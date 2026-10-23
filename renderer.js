@@ -1,8 +1,8 @@
-import { CONFIG } from './config.js?v=20261023-flat';
-import { WORLD } from './engine.js?v=20261023-flat';
-import { obstaclePolygons } from './collision.js?v=20261023-flat';
-import {BACKGROUND_LAYOUT} from './scene-data.js?v=20261023-flat';
-import {propTransform} from './props.js?v=20261023-flat';
+import { CONFIG } from './config.js?v=20261023-flat2';
+import { WORLD } from './engine.js?v=20261023-flat2';
+import { obstaclePolygons } from './collision.js?v=20261023-flat2';
+import {BACKGROUND_LAYOUT} from './scene-data.js?v=20261023-flat2';
+import {propTransform} from './props.js?v=20261023-flat2';
 const {floor,librarianX} = WORLD;
 function rect(c,x,y,w,h,color){c.fillStyle=color;c.fillRect(x,y,w,h)}
 export function backgroundTiles(distance,section,width=WORLD.width){

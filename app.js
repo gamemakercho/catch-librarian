@@ -1,7 +1,7 @@
-import {SPRITE_LAYOUT,PROPS_LAYOUT,BACKGROUND_LAYOUT} from './scene-data.js?v=20261023-flat';
-import { CONFIG } from './config.js?v=20261023-flat';
-import { Chase, isCorrectAnswer } from './engine.js?v=20261023-flat';
-import { Renderer } from './renderer.js?v=20261023-flat';
+import {SPRITE_LAYOUT,PROPS_LAYOUT,BACKGROUND_LAYOUT} from './scene-data.js?v=20261023-flat2';
+import { CONFIG } from './config.js?v=20261023-flat2';
+import { Chase, isCorrectAnswer } from './engine.js?v=20261023-flat2';
+import { Renderer } from './renderer.js?v=20261023-flat2';
 const $ = id => document.getElementById(id);
 const game = new Chase();
 const comicFiles = ['01-chase','02-treat','03-sparkle','04-trip','05-jump'].map(x=>`assets/ending/ending-${x}.webp`);

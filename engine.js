@@ -1,6 +1,6 @@
-import {createProp} from './props.js?v=20261023-flat';
-import { CONFIG } from './config.js?v=20261023-flat';
-import { boxPolygon, obstaclePolygons, penetration, sweepPolygons } from './collision.js?v=20261023-flat';
+import {createProp} from './props.js?v=20261023-flat2';
+import { CONFIG } from './config.js?v=20261023-flat2';
+import { boxPolygon, obstaclePolygons, penetration, sweepPolygons } from './collision.js?v=20261023-flat2';
 export const WORLD=Object.freeze({width:960,height:500,floor:415,catX:240,librarianX:780});
 export const normalizeAnswer=value=>value.normalize('NFC').replace(/[\s!.！。．]/gu,'');
 const acceptedAnswer=String.fromCodePoint(44256,50577,51060,50752,32,49324,49436,44032,32,46028,50500,50772,45796);
@@ -21,13 +21,22 @@ export class Chase {
  spawn(){
   const kinds=['stack','high','basket','low','box','basket','high'],kind=kinds[this.serial%kinds.length];
   const airborne=kind==='high'||kind==='low',spriteId=airborne?['book-red','book-green','book-blue'][(this.bookSerial+Math.floor(this.bookSerial/3))%3]:kind==='stack'?'book-stack':kind;
-  const trajectory=airborne?Math.floor(this.bookSerial++/9)%3:0;
-  const o=createProp(spriteId,{id:this.serial++,kind,trajectory,lift:0});
+  const trajectory=airborne?Math.floor(this.bookSerial/9)%3:0;
+  const o=createProp(spriteId,{id:this.serial,kind,trajectory,lift:0});
   o.x=WORLD.librarianX-this.config.librarianHeight*.28-o.w/2;
   o.targetLift=kind==='high'?128:kind==='low'?32:0;
   // Lift is the artwork's bottom, so each natural book height shares the hand center.
   o.launchLift=this.config.librarianHeight*.56-o.h/2;o.lift=airborne?o.launchLift:0;
-  this.obstacles.push(this.prepareObstacle(o));this.recoil=.25;
+  // An earlier deflected prop stays visible until its normal cleanup. Delay the
+  // next launch if its approach could reach that prop before cleanup finishes.
+  const speed=this.config.runSpeed+this.config.speedIncrease*this.elapsed/this.config.duration;
+  for(const prior of this.obstacles)if(prior.reacting){
+   const right=Math.max(...obstaclePolygons(prior,WORLD.floor).flat().map(p=>p.x));
+   const arrival=(o.x-right-8)/(speed+Math.max(0,prior.vx));
+   if(arrival<Math.max(0,3-prior.reactionAge)+.12)return false;
+  }
+  this.serial++;if(airborne)this.bookSerial++;
+  this.obstacles.push(this.prepareObstacle(o));this.recoil=.25;return true;
  }
 
  hit(obstacle){
@@ -82,7 +91,7 @@ export class Chase {
   else this.vx*=Math.exp(-1.5*dt);
   this.x+=this.vx*dt;this.vy-=this.config.gravity*dt;this.y+=this.vy*dt;
   if(this.y<=0){this.y=0;this.vy=Math.max(0,this.vy);this.jumps=2;if(this.hitActive&&this.landingAge===null)this.landingAge=0}
-  if(this.elapsed>=this.spawnAt&&this.health>0){this.spawn();this.spawnAt=this.elapsed+Math.max(this.config.minimumInterval,this.config.obstacleInterval-.4*this.elapsed/this.config.duration)}
+  if(this.elapsed>=this.spawnAt&&this.health>0){const spawned=this.spawn();this.spawnAt=this.elapsed+(spawned?Math.max(this.config.minimumInterval,this.config.obstacleInterval-.4*this.elapsed/this.config.duration):.12)}
   for(const o of this.obstacles){
    this.prepareObstacle(o);o.previous={x:o.x,lift:o.lift,angle:o.angle};o.age+=dt;
    if(o.reacting){

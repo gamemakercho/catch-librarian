@@ -71,3 +71,8 @@ test('wall and floor use separate uniform scales and continuous global mirror pa
 test('optimized images remain below 4MB total and 2.6MB initial scene, with exact sprite alpha',()=>{
  const m=JSON.parse(readFileSync(new URL('../asset-verification.json',import.meta.url),'utf8'));assert.ok(m.after_image_bytes<4_000_000);assert.ok(m.initial_image_bytes<2_600_000);for(const f of m.verified.filter(f=>f.alpha)){assert.equal(f.encoding,'lossless');assert.equal(f.alpha_exact,true);assert.equal(f.visible_rgb_exact,true)}
 });
+
+test('deflected props clear before the next launch reaches them, without stacking artwork',()=>{
+ const g=new Chase();g.start();g.health=100;for(let n=0;n<4000&&g.state==='playing';n++){g.update(1/120);for(let i=0;i<g.obstacles.length;i++)for(let j=i+1;j<g.obstacles.length;j++)for(const a of obstaclePolygons(g.obstacles[i]))for(const b of obstaclePolygons(g.obstacles[j]))assert.ok((penetration(a,b)?.depth||0)<.002,'prop overlap at '+g.elapsed)}
+ assert.equal(g.state,'comic');assert.ok(g.serial>=6);
+});
