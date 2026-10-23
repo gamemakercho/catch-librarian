@@ -4,8 +4,8 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import { readFile } from 'node:fs/promises';
 const html=await readFile(new URL('../index.html',import.meta.url),'utf8');
-const layout=JSON.parse(await readFile(new URL('../assets/sprites/sprite-layout.json',import.meta.url),'utf8'));
-let source='';for(const f of ['config.js','engine.js','renderer.js','app.js'])source+=(await readFile(new URL('../'+f,import.meta.url),'utf8')).replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'')+'\n';
+const layout=JSON.parse(await readFile(new URL('../assets/sprites/sprite-layout-v2.json',import.meta.url),'utf8'));
+let source='';for(const f of ['config.js','collision.js','engine.js','renderer.js','app.js'])source+=(await readFile(new URL('../'+f,import.meta.url),'utf8')).replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'')+'\n';
 source+='\nglobalThis.subject={game,getState:()=>state};';
 class Element {
  constructor(){this.listeners={};this.hidden=false;this.disabled=false;this.value='';this.textContent='';this.innerHTML='';this.attrs={};this.classList={toggle(){}}}

@@ -1,5 +1,6 @@
 import { CONFIG } from './config.js';
 import { WORLD } from './engine.js';
+import { obstaclePolygon } from './collision.js';
 const {floor,catX,librarianX} = WORLD;
 function rect(c,x,y,w,h,color){c.fillStyle=color;c.fillRect(x,y,w,h)}
 function rounded(c,x,y,w,h,r,color){c.fillStyle=color;c.beginPath();c.roundRect(x,y,w,h,r);c.fill()}
@@ -33,27 +34,37 @@ function library(){
  rect(c,0,399,1200,16,'#745034');rect(c,0,402,1200,3,'#c49b65');return layer;
 }
 export class Renderer {
- constructor(canvas,images,layout){this.canvas=canvas;this.c=canvas.getContext('2d');this.images=images;this.layout=layout;this.back=library();this.scales=layout.sheets.map((s,i)=>(i?CONFIG.librarianHeight:CONFIG.catHeight)/Math.max(...s.frames.map(f=>f.alpha_bounds_local.h)))}
- sprite(index,x,y,t){const c=this.c,s=this.layout.sheets[index],f=s.frames[Math.floor(t*CONFIG.spriteFPS)%8],a=f.suggested_anchor_local,r=f.source_rect,scale=this.scales[index];c.drawImage(this.images[index],r.x,r.y,r.w,r.h,x-a.x*scale,y-a.y*scale,r.w*scale,r.h*scale)}
+ constructor(canvas,images,layout){
+  this.canvas=canvas;this.c=canvas.getContext('2d');this.layout=layout;this.back=library();this.debug=CONFIG.debugCollisions;
+  this.sheets=new Map(layout.sheets.map((sheet,index)=>[sheet.id,{...sheet,image:images[index]}]));
+  this.scales={cat:CONFIG.catHeight/layout.scale_groups.cat.reference_height_px,librarian:CONFIG.librarianHeight/layout.scale_groups.librarian.reference_height_px};this.resize();
+ }
+ resize(){const width=this.canvas.getBoundingClientRect?.().width||WORLD.width,dpr=Math.min(3,globalThis.devicePixelRatio||1),pixels=Math.max(1,Math.round(width*dpr));if(this.canvas.width!==pixels){this.canvas.width=pixels;this.canvas.height=Math.round(pixels*WORLD.height/WORLD.width)}this.c.setTransform(this.canvas.width/WORLD.width,0,0,this.canvas.height/WORLD.height,0,0);this.c.imageSmoothingEnabled=true}
+ sprite(id,x,y,t,frameIndex=null){
+  const sheet=this.sheets.get(id),frame=sheet.frames[frameIndex??Math.floor(t*CONFIG.spriteFPS)%sheet.frames.length],anchor=frame.anchor_local,r=frame.source_rect,scale=this.scales[sheet.scale_group];
+  this.c.drawImage(sheet.image,r.x,r.y,r.w,r.h,x-anchor.x*scale,y-anchor.y*scale,r.w*scale,r.h*scale);
+ }
  draw(game,ambient){
- const c=this.c;const d=game.distance;const offset=(d*.24)%1200;c.clearRect(0,0,960,500);c.drawImage(this.back,-offset,0);c.drawImage(this.back,1200-offset,0);
- c.save();c.globalAlpha=.13;c.fillStyle='#fff1c0';for(const x of [230,650]){c.beginPath();c.moveTo(x-offset,40);c.lineTo(x+130-offset,40);c.lineTo(x+350-offset,415);c.lineTo(x+50-offset,415);c.fill()}c.restore();
- const g=c.createLinearGradient(0,floor,0,500);g.addColorStop(0,'#ce9d5c');g.addColorStop(1,'#a77441');rect(c,0,floor,960,85,g);
- for(let row=0;row<4;row++){const yy=floor+row*23;rect(c,0,yy,960,2,'#704d2f66');rect(c,0,yy+2,960,1,'#f4cc8e70');for(let x=-240;x<1200;x+=220){const xx=x-(d%220)+(row%2)*110;rect(c,xx,yy+2,2,21,'#83573180');rect(c,xx+15,yy+11,160,1,'#e8b77850')}}
- const t=game.state==='playing'?game.elapsed:game.state==='ready'?ambient:game.elapsed;
- const shadow=(x,y,w)=>{c.fillStyle='#4c322530';c.beginPath();c.ellipse(x,y,w,6,0,0,Math.PI*2);c.fill()};
- shadow(catX,floor+3,37-game.y*.06);shadow(librarianX,floor+4,35);
- if(game.state==='playing')for(let j=0;j<3;j++){const f=(t*3+j/3)%1;c.fillStyle=`rgba(255,236,201,${(1-f)*.6})`;c.beginPath();c.ellipse(catX-40-f*48,floor-3-f*13,3+f*5,2+f*4,0,0,Math.PI*2);c.fill()}
- this.sprite(1,librarianX+(game.recoil>0?Math.sin(game.recoil*30)*7:0),floor,t+.2);
- for(const o of game.obstacles)this.obstacle(o,t);
- c.save();if(game.invincible>0&&Math.floor(game.elapsed*16)%2)c.globalAlpha=.28;this.sprite(0,catX,floor-game.y,t);c.restore();
- // A soft vignette keeps the illustrated space warm and readable.
- let v=c.createRadialGradient(480,230,160,480,230,620);v.addColorStop(0,'#46311900');v.addColorStop(1,'#46311938');rect(c,0,0,960,500,v);
+  const c=this.c,d=game.distance,offset=(d*.24)%1200;c.clearRect(0,0,960,500);c.drawImage(this.back,-offset,0);c.drawImage(this.back,1200-offset,0);
+  c.save();c.globalAlpha=.13;c.fillStyle='#fff1c0';for(const x of [230,650]){c.beginPath();c.moveTo(x-offset,40);c.lineTo(x+130-offset,40);c.lineTo(x+350-offset,415);c.lineTo(x+50-offset,415);c.fill()}c.restore();
+  const g=c.createLinearGradient(0,floor,0,500);g.addColorStop(0,'#ce9d5c');g.addColorStop(1,'#a77441');rect(c,0,floor,960,85,g);
+  for(let row=0;row<4;row++){const yy=floor+row*23;rect(c,0,yy,960,2,'#704d2f66');rect(c,0,yy+2,960,1,'#f4cc8e70');for(let x=-240;x<1200;x+=220){const xx=x-(d%220)+(row%2)*110;rect(c,xx,yy+2,2,21,'#83573180');rect(c,xx+15,yy+11,160,1,'#e8b77850')}}
+  const t=game.state==='ready'?ambient:game.elapsed;
+  const shadow=(x,y,w)=>{c.fillStyle='#4c322530';c.beginPath();c.ellipse(x,y,w,5,0,0,Math.PI*2);c.fill()};shadow(game.x,floor+3,Math.max(7,25-game.y*.06));shadow(librarianX,floor+4,42);
+  if(game.state==='playing'&&!game.hitActive)for(let j=0;j<3;j++){const f=(t*3+j/3)%1;c.fillStyle='rgba(255,236,201,'+((1-f)*.6)+')';c.beginPath();c.ellipse(game.x-30-f*40,floor-3-f*13,3+f*5,2+f*4,0,0,Math.PI*2);c.fill()}
+  this.sprite('librarian-run',librarianX+(game.recoil>0?Math.sin(game.recoil*30)*7:0),floor,t+.2);
+  for(const o of game.obstacles)this.obstacle(o);
+  c.save();if(game.invincible>0&&!game.hitActive&&Math.floor(t*12)%8===0)c.globalAlpha=.9;
+  const bounce=game.state==='playing'&&!game.hitActive&&game.y===0?Math.sin(t*CONFIG.spriteFPS*Math.PI)*.8:0;
+  if(game.hitActive)this.sprite('cat-hit-recover-v2',game.x,floor-game.y,t,game.hitFrame);
+  else this.sprite('cat-run-thin-v2',game.x,floor-game.y+bounce,t);c.restore();
+  let v=c.createRadialGradient(480,230,160,480,230,620);v.addColorStop(0,'#46311900');v.addColorStop(1,'#46311938');rect(c,0,0,960,500,v);
+  if(this.debug)this.drawDebug(game);
  }
- obstacle(o,t){const c=this.c;const y=floor-o.lift-o.h;c.save();c.translate(o.x,y);
- if(o.kind==='basket'){rounded(c,0,4,o.w,o.h-4,8,'#ad783d');c.strokeStyle='#694725';c.lineWidth=3;for(let x=6;x<o.w;x+=9){c.beginPath();c.moveTo(x,7);c.lineTo(x-4,o.h-2);c.stroke()}for(let z=10;z<o.h;z+=9){c.beginPath();c.moveTo(2,z);c.lineTo(o.w-1,z);c.stroke()}c.strokeRect(2,4,o.w-4,o.h-7)}
- else if(o.kind==='stack'){for(let j=0;j<3;j++){rounded(c,j%2*5,j*17,o.w-5,16,2,['#904734','#466d62','#b68c41'][j]);rect(c,4+j%2*5,j*17+4,o.w-13,8,'#f5dfae');rect(c,6,j*17+16,o.w-7,2,'#533a29')}}
- else{c.save();c.translate(o.w/2,o.h/2);c.rotate(Math.sin(t*8+o.id)*.15-.2);rounded(c,-o.w/2,-o.h/2,o.w,o.h,3,o.kind==='high'?'#8f4935':'#42645c');c.strokeStyle='#d7b063';c.lineWidth=2;c.strokeRect(-o.w/2+5,-o.h/2+4,o.w-10,o.h-8);c.restore();c.strokeStyle='#fff2ccaa';c.lineWidth=2;for(let j=0;j<2;j++){c.beginPath();c.moveTo(o.w+8,6+j*10);c.lineTo(o.w+23+j*8,6+j*10);c.stroke()}}
- c.restore();
+ obstacle(o){const c=this.c;c.save();c.translate(o.x+o.w/2,floor-o.lift-o.h/2);c.rotate(o.angle||0);c.translate(-o.w/2,-o.h/2);
+  if(o.kind==='basket'){rounded(c,0,4,o.w,o.h-4,8,'#ad783d');c.strokeStyle='#694725';c.lineWidth=3;for(let x=6;x<o.w;x+=9){c.beginPath();c.moveTo(x,7);c.lineTo(x-4,o.h-2);c.stroke()}for(let z=10;z<o.h;z+=9){c.beginPath();c.moveTo(2,z);c.lineTo(o.w-1,z);c.stroke()}c.strokeRect(2,4,o.w-4,o.h-7)}
+  else if(o.kind==='stack'){for(let j=0;j<3;j++){rounded(c,j%2*5,j*17,o.w-5,16,2,['#904734','#466d62','#b68c41'][j]);rect(c,4+j%2*5,j*17+4,o.w-13,8,'#f5dfae');rect(c,6,j*17+16,o.w-7,2,'#533a29')}}
+  else{rounded(c,0,0,o.w,o.h,3,o.kind==='high'?'#8f4935':'#42645c');c.strokeStyle='#d7b063';c.lineWidth=2;c.strokeRect(5,4,o.w-10,o.h-8);if(!o.reacting){c.strokeStyle='#fff2ccaa';for(let j=0;j<2;j++){c.beginPath();c.moveTo(o.w+8,6+j*10);c.lineTo(o.w+23+j*8,6+j*10);c.stroke()}}}c.restore();
  }
+ drawDebug(game){const c=this.c;const outline=(poly,color)=>{c.strokeStyle=color;c.lineWidth=1.5;c.beginPath();poly.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.closePath();c.stroke()};outline(game.catPolygon(),'#00ff9d');for(const o of game.obstacles)outline(obstaclePolygon(o,floor),o.damageConsumed?'#ffaa00':'#ff48d4');for(const p of game.contacts){c.fillStyle='#fff';c.beginPath();c.arc(p.x,p.y,3,0,Math.PI*2);c.fill();c.strokeStyle='#fff';c.beginPath();c.moveTo(p.x,p.y);c.lineTo(p.x+p.normal.x*24,p.y+p.normal.y*24);c.stroke()}c.fillStyle='#102d28dd';c.fillRect(10,10,440,35);c.fillStyle='#fff';c.font='16px monospace';c.fillText('x '+game.x.toFixed(1)+' vx '+game.vx.toFixed(1)+' y '+game.y.toFixed(1)+' penetration '+game.maxPenetration.toFixed(4),20,33)}
 }

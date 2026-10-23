@@ -1,44 +1,125 @@
 import { CONFIG } from './config.js';
-export const WORLD = Object.freeze({ width: 960, height: 500, floor: 415, catX: 240, librarianX: 780 });
-export const normalizeAnswer = value => value.normalize('NFC').replace(/[\s!.！。．]/gu, '');
-const acceptedAnswer = String.fromCodePoint(44256,50577,51060,50752,32,49324,49436,44032,32,46028,50500,50772,45796);
-export const isCorrectAnswer = value => normalizeAnswer(value) === normalizeAnswer(acceptedAnswer);
+import { boxPolygon, obstaclePolygon, penetration, sweepPolygons } from './collision.js';
+export const WORLD=Object.freeze({width:960,height:500,floor:415,catX:240,librarianX:780});
+export const normalizeAnswer=value=>value.normalize('NFC').replace(/[\s!.！。．]/gu,'');
+const acceptedAnswer=String.fromCodePoint(44256,50577,51060,50752,32,49324,49436,44032,32,46028,50500,50772,45796);
+export const isCorrectAnswer=value=>normalizeAnswer(value)===normalizeAnswer(acceptedAnswer);
 export class Chase {
- constructor(config = CONFIG) { this.config = config; this.reset(); }
- reset() { this.state = 'ready'; this.elapsed = 0; this.health = this.config.health; this.y = 0; this.vy = 0; this.jumps = 2; this.invincible = 0; this.obstacles = []; this.spawnAt = this.config.warmup; this.serial = 0; this.distance = 0; this.recoil = 0; this.hits = 0; }
- start() { this.reset(); this.state = 'playing'; }
- jump() { if (this.state !== 'playing' || this.jumps === 0) return false; this.vy = this.jumps === 2 ? this.config.jumpForce : this.config.doubleJumpForce; this.jumps--; return true; }
- spawn() {
-  const kinds = ['stack', 'high', 'basket', 'low', 'stack', 'basket', 'high'];
-  const kind = kinds[this.serial % kinds.length];
-  this.obstacles.push({ id: this.serial++, kind, x: WORLD.librarianX - 50, w: kind === 'basket' ? 62 : 48, h: kind === 'high' || kind === 'low' ? 25 : kind === 'basket' ? 45 : 53, lift: kind === 'high' ? 128 : kind === 'low' ? 32 : 0, hit: false });
-  this.recoil = .25;
+ constructor(config=CONFIG){this.config=config;this.reset()}
+ reset(){Object.assign(this,{state:'ready',elapsed:0,health:this.config.health,x:WORLD.catX,vx:0,y:0,vy:0,jumps:2,invincible:0,obstacles:[],spawnAt:this.config.warmup,serial:0,distance:0,recoil:0,hits:0,hitStop:0,stun:0,hitActive:false,hitAge:0,landingAge:null,defeatAge:0,contacts:[],maxPenetration:0})}
+ start(){this.reset();this.state='playing'}
+ jump(){
+  if(this.state!=='playing'||this.health<=0||this.stun>0||this.hitStop>0||this.jumps===0)return false;
+  this.vy=this.jumps===2?this.config.jumpForce:this.config.doubleJumpForce;this.jumps--;this.landingAge=null;return true;
  }
- hit(obstacle) { if (this.state !== 'playing' || this.invincible > 0 || obstacle.hit) return false; obstacle.hit = true; this.health--; this.hits++; this.invincible = this.config.invincibility; if (this.health <= 0) this.state = 'failed'; return true; }
- update(dt) {
-  if (this.state !== 'playing') return;
-  let left = Math.min(dt, .1);
-  while (left > 0 && this.state === 'playing') { const step = Math.min(left, 1 / 120); this.step(step); left -= step; }
+ catPolygon(x=this.x,y=this.y){const b=this.config.catCollider;return boxPolygon(x+b.x,WORLD.floor-y+b.y,b.w,b.h)}
+ prepareObstacle(o){
+  o.lift??=0;o.targetLift??=o.lift;o.launchLift??=o.lift;o.angle??=0;o.vx??=0;o.vy??=0;o.angularVelocity??=0;o.reactionAge??=0;o.age??=0;
+  o.damageConsumed??=Boolean(o.hit);o.reacting??=false;return o;
  }
- step(dt) {
-  this.elapsed = Math.min(this.config.duration, this.elapsed + dt);
-  this.invincible = Math.max(0, this.invincible - dt); this.recoil = Math.max(0, this.recoil - dt);
-  const speed = this.config.runSpeed + this.config.speedIncrease * (this.elapsed / this.config.duration);
-  this.distance += speed * dt;
-  this.vy -= this.config.gravity * dt; this.y += this.vy * dt;
-  if (this.y <= 0) { this.y = 0; this.vy = 0; this.jumps = 2; }
-  if (this.elapsed >= this.config.duration) { this.state = 'comic'; return; }
-  if (this.elapsed >= this.spawnAt) {
-   this.spawn();
-   // Gap exceeds a full double-jump flight + recovery. All hazards share speed.
-   this.spawnAt = this.elapsed + Math.max(this.config.minimumInterval, this.config.obstacleInterval - .4 * this.elapsed / this.config.duration);
+ spawn(){
+  const kinds=['stack','high','basket','low','stack','basket','high'],kind=kinds[this.serial%kinds.length];
+  const airborne=kind==='high'||kind==='low',w=kind==='basket'?62:48,h=airborne?25:kind==='basket'?45:53;
+  // Measured hand/bag vicinity relative to the enlarged librarian's paw baseline.
+  const x=WORLD.librarianX-this.config.librarianHeight*.28-w/2;
+  const targetLift=kind==='high'?128:kind==='low'?32:0;
+  this.obstacles.push(this.prepareObstacle({id:this.serial++,kind,x,w,h,lift:airborne?this.config.librarianHeight*.56-h/2:0,targetLift,launchLift:this.config.librarianHeight*.56-h/2}));this.recoil=.25;
+ }
+ hit(obstacle){
+  // Damage history is separate from geometry. This never controls separation.
+  if(this.state!=='playing'||obstacle.damageConsumed||obstacle.hit)return false;
+  obstacle.damageConsumed=true;obstacle.hit=true;
+  if(this.invincible>0||this.health<=0)return false;
+  this.health--;this.hits++;this.invincible=this.config.invincibility;
+  this.hitActive=true;this.hitAge=0;this.landingAge=null;
+  this.hitStop=this.config.hitStop;this.stun=this.config.stunDuration;this.defeatAge=0;
+  this.spawnAt=Math.max(this.spawnAt,this.elapsed+this.config.spawnRecoverySpace);return true;
+ }
+ react(o,n){
+  const newDamage=this.hit(o),firstPhysical=!o.reacting;
+  if(newDamage||firstPhysical){
+   if(!newDamage){this.hitActive=true;this.hitAge=0;this.landingAge=null;this.stun=Math.max(this.stun,.12)}
+   if(Math.abs(n.x)>.25)this.vx=n.x*this.config.knockbackX;
+   this.vy=n.y>.5?Math.min(this.vy,-140):Math.max(this.vy,this.config.knockbackY);
+   this.landingAge=null;
+   o.vx=-n.x*this.config.propKnockback;o.vy=n.y>.5?180:n.y<-.5?-130:155;
+   o.angularVelocity=(n.x<=0?1:-1)*(o.kind==='basket'?5:o.kind==='stack'?2.4:8);
+   o.reacting=true;o.reactionAge=0;
   }
-  const cat = { x: WORLD.catX - 24, y: WORLD.floor - this.y - this.config.catHeight * .72, w: 48, h: this.config.catHeight * .54 };
-  for (const o of this.obstacles) {
-   o.x -= speed * dt;
-   const box = { x: o.x + 6, y: WORLD.floor - o.lift - o.h + 5, w: o.w - 12, h: o.h - 8 };
-   if (cat.x < box.x + box.w && cat.x + cat.w > box.x && cat.y < box.y + box.h && cat.y + cat.h > box.y) this.hit(o);
+  // Screen-relative velocity: reacting objects do NOT also subtract camera speed.
+  const relativeNormal=(this.vx-o.vx)*n.x+(-this.vy+o.vy)*n.y;
+  if(relativeNormal<0){const impulse=-relativeNormal+.5;this.vx+=n.x*impulse*.4;this.vy-=n.y*impulse*.4;o.vx-=n.x*impulse*.6;o.vy+=n.y*impulse*.6}
+ }
+ get hitFrame(){
+  if(!this.hitActive)return null;
+  if(this.hitStop>0||this.hitAge<.016)return 1;
+  if(this.landingAge!==null)return this.landingAge<.09?5:this.landingAge<.18?6:7;
+  return this.vy>35?2:this.vy< -35?4:3;
+ }
+ update(dt){
+  if(this.state!=='playing'||!Number.isFinite(dt)||dt<=0)return;
+  let remaining=Math.min(dt,.5);this.contacts=[];
+  while(remaining>1e-9&&this.state==='playing'){
+   if(this.hitStop>0){const frozen=Math.min(remaining,this.hitStop);this.hitStop=Math.max(0,this.hitStop-frozen);remaining-=frozen;continue}
+   const maxMotion=Math.max(300,Math.abs(this.vx)+Math.abs(this.vy),...this.obstacles.map(o=>Math.abs(o.vx||0)+Math.abs(o.vy||0)));
+   const angular=Math.max(1,...this.obstacles.map(o=>Math.abs(o.angularVelocity||0)));
+   const step=Math.min(remaining,1/120,4/maxMotion,.04/angular);this.step(step);remaining-=step;
   }
-  this.obstacles = this.obstacles.filter(o => o.x + o.w > -30);
+ }
+ step(dt){
+  const previous={x:this.x,y:this.y};
+  this.elapsed=Math.min(this.config.duration,this.elapsed+dt);
+  this.invincible=Math.max(0,this.invincible-dt);this.stun=Math.max(0,this.stun-dt);this.recoil=Math.max(0,this.recoil-dt);
+  if(this.hitActive){this.hitAge+=dt;if(this.landingAge!==null){this.landingAge+=dt;if(this.landingAge>=.26){this.hitActive=false;this.landingAge=null}}}
+  const speed=this.config.runSpeed+this.config.speedIncrease*this.elapsed/this.config.duration;
+  this.distance+=speed*dt;
+  if(this.stun<=0){const desired=Math.max(-this.config.homeSpeed,Math.min(this.config.homeSpeed,(WORLD.catX-this.x)*7));this.vx+=(desired-this.vx)*(1-Math.exp(-10*dt))}
+  else this.vx*=Math.exp(-1.5*dt);
+  this.x+=this.vx*dt;this.vy-=this.config.gravity*dt;this.y+=this.vy*dt;
+  if(this.y<=0){this.y=0;this.vy=Math.max(0,this.vy);this.jumps=2;if(this.hitActive&&this.landingAge===null)this.landingAge=0}
+  if(this.elapsed>=this.spawnAt&&this.health>0){this.spawn();this.spawnAt=this.elapsed+Math.max(this.config.minimumInterval,this.config.obstacleInterval-.4*this.elapsed/this.config.duration)}
+  for(const o of this.obstacles){
+   this.prepareObstacle(o);o.previous={x:o.x,lift:o.lift,angle:o.angle};o.age+=dt;
+   if(o.reacting){
+    o.reactionAge+=dt;o.x+=o.vx*dt;o.vy-=this.config.propGravity*dt;o.lift+=o.vy*dt;o.angle+=o.angularVelocity*dt;
+    const extent=Math.abs(Math.cos(o.angle))*o.h/2+Math.abs(Math.sin(o.angle))*o.w/2;
+    const minimumLift=extent-o.h/2;
+    if(o.lift<minimumLift){o.lift=minimumLift;if(o.vy< -35)o.vy=-o.vy*.24;else o.vy=0;o.vx*=Math.exp(-2*dt);o.angularVelocity*=Math.exp(-2.5*dt)}
+    o.vx*=Math.exp(-.35*dt);
+   }else{
+    o.x-=speed*dt;
+    if(o.kind==='high'||o.kind==='low'){
+     const blend=Math.max(0,1-o.age/.65);o.lift=o.targetLift+(o.launchLift-o.targetLift)*blend*blend;o.angle=Math.sin(this.elapsed*8+o.id)*.15-.2;
+    }
+   }
+  }
+  // Continuous translation test catches fast books before an end-step overlap.
+  for(const o of this.obstacles){
+   const prev=o.previous,from={...o,x:prev.x,lift:prev.lift};
+   const collision=sweepPolygons(this.catPolygon(previous.x,previous.y),obstaclePolygon(from,WORLD.floor),{x:this.x-previous.x,y:previous.y-this.y},{x:o.x-prev.x,y:prev.lift-o.lift});
+   if(collision){
+    const t=collision.time;this.x=previous.x+(this.x-previous.x)*t;this.y=previous.y+(this.y-previous.y)*t;
+    o.x=prev.x+(o.x-prev.x)*t;o.lift=prev.lift+(o.lift-prev.lift)*t;
+    this.separate(o,collision.normal,0);this.react(o,collision.normal);
+   }
+  }
+  // Invulnerability and damageConsumed never bypass these physical passes.
+  for(let pass=0;pass<24;pass++){
+   let resolved=false;
+   for(const o of this.obstacles){const overlap=penetration(this.catPolygon(),obstaclePolygon(o,WORLD.floor));if(overlap){this.separate(o,overlap.normal,overlap.depth);this.react(o,overlap.normal);resolved=true}}
+   this.x=Math.max(30,this.x);this.y=Math.max(0,this.y);
+   if(!resolved)break;
+  }
+  this.maxPenetration=Math.max(0,...this.obstacles.map(o=>penetration(this.catPolygon(),obstaclePolygon(o,WORLD.floor))?.depth||0));
+  this.obstacles=this.obstacles.filter(o=>o.x+o.w> -100&&o.x< WORLD.width+130&&!(o.reactionAge>3&&Math.abs(o.x-this.x)>150));
+  if(this.health<=0){this.defeatAge+=dt;if(this.defeatAge>=this.config.defeatDelay)this.state='failed'}
+  else if(this.elapsed>=this.config.duration)this.state='comic';
+ }
+ separate(o,n,depth){
+  const distance=depth+this.config.contactGap;
+  // Both are light movable bodies. Share the MTV; never send the cat through a prop.
+  this.x+=n.x*distance*.6;this.y-=n.y*distance*.6;
+  o.x-=n.x*distance*.4;o.lift+=n.y*distance*.4;
+  this.contacts.push({x:this.x+this.config.catCollider.x+this.config.catCollider.w/2,y:WORLD.floor-this.y-24,normal:n});
  }
 }

@@ -1,0 +1,707 @@
+{
+  "schema_version": 2,
+  "coordinate_note": "image/source coordinates: x right, y down; WORLD jumpY is positive upward; anchor is lower central paw baseline",
+  "measurement": "visible outline at alpha > 16; fixed reference heights at alpha > 128; PNG bytes preserved without raster edits",
+  "scale_groups": {
+    "cat": {
+      "reference_sheet": "cat-run-thin-v2",
+      "reference_height_px": 261,
+      "target_height_world": 58,
+      "note": "Use this ONE fixed scale for BOTH cat sheets, including taller upright hit poses."
+    },
+    "librarian": {
+      "reference_sheet": "librarian-run",
+      "reference_height_px": 391,
+      "target_height_world": 180
+    }
+  },
+  "suggested_world": {
+    "width": 960,
+    "height": 500,
+    "floor": 415,
+    "cat_home_x": 240,
+    "librarian_x": 780
+  },
+  "collider_starting_point": {
+    "coordinate_space": "world pixels relative to the cat paw anchor; y positive downward",
+    "x": -21,
+    "y": -44,
+    "w": 56,
+    "h": 40,
+    "note": "Starting value only. Verify the solid head/body against actual rendered poses; exclude decorative whiskers/tail. Resolve contact before rendering."
+  },
+  "clips": {
+    "cat_run": {
+      "sheet": "cat-run-thin-v2",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fps": 12,
+      "loop": true
+    },
+    "librarian_run": {
+      "sheet": "librarian-run",
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fps": 12,
+      "loop": true
+    },
+    "cat_brace_optional": {
+      "sheet": "cat-hit-recover-v2",
+      "frames": [
+        0
+      ],
+      "loop": false
+    },
+    "cat_hit": {
+      "sheet": "cat-hit-recover-v2",
+      "frames": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "nominal_frame_ms": [
+        70,
+        90,
+        120,
+        90,
+        90,
+        90,
+        80
+      ],
+      "loop": false,
+      "physics_gates": {
+        "recoil_rise": 2,
+        "airborne_hold": 3,
+        "descending": 4,
+        "ground_contact": 5,
+        "recover": 6,
+        "return_to_run": 7
+      },
+      "note": "Enter impact index1 immediately on contact. Nominal timing is a guide; landing and recovery must follow real physical grounding."
+    }
+  },
+  "sheets": [
+    {
+      "id": "cat-run-thin-v2",
+      "image": "assets/sprites/cat-run-thin-v2.png",
+      "image_size": {
+        "w": 1536,
+        "h": 1024
+      },
+      "scale_group": "cat",
+      "animation_type": "loop",
+      "frame_count": 8,
+      "layout": "4 columns x 2 rows; use measured source_rect, not uniform slicing",
+      "frames": [
+        {
+          "index": 0,
+          "nominal_row": 0,
+          "nominal_column": 0,
+          "source_rect": {
+            "x": 34,
+            "y": 170,
+            "w": 348,
+            "h": 258
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 344,
+            "h": 254
+          },
+          "anchor_local": {
+            "x": 174.0,
+            "y": 256
+          },
+          "facing": "right",
+          "connected_visible_pixels": 49056
+        },
+        {
+          "index": 1,
+          "nominal_row": 0,
+          "nominal_column": 1,
+          "source_rect": {
+            "x": 415,
+            "y": 169,
+            "w": 344,
+            "h": 265
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 340,
+            "h": 261
+          },
+          "anchor_local": {
+            "x": 172.0,
+            "y": 263
+          },
+          "facing": "right",
+          "connected_visible_pixels": 47955
+        },
+        {
+          "index": 2,
+          "nominal_row": 0,
+          "nominal_column": 2,
+          "source_rect": {
+            "x": 784,
+            "y": 172,
+            "w": 343,
+            "h": 261
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 339,
+            "h": 257
+          },
+          "anchor_local": {
+            "x": 171.5,
+            "y": 259
+          },
+          "facing": "right",
+          "connected_visible_pixels": 46250
+        },
+        {
+          "index": 3,
+          "nominal_row": 0,
+          "nominal_column": 3,
+          "source_rect": {
+            "x": 1159,
+            "y": 165,
+            "w": 349,
+            "h": 256
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 345,
+            "h": 252
+          },
+          "anchor_local": {
+            "x": 174.5,
+            "y": 254
+          },
+          "facing": "right",
+          "connected_visible_pixels": 48496
+        },
+        {
+          "index": 4,
+          "nominal_row": 1,
+          "nominal_column": 0,
+          "source_rect": {
+            "x": 35,
+            "y": 606,
+            "w": 347,
+            "h": 228
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 343,
+            "h": 224
+          },
+          "anchor_local": {
+            "x": 173.5,
+            "y": 226
+          },
+          "facing": "right",
+          "connected_visible_pixels": 44295
+        },
+        {
+          "index": 5,
+          "nominal_row": 1,
+          "nominal_column": 1,
+          "source_rect": {
+            "x": 419,
+            "y": 605,
+            "w": 346,
+            "h": 248
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 342,
+            "h": 244
+          },
+          "anchor_local": {
+            "x": 173.0,
+            "y": 246
+          },
+          "facing": "right",
+          "connected_visible_pixels": 46213
+        },
+        {
+          "index": 6,
+          "nominal_row": 1,
+          "nominal_column": 2,
+          "source_rect": {
+            "x": 785,
+            "y": 622,
+            "w": 345,
+            "h": 254
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 341,
+            "h": 250
+          },
+          "anchor_local": {
+            "x": 172.5,
+            "y": 252
+          },
+          "facing": "right",
+          "connected_visible_pixels": 46112
+        },
+        {
+          "index": 7,
+          "nominal_row": 1,
+          "nominal_column": 3,
+          "source_rect": {
+            "x": 1165,
+            "y": 617,
+            "w": 349,
+            "h": 259
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 345,
+            "h": 255
+          },
+          "anchor_local": {
+            "x": 174.5,
+            "y": 257
+          },
+          "facing": "right",
+          "connected_visible_pixels": 48003
+        }
+      ]
+    },
+    {
+      "id": "librarian-run",
+      "image": "assets/sprites/librarian-run.png",
+      "image_size": {
+        "w": 1536,
+        "h": 1024
+      },
+      "scale_group": "librarian",
+      "animation_type": "loop",
+      "frame_count": 8,
+      "layout": "4 columns x 2 rows; use measured source_rect, not uniform slicing",
+      "frames": [
+        {
+          "index": 0,
+          "nominal_row": 0,
+          "nominal_column": 0,
+          "source_rect": {
+            "x": 92,
+            "y": 106,
+            "w": 245,
+            "h": 371
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 241,
+            "h": 367
+          },
+          "anchor_local": {
+            "x": 122.5,
+            "y": 369
+          },
+          "facing": "right",
+          "connected_visible_pixels": 51102
+        },
+        {
+          "index": 1,
+          "nominal_row": 0,
+          "nominal_column": 1,
+          "source_rect": {
+            "x": 454,
+            "y": 106,
+            "w": 239,
+            "h": 371
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 235,
+            "h": 367
+          },
+          "anchor_local": {
+            "x": 119.5,
+            "y": 369
+          },
+          "facing": "right",
+          "connected_visible_pixels": 50707
+        },
+        {
+          "index": 2,
+          "nominal_row": 0,
+          "nominal_column": 2,
+          "source_rect": {
+            "x": 825,
+            "y": 100,
+            "w": 244,
+            "h": 377
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 240,
+            "h": 373
+          },
+          "anchor_local": {
+            "x": 122.0,
+            "y": 375
+          },
+          "facing": "right",
+          "connected_visible_pixels": 50939
+        },
+        {
+          "index": 3,
+          "nominal_row": 0,
+          "nominal_column": 3,
+          "source_rect": {
+            "x": 1205,
+            "y": 98,
+            "w": 248,
+            "h": 380
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 244,
+            "h": 376
+          },
+          "anchor_local": {
+            "x": 124.0,
+            "y": 378
+          },
+          "facing": "right",
+          "connected_visible_pixels": 55815
+        },
+        {
+          "index": 4,
+          "nominal_row": 1,
+          "nominal_column": 0,
+          "source_rect": {
+            "x": 95,
+            "y": 574,
+            "w": 260,
+            "h": 390
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 256,
+            "h": 386
+          },
+          "anchor_local": {
+            "x": 130.0,
+            "y": 388
+          },
+          "facing": "right",
+          "connected_visible_pixels": 58127
+        },
+        {
+          "index": 5,
+          "nominal_row": 1,
+          "nominal_column": 1,
+          "source_rect": {
+            "x": 458,
+            "y": 574,
+            "w": 263,
+            "h": 389
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 259,
+            "h": 385
+          },
+          "anchor_local": {
+            "x": 131.5,
+            "y": 387
+          },
+          "facing": "right",
+          "connected_visible_pixels": 55822
+        },
+        {
+          "index": 6,
+          "nominal_row": 1,
+          "nominal_column": 2,
+          "source_rect": {
+            "x": 828,
+            "y": 574,
+            "w": 260,
+            "h": 388
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 256,
+            "h": 384
+          },
+          "anchor_local": {
+            "x": 130.0,
+            "y": 386
+          },
+          "facing": "right",
+          "connected_visible_pixels": 57495
+        },
+        {
+          "index": 7,
+          "nominal_row": 1,
+          "nominal_column": 3,
+          "source_rect": {
+            "x": 1201,
+            "y": 569,
+            "w": 260,
+            "h": 396
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 256,
+            "h": 392
+          },
+          "anchor_local": {
+            "x": 130.0,
+            "y": 394
+          },
+          "facing": "right",
+          "connected_visible_pixels": 60373
+        }
+      ]
+    },
+    {
+      "id": "cat-hit-recover-v2",
+      "image": "assets/sprites/cat-hit-recover-v2.png",
+      "image_size": {
+        "w": 1536,
+        "h": 1024
+      },
+      "scale_group": "cat",
+      "animation_type": "one-shot",
+      "frame_count": 8,
+      "layout": "4 columns x 2 rows; use measured source_rect, not uniform slicing",
+      "frames": [
+        {
+          "index": 0,
+          "nominal_row": 0,
+          "nominal_column": 0,
+          "source_rect": {
+            "x": 40,
+            "y": 181,
+            "w": 349,
+            "h": 263
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 345,
+            "h": 259
+          },
+          "anchor_local": {
+            "x": 174.5,
+            "y": 261
+          },
+          "facing": "right",
+          "connected_visible_pixels": 53100,
+          "phase": "brace"
+        },
+        {
+          "index": 1,
+          "nominal_row": 0,
+          "nominal_column": 1,
+          "source_rect": {
+            "x": 431,
+            "y": 212,
+            "w": 348,
+            "h": 233
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 344,
+            "h": 229
+          },
+          "anchor_local": {
+            "x": 174.0,
+            "y": 231
+          },
+          "facing": "right",
+          "connected_visible_pixels": 49598,
+          "phase": "impact-compression"
+        },
+        {
+          "index": 2,
+          "nominal_row": 0,
+          "nominal_column": 2,
+          "source_rect": {
+            "x": 782,
+            "y": 136,
+            "w": 323,
+            "h": 309
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 319,
+            "h": 305
+          },
+          "anchor_local": {
+            "x": 161.5,
+            "y": 307
+          },
+          "facing": "right",
+          "connected_visible_pixels": 53481,
+          "phase": "recoil-rise"
+        },
+        {
+          "index": 3,
+          "nominal_row": 0,
+          "nominal_column": 3,
+          "source_rect": {
+            "x": 1185,
+            "y": 135,
+            "w": 332,
+            "h": 256
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 328,
+            "h": 252
+          },
+          "anchor_local": {
+            "x": 166.0,
+            "y": 254
+          },
+          "facing": "right",
+          "connected_visible_pixels": 45110,
+          "phase": "knockback-air"
+        },
+        {
+          "index": 4,
+          "nominal_row": 1,
+          "nominal_column": 0,
+          "source_rect": {
+            "x": 62,
+            "y": 581,
+            "w": 311,
+            "h": 301
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 307,
+            "h": 297
+          },
+          "anchor_local": {
+            "x": 155.5,
+            "y": 299
+          },
+          "facing": "right",
+          "connected_visible_pixels": 56119,
+          "phase": "falling-brace"
+        },
+        {
+          "index": 5,
+          "nominal_row": 1,
+          "nominal_column": 1,
+          "source_rect": {
+            "x": 427,
+            "y": 646,
+            "w": 344,
+            "h": 242
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 340,
+            "h": 238
+          },
+          "anchor_local": {
+            "x": 172.0,
+            "y": 240
+          },
+          "facing": "right",
+          "connected_visible_pixels": 49319,
+          "phase": "landing-compression"
+        },
+        {
+          "index": 6,
+          "nominal_row": 1,
+          "nominal_column": 2,
+          "source_rect": {
+            "x": 802,
+            "y": 659,
+            "w": 350,
+            "h": 229
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 346,
+            "h": 225
+          },
+          "anchor_local": {
+            "x": 175.0,
+            "y": 227
+          },
+          "facing": "right",
+          "connected_visible_pixels": 49486,
+          "phase": "recover"
+        },
+        {
+          "index": 7,
+          "nominal_row": 1,
+          "nominal_column": 3,
+          "source_rect": {
+            "x": 1180,
+            "y": 630,
+            "w": 332,
+            "h": 247
+          },
+          "visible_bounds_local": {
+            "x": 2,
+            "y": 2,
+            "w": 328,
+            "h": 243
+          },
+          "anchor_local": {
+            "x": 166.0,
+            "y": 245
+          },
+          "facing": "right",
+          "connected_visible_pixels": 50042,
+          "phase": "return-to-run"
+        }
+      ]
+    }
+  ]
+}

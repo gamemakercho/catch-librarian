@@ -44,6 +44,21 @@
       "file": "assets/sprites/sprite-layout.json",
       "sha256": "09472a1753a8dcbf822b8684f46f66f1243eef4edcdadd3b7da83be8be543fa2",
       "bytes": 7369
+    },
+    {
+      "file": "assets/sprites/cat-hit-recover-v2.png",
+      "sha256": "3122c108f70276e522094c03340fad79e3364084d243c419de9a1e17430a7b0a",
+      "bytes": 1623216
+    },
+    {
+      "file": "assets/sprites/cat-run-thin-v2.png",
+      "sha256": "097179e196fdd0394f7cdb58ecaf89a9fdd0b46c6d29abfb5872e3fd7a177813",
+      "bytes": 1596748
+    },
+    {
+      "file": "assets/sprites/sprite-layout-v2.json",
+      "sha256": "7683df38782273e4bb43afe26c0ba66973f81a12928ed2e946c05f6c005da6fb",
+      "bytes": 16231
     }
   ]
 }
