@@ -1,0 +1,5 @@
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+사서를잡아라_바로실행.html

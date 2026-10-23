@@ -1,0 +1,49 @@
+{
+  "verified": [
+    {
+      "file": "assets/ending/ending-01-chase.png",
+      "sha256": "d0b046418775d4bdd0f76bb50a2ace557f10bce225444fd646394b403f9350c2",
+      "bytes": 2375792
+    },
+    {
+      "file": "assets/ending/ending-02-treat.png",
+      "sha256": "bdc06aea1828aa3d5ba725e4a8adc3087627ec2636a9dcacc13ca7548952ad46",
+      "bytes": 2028715
+    },
+    {
+      "file": "assets/ending/ending-03-sparkle.png",
+      "sha256": "d1591b464c11f5dafbd14436099af4cda06fb03a75822d7564c4c5092c30e3ca",
+      "bytes": 2008070
+    },
+    {
+      "file": "assets/ending/ending-04-trip.png",
+      "sha256": "3b120ee8f8f5b6446b1213cef74295e147d7a4c4d022a4f6c2a786ca6fe9874e",
+      "bytes": 2447184
+    },
+    {
+      "file": "assets/ending/ending-05-jump.png",
+      "sha256": "64b90c354e31a7ddedc8d1e62386eb73fe5f49f686bbeb9cd4c268913f04ee9c",
+      "bytes": 2558119
+    },
+    {
+      "file": "assets/puzzle/fold-guide.svg",
+      "sha256": "47e5153fc63be052ca2e53856bda92bb60c364dda31c402aa73f7746f8ca12cc",
+      "bytes": 1678
+    },
+    {
+      "file": "assets/sprites/cat-run.png",
+      "sha256": "1f85c8de3fd10f1d1aa04751a2cb42a9cb939cf625e580ace04d6619da0d861c",
+      "bytes": 1510819
+    },
+    {
+      "file": "assets/sprites/librarian-run.png",
+      "sha256": "07b5b2490ea9fdcdd7848bfe4650c283d10af350e78a09f9fc30ad93cc14e136",
+      "bytes": 2006858
+    },
+    {
+      "file": "assets/sprites/sprite-layout.json",
+      "sha256": "09472a1753a8dcbf822b8684f46f66f1243eef4edcdadd3b7da83be8be543fa2",
+      "bytes": 7369
+    }
+  ]
+}

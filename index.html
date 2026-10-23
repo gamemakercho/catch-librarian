@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5eddf"><meta name="description" content="고양이와 함께 사서를 쫓고, 종이 엽서에 숨은 이야기를 완성하세요."><title>사서를 잡아라! · 도서관의 마지막 모험</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E🐾%3C/text%3E%3C/svg%3E"><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page-grain" aria-hidden="true"></div>
+<main>
+<header class="masthead"><a class="brand" href="./" aria-label="도서관의 마지막 모험 홈"><span class="book-mark" aria-hidden="true">▥</span> 비밀의 도서관</a><span class="chapter">마지막 장 <span aria-hidden="true">/</span> THE FINAL CHAPTER</span></header>
+<section class="intro"><p class="eyebrow">고양이의 발끝에서 시작되는 마지막 이야기</p><h1>쉿, 사서가 달아나고 있어!</h1><p>책장 사이를 달려, 두 친구의 이야기를 완성해 주세요.</p></section>
+<nav class="journey" aria-label="모험 진행"><span id="step-run" aria-current="step"><b>01</b> 사서 쫓기</span><i aria-hidden="true"></i><span id="step-comic"><b>02</b> 마지막 이야기</span><i aria-hidden="true"></i><span id="step-puzzle"><b>03</b> 엽서의 비밀</span></nav>
+<section id="run-screen" class="screen">
+<div class="game-frame">
+<div class="game-hud"><div class="timer"><span>남은 시간</span><strong id="time">30<small>초</small></strong></div><h2>사서를 잡아라!</h2><div class="health"><span>체력</span><div id="paws" aria-label="체력 3칸"></div></div></div>
+<div class="stage"><canvas id="game" width="960" height="500" aria-label="도서관에서 달리는 고양이. 화면이나 점프 버튼을 눌러 장애물을 피하세요."></canvas><div id="overlay" class="overlay"><div class="overlay-card"><span class="tiny-label" id="overlay-label">도서관의 마지막 추격전</span><h3 id="overlay-title">이야기를 펼치는 중…</h3><p id="overlay-copy">두 친구가 달릴 준비를 하고 있어요.</p><button id="start" class="primary" disabled>이미지 불러오는 중…</button></div></div><button id="pause" class="pause" aria-label="게임 일시 정지" hidden>Ⅱ</button><span id="game-message" class="game-message" aria-live="polite"></span></div>
+<div class="controls"><div class="jump-help"><strong>폴짝, 한 번 더!</strong><span>터치하면 점프 · 공중에서 한 번 더!</span></div><button id="jump" class="jump-button" disabled><span aria-hidden="true">↑</span> 점프 <span class="jump-dots" id="jump-dots" aria-label="남은 점프 2회">● ●</span></button></div>
+</div><div class="below-game"><span><span aria-hidden="true">✦</span> 책 더미는 뛰어넘고, 높은 책은 아래로!</span><span class="desktop-help">PC에서는 <kbd>Space</kbd>로 점프</span></div>
+</section>
+<section id="comic-screen" class="screen story-screen" hidden aria-label="마지막 이야기"><div class="section-heading"><div><p class="eyebrow">책장 너머, 두 친구에게 무슨 일이?</p><h2>마지막 이야기</h2></div><span id="comic-count">1 / 5</span></div><figure class="comic-frame"><img id="comic-image" alt=""></figure><div class="story-actions"><div class="comic-progress" id="comic-progress" aria-hidden="true"></div><button id="comic-auto" class="text-button" aria-pressed="true">자동 넘김 끄기</button><button id="next" class="primary">다음 <span aria-hidden="true">→</span></button></div></section>
+<section id="puzzle-screen" class="screen puzzle-screen" hidden><p class="eyebrow">이제, 화면 밖에서 이어지는 이야기</p><h2>마지막 장면은<br>너의 손끝에 있어.</h2><p class="puzzle-copy">엽서의 노란 모서리를 접어 두 친구의 마지막 장면을 완성해 줘! 완성된 문장을 입력해 봐.</p><div class="fold-paper"><img src="assets/puzzle/fold-guide.svg" alt="가지고 있는 종이 엽서의 노란 모서리를 안쪽으로 접는 방법"></div><p class="paper-note">가지고 있는 <strong>실제 종이 엽서</strong>를 접어 주세요.</p><form id="answer-form" novalidate><label for="answer">완성된 문장</label><div class="answer-row"><input id="answer" type="text" placeholder="엽서에서 찾은 문장을 적어 주세요" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="100" aria-describedby="answer-feedback"><button type="submit" class="primary">확인</button></div><p id="answer-feedback" class="feedback" aria-live="polite"></p></form></section>
+<section id="complete-screen" class="screen complete-screen" hidden><div class="completion-seal" aria-hidden="true">✦</div><p class="eyebrow">마지막 페이지까지, 함께한 너에게</p><h2>두 친구가<br>돌아왔어요!</h2><p id="completed-sentence"></p><p class="completion-copy">두 친구는 원래의 모습으로 돌아왔어요.<br>비밀의 도서관 방탈출, 모든 모험을 마쳤습니다.</p><div class="completed-stamp">방탈출 최종 완료 <span aria-hidden="true">✓</span></div><button id="replay" class="text-button">이야기 처음부터 다시 보기 ↻</button></section>
+<footer><span>비밀의 도서관 · 마지막 모험</span><span>작은 발자국이, 커다란 이야기가 되는 곳.</span></footer>
+</main><script type="module" src="app.js"></script>
+</body></html>
