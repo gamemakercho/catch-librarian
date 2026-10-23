@@ -1,12 +1,13 @@
-import { CONFIG } from './config.js?v=20261023-v2';
-import { boxPolygon, obstaclePolygon, penetration, sweepPolygons } from './collision.js?v=20261023-v2';
+import {createProp} from './props.js?v=20261023-flat';
+import { CONFIG } from './config.js?v=20261023-flat';
+import { boxPolygon, obstaclePolygons, penetration, sweepPolygons } from './collision.js?v=20261023-flat';
 export const WORLD=Object.freeze({width:960,height:500,floor:415,catX:240,librarianX:780});
 export const normalizeAnswer=value=>value.normalize('NFC').replace(/[\s!.！。．]/gu,'');
 const acceptedAnswer=String.fromCodePoint(44256,50577,51060,50752,32,49324,49436,44032,32,46028,50500,50772,45796);
 export const isCorrectAnswer=value=>normalizeAnswer(value)===normalizeAnswer(acceptedAnswer);
 export class Chase {
  constructor(config=CONFIG){this.config=config;this.reset()}
- reset(){Object.assign(this,{state:'ready',elapsed:0,health:this.config.health,x:WORLD.catX,vx:0,y:0,vy:0,jumps:2,invincible:0,obstacles:[],spawnAt:this.config.warmup,serial:0,distance:0,recoil:0,hits:0,hitStop:0,stun:0,hitActive:false,hitAge:0,landingAge:null,defeatAge:0,contacts:[],maxPenetration:0})}
+ reset(){Object.assign(this,{state:'ready',elapsed:0,health:this.config.health,x:WORLD.catX,vx:0,y:0,vy:0,jumps:2,invincible:0,obstacles:[],spawnAt:this.config.warmup,serial:0,bookSerial:0,distance:0,recoil:0,hits:0,hitStop:0,stun:0,hitActive:false,hitAge:0,landingAge:null,defeatAge:0,contacts:[],maxPenetration:0})}
  start(){this.reset();this.state='playing'}
  jump(){
   if(this.state!=='playing'||this.health<=0||this.stun>0||this.hitStop>0||this.jumps===0)return false;
@@ -18,13 +19,17 @@ export class Chase {
   o.damageConsumed??=Boolean(o.hit);o.reacting??=false;return o;
  }
  spawn(){
-  const kinds=['stack','high','basket','low','stack','basket','high'],kind=kinds[this.serial%kinds.length];
-  const airborne=kind==='high'||kind==='low',w=kind==='basket'?62:48,h=airborne?25:kind==='basket'?45:53;
-  // Measured hand/bag vicinity relative to the enlarged librarian's paw baseline.
-  const x=WORLD.librarianX-this.config.librarianHeight*.28-w/2;
-  const targetLift=kind==='high'?128:kind==='low'?32:0;
-  this.obstacles.push(this.prepareObstacle({id:this.serial++,kind,x,w,h,lift:airborne?this.config.librarianHeight*.56-h/2:0,targetLift,launchLift:this.config.librarianHeight*.56-h/2}));this.recoil=.25;
+  const kinds=['stack','high','basket','low','box','basket','high'],kind=kinds[this.serial%kinds.length];
+  const airborne=kind==='high'||kind==='low',spriteId=airborne?['book-red','book-green','book-blue'][(this.bookSerial+Math.floor(this.bookSerial/3))%3]:kind==='stack'?'book-stack':kind;
+  const trajectory=airborne?Math.floor(this.bookSerial++/9)%3:0;
+  const o=createProp(spriteId,{id:this.serial++,kind,trajectory,lift:0});
+  o.x=WORLD.librarianX-this.config.librarianHeight*.28-o.w/2;
+  o.targetLift=kind==='high'?128:kind==='low'?32:0;
+  // Lift is the artwork's bottom, so each natural book height shares the hand center.
+  o.launchLift=this.config.librarianHeight*.56-o.h/2;o.lift=airborne?o.launchLift:0;
+  this.obstacles.push(this.prepareObstacle(o));this.recoil=.25;
  }
+
  hit(obstacle){
   // Damage history is separate from geometry. This never controls separation.
   if(this.state!=='playing'||obstacle.damageConsumed||obstacle.hit)return false;
@@ -82,21 +87,20 @@ export class Chase {
    this.prepareObstacle(o);o.previous={x:o.x,lift:o.lift,angle:o.angle};o.age+=dt;
    if(o.reacting){
     o.reactionAge+=dt;o.x+=o.vx*dt;o.vy-=this.config.propGravity*dt;o.lift+=o.vy*dt;o.angle+=o.angularVelocity*dt;
-    const extent=Math.abs(Math.cos(o.angle))*o.h/2+Math.abs(Math.sin(o.angle))*o.w/2;
-    const minimumLift=extent-o.h/2;
-    if(o.lift<minimumLift){o.lift=minimumLift;if(o.vy< -35)o.vy=-o.vy*.24;else o.vy=0;o.vx*=Math.exp(-2*dt);o.angularVelocity*=Math.exp(-2.5*dt)}
+    const bottom=Math.max(...obstaclePolygons(o,WORLD.floor).flat().map(p=>p.y));
+    if(bottom>WORLD.floor){o.lift+=bottom-WORLD.floor;if(o.vy< -35)o.vy=-o.vy*.24;else o.vy=0;o.vx*=Math.exp(-2*dt);o.angularVelocity*=Math.exp(-2.5*dt)}
     o.vx*=Math.exp(-.35*dt);
    }else{
     o.x-=speed*dt;
     if(o.kind==='high'||o.kind==='low'){
-     const blend=Math.max(0,1-o.age/.65);o.lift=o.targetLift+(o.launchLift-o.targetLift)*blend*blend;o.angle=Math.sin(this.elapsed*8+o.id)*.15-.2;
+     const blend=Math.max(0,1-o.age/.65);o.lift=o.targetLift+(o.launchLift-o.targetLift)*blend*blend+4*blend*(1-blend)*[0,22,44][o.trajectory||0];o.angle=Math.sin(this.elapsed*8+o.id)*.15-.2;
     }
    }
   }
   // Continuous translation test catches fast books before an end-step overlap.
   for(const o of this.obstacles){
-   const prev=o.previous,from={...o,x:prev.x,lift:prev.lift};
-   const collision=sweepPolygons(this.catPolygon(previous.x,previous.y),obstaclePolygon(from,WORLD.floor),{x:this.x-previous.x,y:previous.y-this.y},{x:o.x-prev.x,y:prev.lift-o.lift});
+   const prev=o.previous,from={...o,x:prev.x,lift:prev.lift,angle:prev.angle};
+   const collision=obstaclePolygons(from,WORLD.floor).map(poly=>sweepPolygons(this.catPolygon(previous.x,previous.y),poly,{x:this.x-previous.x,y:previous.y-this.y},{x:o.x-prev.x,y:prev.lift-o.lift})).filter(Boolean).sort((a,b)=>a.time-b.time)[0];
    if(collision){
     const t=collision.time;this.x=previous.x+(this.x-previous.x)*t;this.y=previous.y+(this.y-previous.y)*t;
     o.x=prev.x+(o.x-prev.x)*t;o.lift=prev.lift+(o.lift-prev.lift)*t;
@@ -106,11 +110,11 @@ export class Chase {
   // Invulnerability and damageConsumed never bypass these physical passes.
   for(let pass=0;pass<24;pass++){
    let resolved=false;
-   for(const o of this.obstacles){const overlap=penetration(this.catPolygon(),obstaclePolygon(o,WORLD.floor));if(overlap){this.separate(o,overlap.normal,overlap.depth);this.react(o,overlap.normal);resolved=true}}
+   for(const o of this.obstacles)for(const part of obstaclePolygons(o,WORLD.floor)){const overlap=penetration(this.catPolygon(),part);if(overlap){this.separate(o,overlap.normal,overlap.depth);this.react(o,overlap.normal);resolved=true}}
    this.x=Math.max(30,this.x);this.y=Math.max(0,this.y);
    if(!resolved)break;
   }
-  this.maxPenetration=Math.max(0,...this.obstacles.map(o=>penetration(this.catPolygon(),obstaclePolygon(o,WORLD.floor))?.depth||0));
+  this.maxPenetration=Math.max(0,...this.obstacles.flatMap(o=>obstaclePolygons(o,WORLD.floor).map(poly=>penetration(this.catPolygon(),poly)?.depth||0)));
   this.obstacles=this.obstacles.filter(o=>o.x+o.w> -100&&o.x< WORLD.width+130&&!(o.reactionAge>3&&Math.abs(o.x-this.x)>150));
   if(this.health<=0){this.defeatAge+=dt;if(this.defeatAge>=this.config.defeatDelay)this.state='failed'}
   else if(this.elapsed>=this.config.duration)this.state='comic';

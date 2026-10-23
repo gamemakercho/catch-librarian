@@ -1,6 +1,10 @@
+import {propFrame,transformPropPoint} from './props.js?v=20261023-flat';
 // Convex SAT, plus continuous translation TOI. Screen coordinates: y down.
 const COLLISION_EPS=1e-8;
 export function boxPolygon(x,y,w,h){return [{x,y},{x:x+w,y},{x:x+w,y:y+h},{x,y:y+h}]}
+export function obstaclePolygons(o,floorY=415){
+ const f=propFrame(o);return f?f.parts.map(part=>part.map(p=>transformPropPoint(o,p,floorY))):[obstaclePolygon(o,floorY)];
+}
 export function obstaclePolygon(o,floorY=415){
  const cx=o.x+o.w/2,cy=floorY-o.lift-o.h/2,c=Math.cos(o.angle||0),s=Math.sin(o.angle||0);
  return [[-o.w/2,-o.h/2],[o.w/2,-o.h/2],[o.w/2,o.h/2],[-o.w/2,o.h/2]].map(([x,y])=>({x:cx+x*c-y*s,y:cy+x*s+y*c}));

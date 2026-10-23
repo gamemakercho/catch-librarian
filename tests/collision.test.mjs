@@ -2,11 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Chase,WORLD} from '../engine.js';
 import {CONFIG} from '../config.js';
-import {boxPolygon,obstaclePolygon,penetration,sweepPolygons} from '../collision.js';
+import {boxPolygon,obstaclePolygon,obstaclePolygons,penetration,sweepPolygons} from '../collision.js';
 const tick=(g,t,dt=1/120)=>{for(let left=t;left>1e-9;left-=dt)g.update(Math.min(dt,left))};
 const fixture=()=>{const g=new Chase();g.start();g.spawnAt=1000;return g};
 const prop=(kind='stack',extra={})=>({id:77,kind,x:270,w:kind==='basket'?62:48,h:['high','low'].includes(kind)?25:kind==='basket'?45:53,lift:0,age:2,...extra});
-function assertSeparate(g,message=''){for(const o of g.obstacles){const depth=penetration(g.catPolygon(),obstaclePolygon(o))?.depth||0;assert.ok(depth<.002,message+' penetration '+depth)}assert.ok(Number.isFinite(g.x)&&Number.isFinite(g.y))}
+function assertSeparate(g,message=''){for(const o of g.obstacles)for(const part of obstaclePolygons(o)){const depth=penetration(g.catPolygon(),part)?.depth||0;assert.ok(depth<.002,message+' penetration '+depth)}assert.ok(Number.isFinite(g.x)&&Number.isFinite(g.y))}
 function firstContact(g,seconds=.1){for(let t=0;t<seconds&&g.hits===0;t+=1/120)g.update(1/120);assert.equal(g.hits,1);assertSeparate(g);return g.obstacles[0]}
 test('SAT includes rotated book corners and continuous TOI finds the correct incoming face',()=>{const a=boxPolygon(0,0,10,10),b=boxPolygon(100,0,10,10);const hit=sweepPolygons(a,b,{x:0,y:0},{x:-200,y:0});assert.ok(Math.abs(hit.time-.45)<1e-9);assert.equal(hit.normal.x,-1);assert.equal(hit.normal.y,0);assert(penetration(boxPolygon(0,0,10,10),boxPolygon(5,5,10,10)));assert.equal(penetration(a,b),null);const rotated=obstaclePolygon({x:10,w:40,h:10,lift:395,angle:Math.PI/4});assert.ok(rotated.some(p=>p.y<0));});
 for(const kind of ['stack','basket','low'])test(kind+' contact separates before render, compresses immediately, and both bodies recoil continuously',()=>{const g=fixture();g.obstacles=[prop(kind,{lift:kind==='low'?20:0})];const o=firstContact(g);assert.equal(g.health,2);assert.equal(g.hitFrame,1);assert.ok(g.hitStop>0);assert.ok(g.vx<0);assert.ok(g.vy>0);assert.ok(o.vx>0);assert.ok(o.damageConsumed&&o.reacting);assert.equal(g.obstacles.length,1);const x=g.x,ox=o.x;tick(g,.2);assert.ok(g.x<x);assert.ok(o.x>ox);assertSeparate(g);tick(g,.9);assert.equal(g.health,2);assertSeparate(g)});

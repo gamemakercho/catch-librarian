@@ -103,7 +103,7 @@
   "sheets": [
     {
       "id": "cat-run-thin-v2",
-      "image": "assets/sprites/cat-run-thin-v2.png",
+      "image": "assets/sprites/cat-run-thin-v2.webp",
       "image_size": {
         "w": 1536,
         "h": 1024
@@ -301,7 +301,7 @@
     },
     {
       "id": "librarian-run",
-      "image": "assets/sprites/librarian-run.png",
+      "image": "assets/sprites/librarian-run.webp",
       "image_size": {
         "w": 1536,
         "h": 1024
@@ -499,7 +499,7 @@
     },
     {
       "id": "cat-hit-recover-v2",
-      "image": "assets/sprites/cat-hit-recover-v2.png",
+      "image": "assets/sprites/cat-hit-recover-v2.webp",
       "image_size": {
         "w": 1536,
         "h": 1024

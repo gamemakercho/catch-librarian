@@ -1,9 +1,10 @@
-import { CONFIG } from './config.js?v=20261023-v2';
-import { Chase, isCorrectAnswer } from './engine.js?v=20261023-v2';
-import { Renderer } from './renderer.js?v=20261023-v2';
+import {SPRITE_LAYOUT,PROPS_LAYOUT,BACKGROUND_LAYOUT} from './scene-data.js?v=20261023-flat';
+import { CONFIG } from './config.js?v=20261023-flat';
+import { Chase, isCorrectAnswer } from './engine.js?v=20261023-flat';
+import { Renderer } from './renderer.js?v=20261023-flat';
 const $ = id => document.getElementById(id);
 const game = new Chase();
-const comicFiles = ['01-chase','02-treat','03-sparkle','04-trip','05-jump'].map(x=>`assets/ending/ending-${x}.png`);
+const comicFiles = ['01-chase','02-treat','03-sparkle','04-trip','05-jump'].map(x=>`assets/ending/ending-${x}.webp`);
 const comicAlts = ['사서의 뒤를 헉헉대며 쫓아가는 고양이','사서의 뒷통수 너머로 보이는 츄르','츄르를 발견하고 눈이 십자가 모양으로 빛나는 사서','넘어진 사서의 운동화와 놀란 고양이','바닥에서 올려다본 시점, 큰 앞발을 내밀며 뛰어드는 고양이'];
 let state='loading', renderer, lastTime=null, ambient=0, panel=0, comicElapsed=0, autoComic=true, composing=false, compositionEnded=0, priorHits=0;
 const paw = '<svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="7" cy="12" rx="4" ry="5" transform="rotate(-25 7 12)"/><ellipse cx="14" cy="7" rx="4" ry="5"/><ellipse cx="23" cy="9" rx="4" ry="5" transform="rotate(18 23 9)"/><ellipse cx="28" cy="17" rx="3.5" ry="4.5" transform="rotate(35 28 17)"/><path d="M7 25c0-5 6-11 10-10s10 7 9 12c-1 5-7 2-10 2S7 30 7 25Z"/></svg>';
@@ -16,7 +17,8 @@ function hud(){
 let previousHUD='';function syncHUD(){const key=[Math.ceil(CONFIG.duration-game.elapsed),game.health,game.jumps].join();if(key!==previousHUD){hud();previousHUD=key}}
 function showScreen(name){for(const id of ['run','comic','puzzle','complete'])$(id+'-screen').hidden=id!==name;for(const id of ['run','comic','puzzle']){const el=$('step-'+id);if(id===name||(name==='complete'&&id==='puzzle'))el.setAttribute('aria-current','step');else el.removeAttribute('aria-current')}}
 function overlay(title,copy,button,label='도서관의 마지막 추격전'){$('overlay').hidden=false;$('overlay-title').textContent=title;$('overlay-copy').textContent=copy;$('overlay-label').textContent=label;$('start').textContent=button;$('start').disabled=false;$('pause').hidden=true;$('jump').disabled=true}
-function start(){game.start();state='playing';priorHits=0;lastTime=null;$('overlay').hidden=true;$('pause').hidden=false;$('jump').disabled=false;$('game-message').textContent='책장 사이로 출발!';syncHUD()}
+let comicPreloads;function preloadComics(){comicPreloads??=comicFiles.map(src=>{const img=new Image();img.decoding='async';img.src=src;return img})}
+function start(){preloadComics();game.start();state='playing';priorHits=0;lastTime=null;$('overlay').hidden=true;$('pause').hidden=false;$('jump').disabled=false;$('game-message').textContent='책장 사이로 출발!';syncHUD()}
 function jump(){if(state!=='playing')return;game.jump();syncHUD()}
 function pause(){if(state!=='playing')return;state='paused';game.state='paused';overlay('잠깐, 책갈피를 꽂아 둘게.','준비가 되면 모험을 이어가 주세요.','계속 달리기','모험을 잠시 쉬는 중');lastTime=null}
 function resume(){state='playing';game.state='playing';$('overlay').hidden=true;$('pause').hidden=false;$('jump').disabled=false;lastTime=null}
@@ -44,7 +46,7 @@ function complete(announce){
 }
 $('replay').addEventListener('click',()=>{game.reset();state='ready';showScreen('run');$('answer-form').reset();$('answer-feedback').textContent='';$('answer').removeAttribute('aria-invalid');autoComic=true;$('comic-auto').textContent='자동 넘김 끄기';$('comic-auto').setAttribute('aria-pressed','true');overlay('작은 발로, 힘껏 달려 봐!','책 더미를 피해 잠시 사서를 따라가 주세요.\n화면이나 점프 버튼을 누르면 폴짝!','모험 시작하기');hud()});
 function frame(time){const dt=lastTime===null?0:Math.min((time-lastTime)/1000,.25);lastTime=time;if(!document.hidden){ambient+=dt;if(state==='playing'){game.update(dt);syncHUD();if(game.hits!==priorHits){priorHits=game.hits;$('game-message').textContent='앗! 괜찮아, 다시 폴짝!'}else if(game.invincible===0&&game.elapsed>3)$('game-message').textContent='';if(game.state==='failed'){state='failed';overlay('잠깐 쉬었다, 다시 달릴까?','괜찮아! 책 더미를 잘 보고 뛰어넘어 봐.','다시 도전하기','다음엔 조금 더 멀리!')}else if(game.state==='comic')comic()}else if(state==='comic'&&autoComic){comicElapsed+=dt;if(comicElapsed>=CONFIG.comicSeconds)nextPanel()}if(renderer&&(state==='ready'||state==='playing'||state==='paused'||state==='failed'))renderer.draw(game,ambient)}requestAnimationFrame(frame)}
-async function load(){try{const files=['assets/sprites/cat-run-thin-v2.png','assets/sprites/librarian-run.png','assets/sprites/cat-hit-recover-v2.png',...comicFiles,'assets/puzzle/fold-guide.svg'];const images=await Promise.all(files.map(src=>new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error(src));img.src=src})));const response=await fetch('assets/sprites/sprite-layout-v2.json');if(!response.ok)throw new Error('layout');const layout=await response.json();renderer=new Renderer($('game'),images,layout);state='ready';overlay('작은 발로, 힘껏 달려 봐!','책 더미를 피해 잠시 사서를 따라가 주세요.\n화면이나 점프 버튼을 누르면 폴짝!','모험 시작하기');hud();try{if(JSON.parse(localStorage.getItem(CONFIG.completionKey))?.completed)complete(false)}catch{}requestAnimationFrame(frame)}catch(error){state='error';overlay('책장을 불러오지 못했어요.','인터넷 연결을 확인하고 다시 열어 주세요.','다시 불러오기','잠깐만요!');console.error('Asset loading failed:',error)}}
+async function load(){try{const files=[...SPRITE_LAYOUT.sheets.map(s=>s.image),PROPS_LAYOUT.image,BACKGROUND_LAYOUT.image];const images=await Promise.all(files.map(src=>new Promise((resolve,reject)=>{const img=new Image();img.decoding='async';img.onload=()=>resolve(img);img.onerror=()=>reject(new Error(src));img.src=src})));renderer=new Renderer($('game'),images,SPRITE_LAYOUT);state='ready';overlay('작은 발로, 힘껏 달려 봐!','책 더미를 피해 잠시 사서를 따라가 주세요.\n화면이나 점프 버튼을 누르면 폴짝!','모험 시작하기');hud();try{if(JSON.parse(localStorage.getItem(CONFIG.completionKey))?.completed)complete(false)}catch{}requestAnimationFrame(frame)}catch(error){state='error';overlay('책장을 불러오지 못했어요.','인터넷 연결을 확인하고 다시 열어 주세요.','다시 불러오기','잠깐만요!');console.error('Asset loading failed:',error)}}
 load();
 
 

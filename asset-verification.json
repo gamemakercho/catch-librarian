@@ -1,5 +1,153 @@
 {
+  "format": "WebP",
   "verified": [
+    {
+      "file": "assets/sprites/cat-hit-recover-v2.webp",
+      "bytes": 580970,
+      "sha256": "070097436650679b79e6fff3fbfee878cbe37948ea38fcb7e9d9b1f33cb19b62",
+      "width": 1536,
+      "height": 1024,
+      "alpha": true,
+      "encoding": "lossless",
+      "source_bytes": 1623216,
+      "source_sha256": "3122c108f70276e522094c03340fad79e3364084d243c419de9a1e17430a7b0a",
+      "alpha_exact": true,
+      "visible_rgb_exact": true,
+      "psnr_db": 18.53
+    },
+    {
+      "file": "assets/sprites/cat-run-thin-v2.webp",
+      "bytes": 559586,
+      "sha256": "568699710c8080a592aa6b95780d2683e7fd6210a55ddf9cd50f6617413717aa",
+      "width": 1536,
+      "height": 1024,
+      "alpha": true,
+      "encoding": "lossless",
+      "source_bytes": 1596748,
+      "source_sha256": "097179e196fdd0394f7cdb58ecaf89a9fdd0b46c6d29abfb5872e3fd7a177813",
+      "alpha_exact": true,
+      "visible_rgb_exact": true,
+      "psnr_db": 17.04
+    },
+    {
+      "file": "assets/sprites/librarian-run.webp",
+      "bytes": 829124,
+      "sha256": "3c0fd06c92ccadc4a854cdcce90c34492bf51e4650b3d09145ad4686b4a302cd",
+      "width": 1536,
+      "height": 1024,
+      "alpha": true,
+      "encoding": "lossless",
+      "source_bytes": 2006858,
+      "source_sha256": "07b5b2490ea9fdcdd7848bfe4650c283d10af350e78a09f9fc30ad93cc14e136",
+      "alpha_exact": true,
+      "visible_rgb_exact": true,
+      "psnr_db": 18.21
+    },
+    {
+      "file": "assets/ending/ending-01-chase.webp",
+      "bytes": 300714,
+      "sha256": "7b0c186cfdf4643c084e60e813ef6a62dc7a282abb28479841d722794f0d8013",
+      "width": 1536,
+      "height": 1024,
+      "alpha": false,
+      "encoding": "quality88",
+      "source_bytes": 2375792,
+      "source_sha256": "d0b046418775d4bdd0f76bb50a2ace557f10bce225444fd646394b403f9350c2",
+      "alpha_exact": true,
+      "visible_rgb_exact": false,
+      "psnr_db": 36.56
+    },
+    {
+      "file": "assets/ending/ending-02-treat.webp",
+      "bytes": 203106,
+      "sha256": "408235f6b29ad1612119286f6579681bc8dd8ed0024d85d40544d360ba11edcf",
+      "width": 1536,
+      "height": 1024,
+      "alpha": false,
+      "encoding": "quality88",
+      "source_bytes": 2028715,
+      "source_sha256": "bdc06aea1828aa3d5ba725e4a8adc3087627ec2636a9dcacc13ca7548952ad46",
+      "alpha_exact": true,
+      "visible_rgb_exact": false,
+      "psnr_db": 37.19
+    },
+    {
+      "file": "assets/ending/ending-03-sparkle.webp",
+      "bytes": 219834,
+      "sha256": "7f227b2a8e16c4a9c780e9948f45676f235bdbb29406affa1886339648dcfc1f",
+      "width": 1536,
+      "height": 1024,
+      "alpha": false,
+      "encoding": "quality88",
+      "source_bytes": 2008070,
+      "source_sha256": "d1591b464c11f5dafbd14436099af4cda06fb03a75822d7564c4c5092c30e3ca",
+      "alpha_exact": true,
+      "visible_rgb_exact": false,
+      "psnr_db": 37.43
+    },
+    {
+      "file": "assets/ending/ending-04-trip.webp",
+      "bytes": 325672,
+      "sha256": "1552d3df67671a8ebd0b0356debbc78c403c2f7ebc21cb11f1d2375f044141da",
+      "width": 1536,
+      "height": 1024,
+      "alpha": false,
+      "encoding": "quality88",
+      "source_bytes": 2447184,
+      "source_sha256": "3b120ee8f8f5b6446b1213cef74295e147d7a4c4d022a4f6c2a786ca6fe9874e",
+      "alpha_exact": true,
+      "visible_rgb_exact": false,
+      "psnr_db": 36.36
+    },
+    {
+      "file": "assets/ending/ending-05-jump.webp",
+      "bytes": 314026,
+      "sha256": "2dc479cbe1488b99f46153392aac15c6cdcb6642304b3691fb6e05cca6b7aa9f",
+      "width": 1536,
+      "height": 1024,
+      "alpha": false,
+      "encoding": "quality88",
+      "source_bytes": 2558119,
+      "source_sha256": "64b90c354e31a7ddedc8d1e62386eb73fe5f49f686bbeb9cd4c268913f04ee9c",
+      "alpha_exact": true,
+      "visible_rgb_exact": false,
+      "psnr_db": 36.53
+    },
+    {
+      "file": "assets/props/library-props-sideview.webp",
+      "bytes": 445744,
+      "sha256": "ac9038d5b43d3490cf46e6c0ac93fdfc8a2d9fc30a840d1a17acb067a0299979",
+      "width": 1536,
+      "height": 1024,
+      "alpha": true,
+      "encoding": "lossless",
+      "source_bytes": 1388684,
+      "source_sha256": "d08be5c5d339b3007cd9a9e660bb2852ed23be47108522a5e6ed427ad65393e8",
+      "alpha_exact": true,
+      "visible_rgb_exact": true,
+      "psnr_db": 19.26
+    },
+    {
+      "file": "assets/background/library-background-sideview.webp",
+      "bytes": 138392,
+      "sha256": "242d7ecdec2b2670575f25ebd44c8a3120945e83e37624604105c771c6787967",
+      "width": 1736,
+      "height": 906,
+      "alpha": false,
+      "encoding": "quality90",
+      "source_bytes": 1589214,
+      "source_sha256": "d9e71c1dc9e1ea55f0d4e296c8afb2399c67e31b691abb64f7899f7706122653",
+      "alpha_exact": true,
+      "visible_rgb_exact": false,
+      "psnr_db": 39.9
+    },
+    {
+      "file": "assets/puzzle/fold-guide.svg",
+      "bytes": 1678,
+      "sha256": "47e5153fc63be052ca2e53856bda92bb60c364dda31c402aa73f7746f8ca12cc"
+    }
+  ],
+  "original_sources": [
     {
       "file": "assets/ending/ending-01-chase.png",
       "sha256": "d0b046418775d4bdd0f76bb50a2ace557f10bce225444fd646394b403f9350c2",
@@ -60,5 +208,10 @@
       "sha256": "7683df38782273e4bb43afe26c0ba66973f81a12928ed2e946c05f6c005da6fb",
       "bytes": 16231
     }
-  ]
+  ],
+  "before_active_image_bytes": 16644702,
+  "before_all_image_bytes": 18155521,
+  "equivalent_png_with_new_art_bytes": 19622600,
+  "after_image_bytes": 3917168,
+  "initial_image_bytes": 2553816
 }

@@ -1,0 +1,38 @@
+{
+  "schema_version": 4,
+  "image": "assets/background/library-background-sideview.webp",
+  "image_size": {
+    "w": 1736,
+    "h": 906
+  },
+  "world": {
+    "width": 960,
+    "height": 500,
+    "floor": 415
+  },
+  "wall": {
+    "source_rect": {
+      "x": 0,
+      "y": 0,
+      "w": 1736,
+      "h": 721
+    },
+    "destination_y": 0,
+    "destination_height": 415,
+    "distance_factor": 0.22
+  },
+  "floor": {
+    "source_rect": {
+      "x": 0,
+      "y": 721,
+      "w": 1736,
+      "h": 185
+    },
+    "destination_y": 415,
+    "destination_height": 85,
+    "distance_factor": 1
+  },
+  "repeat_mode": "alternate-horizontal-mirror",
+  "repeat_note": "Not a pixel-retouched seamless tile. Connect each edge to the same edge of a mirrored neighbor. Keep global parity, repeat every2 tiles. Scale each crop uniformly, then repeat across width.",
+  "note": "No baked-in characters, UI or running-lane obstacles. Native artwork baseline measured at y721. Align destination baseline with WORLD.floor415."
+}
