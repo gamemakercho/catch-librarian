@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {PROP_FRAMES,createProp,propTransform,transformPropPoint} from '../props.js';
 import {Chase,WORLD} from '../engine.js';
+import {CONFIG} from '../config.js';
 import {obstaclePolygons,penetration,boxPolygon} from '../collision.js';
 import {Renderer,backgroundTiles} from '../renderer.js';
 import {PROPS_LAYOUT,BACKGROUND_LAYOUT,SPRITE_LAYOUT} from '../scene-data.js';
@@ -44,16 +45,20 @@ for(const f of PROPS_LAYOUT.frames)test(f.id+' actual outline separates at conta
   for(let n=0;n<120;n++){g.update(1/120);assertSeparated(g)}assert.equal(g.health,2);
  }
 });
-test('all three natural book shapes clear a grounded cat on high routes and contact on low routes',()=>{
- for(const id of ['book-red','book-green','book-blue'])for(const kind of ['high','low']){
-  const g=fixture(),lift=kind==='high'?128:32;g.obstacles=[createProp(id,{id:0,kind,x:300,lift,targetLift:lift,launchLift:lift,age:2})];
-  for(let n=0;n<120;n++){g.update(1/120);assertSeparated(g)}assert.equal(g.hits,kind==='high'?0:1,id+' '+kind);
+test('all book shapes and launch curves clear a grounded cat high and contact low at every chase speed',()=>{
+ for(const id of ['book-red','book-green','book-blue'])for(const kind of ['high','low'])for(const trajectory of [0,1,2])for(const speed of [CONFIG.runSpeed,CONFIG.runSpeed+CONFIG.speedIncrease/2,CONFIG.runSpeed+CONFIG.speedIncrease]){
+  const g=new Chase({...CONFIG,runSpeed:speed,speedIncrease:0});g.start();g.spawnAt=1000;
+  const o=createProp(id,{id:0,kind,trajectory,x:0,lift:0,angle:-.18+trajectory*.12,angularVelocity:[1.4,-1.7,2.1][trajectory],vy:(kind==='high'?CONFIG.bookThrowHigh:CONFIG.bookThrowLow)[trajectory]});
+  o.x=WORLD.librarianX-CONFIG.librarianHeight*.28-o.w/2;o.lift=CONFIG.librarianHeight*.56-o.h/2;g.obstacles=[o];
+  for(let n=0;n<240;n++){g.update(1/120);assertSeparated(g)}assert.equal(g.hits,kind==='high'?0:1,[id,kind,trajectory,speed].join('/'));
  }
 });
+
 test('ground props rest on the floor after rotating with the same collision geometry',()=>{
  for(const id of ['box','book-stack','basket']){
   const g=fixture();g.obstacles=[createProp(id,{id:0,kind:'basket',x:600,lift:0,reacting:true,vx:0,vy:0,angularVelocity:2})];
-  for(let n=0;n<120;n++){g.update(1/120);const o=g.obstacles[0];assert.ok(Math.max(...obstaclePolygons(o).flat().map(p=>p.y))<=WORLD.floor+.001)}
+  const o=g.obstacles[0];for(let n=0;n<96;n++){g.update(1/120);assert.ok(Math.max(...obstaclePolygons(o).flat().map(p=>p.y))<=WORLD.floor+.001)}
+  for(let n=0;n<24;n++)g.update(1/120);assert.ok(!g.obstacles.includes(o),'floor contact does not postpone cleanup');
  }
 });
 test('book form choice is independent of high/low routes and all three launch curves',()=>{
@@ -74,5 +79,5 @@ test('optimized images remain below 4MB total and 2.6MB initial scene, with exac
 
 test('deflected props clear before the next launch reaches them, without stacking artwork',()=>{
  const g=new Chase();g.start();g.health=100;for(let n=0;n<4000&&g.state==='playing';n++){g.update(1/120);for(let i=0;i<g.obstacles.length;i++)for(let j=i+1;j<g.obstacles.length;j++)for(const a of obstaclePolygons(g.obstacles[i]))for(const b of obstaclePolygons(g.obstacles[j]))assert.ok((penetration(a,b)?.depth||0)<.002,'prop overlap at '+g.elapsed)}
- assert.equal(g.state,'comic');assert.ok(g.serial>=6);
+ assert.equal(g.state,'discovery');assert.ok(g.serial>=6);
 });
