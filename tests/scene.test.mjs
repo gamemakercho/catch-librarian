@@ -6,12 +6,12 @@ import {Chase,WORLD} from '../engine.js';
 import {CONFIG} from '../config.js';
 import {obstaclePolygons,penetration,boxPolygon} from '../collision.js';
 import {Renderer,backgroundTiles} from '../renderer.js';
-import {PROPS_LAYOUT,BACKGROUND_LAYOUT,SPRITE_LAYOUT} from '../scene-data.js';
+import {PROPS_LAYOUT,BACKGROUND_LAYOUT,SPRITE_LAYOUT,SCENE_IMAGE_FILES} from '../scene-data.js';
 const signedArea=p=>p.reduce((a,v,i)=>a+v.x*p[(i+1)%p.length].y-p[(i+1)%p.length].x*v.y,0)/2;
 const cross=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
 const fixture=()=>{const g=new Chase();g.start();g.spawnAt=1000;return g};
 function assertSeparated(g){for(const o of g.obstacles)for(const poly of obstaclePolygons(o))assert.ok((penetration(g.catPolygon(),poly)?.depth||0)<.002);assert.ok(Number.isFinite(g.x)&&Number.isFinite(g.y))}
-test('all six measured prop outlines decompose into finite convex parts with conserved area',()=>{
+test('all seven measured prop outlines decompose into finite convex parts with conserved area',()=>{
  for(const f of PROP_FRAMES.values()){
   const b=f.visible_bounds_local,outline=f.collision_outline_normalized.map(p=>({x:b.x+p.x*b.w,y:b.y+p.y*b.h}));
   assert.ok(Math.abs(f.parts.reduce((a,p)=>a+Math.abs(signedArea(p)),0)-Math.abs(signedArea(outline)))<.001,f.id);
@@ -19,14 +19,14 @@ test('all six measured prop outlines decompose into finite convex parts with con
  }
 });
 test('natural aspect ratios, shared pivot and source rectangles stay exact at all rotations',()=>{
- const calls=[],c=new Proxy({drawImage:(...a)=>calls.push(a)}, {get:(t,k)=>t[k]||(()=>{})}),images=[{},{},{},{id:'props'},{id:'background'}];
+ const calls=[],c=new Proxy({drawImage:(...a)=>calls.push(a)}, {get:(t,k)=>t[k]||(()=>{})}),images=Object.fromEntries(SCENE_IMAGE_FILES.map(url=>[url,{id:url}]));
  const renderer=new Renderer({getContext:()=>c,getBoundingClientRect:()=>({width:960})},images,SPRITE_LAYOUT);
  for(const f of PROP_FRAMES.values())for(const angle of [0,.6,Math.PI]){
   const o=createProp(f.id,{x:300,lift:0,angle}),t=propTransform(o),scale=f.render_width_world/f.visible_bounds_local.w;
   assert.ok(Math.abs(o.h/o.w-f.visible_bounds_local.h/f.visible_bounds_local.w)<1e-9);
   const anchor=transformPropPoint(o,f.ground_anchor_local);if(!angle)assert.ok(Math.abs(anchor.y-WORLD.floor)<1e-9);
   const pivot=transformPropPoint(o,f.pivot_local);assert.equal(pivot.x,t.x);assert.equal(pivot.y,t.y);
-  renderer.obstacle(o);const a=calls.at(-1);assert.equal(a[0],images[3]);assert.deepEqual(a.slice(1,5),Object.values(f.source_rect));assert.equal(a[5],-f.pivot_local.x*scale);assert.equal(a[6],-f.pivot_local.y*scale);assert.equal(a[7]/f.source_rect.w,a[8]/f.source_rect.h);
+  renderer.obstacle(o);const a=calls.at(-1);assert.equal(a[0],images[f.image||PROPS_LAYOUT.image]);assert.deepEqual(a.slice(1,5),Object.values(f.source_rect));assert.equal(a[5],-f.pivot_local.x*scale);assert.equal(a[6],-f.pivot_local.y*scale);assert.ok(Math.abs(a[7]/f.source_rect.w-a[8]/f.source_rect.h)<1e-12);
  }
  const closed=createProp('book-red'),open=createProp('book-green');assert.ok(closed.h>closed.w);assert.ok(open.w>open.h);
 });
@@ -62,7 +62,7 @@ test('ground props rest on the floor after rotating with the same collision geom
  }
 });
 test('book form choice is independent of high/low routes and all three launch curves',()=>{
- const g=fixture(),combinations=new Set(),kinds=new Set();for(let n=0;n<100;n++){g.spawn();const o=g.obstacles.pop();kinds.add(o.spriteId);if(['high','low'].includes(o.kind))combinations.add([o.spriteId,o.kind,o.trajectory].join('/'))}
+ const g=fixture(),combinations=new Set(),kinds=new Set();for(let n=0;n<200;n++){g.spawn();g.updateThrow(.5);const o=g.obstacles.pop();kinds.add(o.spriteId);if(['high','low'].includes(o.kind))combinations.add([o.spriteId,o.kind,o.trajectory].join('/'))}
  assert.equal(kinds.size,6);assert.equal(combinations.size,18);
 });
 test('wall and floor use separate uniform scales and continuous global mirror parity',()=>{
@@ -79,5 +79,5 @@ test('optimized images remain below 4MB total and 2.6MB initial scene, with exac
 
 test('deflected props clear before the next launch reaches them, without stacking artwork',()=>{
  const g=new Chase();g.start();g.health=100;for(let n=0;n<4000&&g.state==='playing';n++){g.update(1/120);for(let i=0;i<g.obstacles.length;i++)for(let j=i+1;j<g.obstacles.length;j++)for(const a of obstaclePolygons(g.obstacles[i]))for(const b of obstaclePolygons(g.obstacles[j]))assert.ok((penetration(a,b)?.depth||0)<.002,'prop overlap at '+g.elapsed)}
- assert.equal(g.state,'discovery');assert.ok(g.serial>=6);
+ assert.equal(g.state,'ending-trip');assert.ok(g.serial>=6);
 });

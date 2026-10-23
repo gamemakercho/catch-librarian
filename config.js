@@ -4,6 +4,7 @@ export const CONFIG = Object.freeze({
  runSpeed:410, speedIncrease:84, obstacleInterval:3.1, minimumInterval:2.5,
  warmup:3, invincibility:1.05, catHeight:58, librarianHeight:180,
  spriteFPS:24, comicSeconds:3.7, discoverySeconds:2.2,
+ throwRelease:.230, throwDuration:.500, endingToeOff:.640, endingFlight:.400, endingStumble:1.060, endingDuration:1.160,
  catCollider:Object.freeze({x:-21,y:-44,w:56,h:40}),
  hitStop:.07, stunDuration:.23, knockbackX:155, knockbackY:195,
  propKnockback:260, propGravity:550, propRestitution:Math.SQRT1_2,

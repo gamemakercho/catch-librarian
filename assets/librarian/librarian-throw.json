@@ -1,0 +1,341 @@
+{
+  "id": "librarian-throw-v3",
+  "image": "assets/librarian/librarian-throw-aligned.webp",
+  "frame_canvas": {
+    "w": 320,
+    "h": 320
+  },
+  "root_anchor": {
+    "x": 144,
+    "y": 212
+  },
+  "scale_group": "librarian-v3",
+  "reference_height_px": 270,
+  "loop": false,
+  "duration_ms": 500,
+  "frames": [
+    {
+      "index": 0,
+      "source_rect": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 320
+      },
+      "root_anchor": {
+        "x": 144,
+        "y": 212
+      },
+      "head_reference": {
+        "face_center": {
+          "x": 181.16,
+          "y": 135.356
+        },
+        "face_size": {
+          "w": 69.45,
+          "h": 87.088
+        },
+        "normalized_face_area_px": 2470
+      },
+      "duration_ms": 70,
+      "source_registration": {
+        "source_rect": {
+          "left": 106,
+          "top": 25,
+          "width": 322,
+          "height": 462
+        },
+        "pelvis_in_source_crop": {
+          "x": 151,
+          "y": 312
+        },
+        "uniform_scale": 0.5511923785126036,
+        "offset": {
+          "x": 61,
+          "y": 40
+        }
+      },
+      "hand_anchor": {
+        "x": 128.245,
+        "y": 204.807
+      },
+      "held_book": true,
+      "event": null,
+      "upper_body_clip": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 212
+      }
+    },
+    {
+      "index": 1,
+      "source_rect": {
+        "x": 320,
+        "y": 0,
+        "w": 320,
+        "h": 320
+      },
+      "root_anchor": {
+        "x": 144,
+        "y": 212
+      },
+      "head_reference": {
+        "face_center": {
+          "x": 166.276,
+          "y": 129.398
+        },
+        "face_size": {
+          "w": 68.878,
+          "h": 84.307
+        },
+        "normalized_face_area_px": 2470
+      },
+      "duration_ms": 80,
+      "source_registration": {
+        "source_rect": {
+          "left": 625,
+          "top": 24,
+          "width": 297,
+          "height": 467
+        },
+        "pelvis_in_source_crop": {
+          "x": 156,
+          "y": 319
+        },
+        "uniform_scale": 0.5510229633008217,
+        "offset": {
+          "x": 58,
+          "y": 36
+        }
+      },
+      "hand_anchor": {
+        "x": 84.449,
+        "y": 141.796
+      },
+      "held_book": true,
+      "event": null,
+      "upper_body_clip": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 212
+      }
+    },
+    {
+      "index": 2,
+      "source_rect": {
+        "x": 640,
+        "y": 0,
+        "w": 320,
+        "h": 320
+      },
+      "root_anchor": {
+        "x": 144,
+        "y": 212
+      },
+      "head_reference": {
+        "face_center": {
+          "x": 160.233,
+          "y": 129.782
+        },
+        "face_size": {
+          "w": 67.655,
+          "h": 86.357
+        },
+        "normalized_face_area_px": 2470
+      },
+      "duration_ms": 80,
+      "source_registration": {
+        "source_rect": {
+          "left": 1107,
+          "top": 22,
+          "width": 305,
+          "height": 471
+        },
+        "pelvis_in_source_crop": {
+          "x": 160,
+          "y": 320
+        },
+        "uniform_scale": 0.550043426195275,
+        "offset": {
+          "x": 56,
+          "y": 36
+        }
+      },
+      "hand_anchor": {
+        "x": 81.852,
+        "y": 109.156
+      },
+      "held_book": true,
+      "event": null,
+      "upper_body_clip": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 212
+      }
+    },
+    {
+      "index": 3,
+      "source_rect": {
+        "x": 0,
+        "y": 320,
+        "w": 320,
+        "h": 320
+      },
+      "root_anchor": {
+        "x": 144,
+        "y": 212
+      },
+      "head_reference": {
+        "face_center": {
+          "x": 167.466,
+          "y": 128.994
+        },
+        "face_size": {
+          "w": 68.995,
+          "h": 86.384
+        },
+        "normalized_face_area_px": 2470
+      },
+      "duration_ms": 70,
+      "source_registration": {
+        "source_rect": {
+          "left": 99,
+          "top": 526,
+          "width": 357,
+          "height": 465
+        },
+        "pelvis_in_source_crop": {
+          "x": 200,
+          "y": 312
+        },
+        "uniform_scale": 0.560936432698628,
+        "offset": {
+          "x": 32,
+          "y": 37
+        }
+      },
+      "hand_anchor": {
+        "x": 49.389,
+        "y": 132.359
+      },
+      "held_book": false,
+      "event": "release-book",
+      "upper_body_clip": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 212
+      }
+    },
+    {
+      "index": 4,
+      "source_rect": {
+        "x": 320,
+        "y": 320,
+        "w": 320,
+        "h": 320
+      },
+      "root_anchor": {
+        "x": 144,
+        "y": 212
+      },
+      "head_reference": {
+        "face_center": {
+          "x": 169.09,
+          "y": 126.598
+        },
+        "face_size": {
+          "w": 71.203,
+          "h": 86.133
+        },
+        "normalized_face_area_px": 2470
+      },
+      "duration_ms": 90,
+      "source_registration": {
+        "source_rect": {
+          "left": 609,
+          "top": 526,
+          "width": 344,
+          "height": 470
+        },
+        "pelvis_in_source_crop": {
+          "x": 194,
+          "y": 312
+        },
+        "uniform_scale": 0.5742203480747657,
+        "offset": {
+          "x": 33,
+          "y": 33
+        }
+      },
+      "hand_anchor": {
+        "x": 50.801,
+        "y": 177.129
+      },
+      "held_book": false,
+      "event": null,
+      "upper_body_clip": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 212
+      }
+    },
+    {
+      "index": 5,
+      "source_rect": {
+        "x": 640,
+        "y": 320,
+        "w": 320,
+        "h": 320
+      },
+      "root_anchor": {
+        "x": 144,
+        "y": 212
+      },
+      "head_reference": {
+        "face_center": {
+          "x": 177.46,
+          "y": 131.194
+        },
+        "face_size": {
+          "w": 68.737,
+          "h": 84.385
+        },
+        "normalized_face_area_px": 2470
+      },
+      "duration_ms": 110,
+      "source_registration": {
+        "source_rect": {
+          "left": 1124,
+          "top": 516,
+          "width": 328,
+          "height": 480
+        },
+        "pelvis_in_source_crop": {
+          "x": 164,
+          "y": 322
+        },
+        "uniform_scale": 0.5588402636334769,
+        "offset": {
+          "x": 52,
+          "y": 32
+        }
+      },
+      "hand_anchor": null,
+      "held_book": false,
+      "event": null,
+      "upper_body_clip": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 212
+      }
+    }
+  ],
+  "preferred_rendering": "Upper-body overlay on the continuously playing run lower-body. Keep one pelvis root and shared runtime scale; do not freeze run clock.",
+  "release_frame": 3
+}

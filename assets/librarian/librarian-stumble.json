@@ -1,0 +1,401 @@
+{
+  "id": "librarian-stumble-v3",
+  "image": "assets/librarian/librarian-stumble-aligned.webp",
+  "frame_canvas": {
+    "w": 320,
+    "h": 320
+  },
+  "root_anchor": {
+    "x": 144,
+    "y": 212
+  },
+  "scale_group": "librarian-v3",
+  "reference_height_px": 270,
+  "loop": false,
+  "duration_ms": 1060,
+  "frames": [
+    {
+      "index": 0,
+      "source_rect": {
+        "x": 0,
+        "y": 0,
+        "w": 320,
+        "h": 320
+      },
+      "root_anchor": {
+        "x": 144,
+        "y": 212
+      },
+      "head_reference": {
+        "face_center": {
+          "x": 182.134,
+          "y": 131.989
+        },
+        "face_size": {
+          "w": 69.169,
+          "h": 85.226
+        },
+        "normalized_face_area_px": 2470
+      },
+      "duration_ms": 100,
+      "source_registration": {
+        "source_rect": {
+          "left": 62,
+          "top": 22,
+          "width": 297,
+          "height": 428
+        },
+        "pelvis_in_source_crop": {
+          "x": 139,
+          "y": 299
+        },
+        "uniform_scale": 0.6175826071984387,
+        "offset": {
+          "x": 58,
+          "y": 27
+        }
+      },
+      "support_anchor": {
+        "x": 195,
+        "y": 288
+      },
+      "toe_locked": true,
+      "event": null,
+      "support_measurement": "Measured rightmost opaque sole within bottom 6 rows of FINAL aligned PNG; alpha > 128"
+    },
+    {
+      "index": 1,
+      "source_rect": {
+        "x": 320,
+        "y": 0,
+        "w": 320,
+        "h": 320
+      },
+      "root_anchor": {
+        "x": 144,
+        "y": 212
+      },
+      "head_reference": {
+        "face_center": {
+          "x": 194.093,
+          "y": 132.152
+        },
+        "face_size": {
+          "w": 68.972,
+          "h": 84.231
+        },
+        "normalized_face_area_px": 2470
+      },
+      "duration_ms": 120,
+      "source_registration": {
+        "source_rect": {
+          "left": 479,
+          "top": 18,
+          "width": 330,
+          "height": 432
+        },
+        "pelvis_in_source_crop": {
+          "x": 130,
+          "y": 300
+        },
+        "uniform_scale": 0.6103679378930738,
+        "offset": {
+          "x": 65,
+          "y": 29
+        }
+      },
+      "support_anchor": {
+        "x": 193,
+        "y": 290
+      },
+      "toe_locked": true,
+      "event": null,
+      "support_measurement": "Measured rightmost opaque sole within bottom 6 rows of FINAL aligned PNG; alpha > 128"
+    },
+    {
+      "index": 2,
+      "source_rect": {
+        "x": 640,
+        "y": 0,
+        "w": 320,
+        "h": 320
+      },
+      "root_anchor": {
+        "x": 144,
+        "y": 212
+      },
+      "head_reference": {
+        "face_center": {
+          "x": 209.178,
+          "y": 138.884
+        },
+        "face_size": {
+          "w": 71.575,
+          "h": 80.448
+        },
+        "normalized_face_area_px": 2470
+      },
+      "duration_ms": 140,
+      "source_registration": {
+        "source_rect": {
+          "left": 874,
+          "top": 22,
+          "width": 376,
+          "height": 429
+        },
+        "pelvis_in_source_crop": {
+          "x": 141,
+          "y": 303
+        },
+        "uniform_scale": 0.591530150515333,
+        "offset": {
+          "x": 61,
+          "y": 33
+        }
+      },
+      "support_anchor": {
+        "x": 169,
+        "y": 284
+      },
+      "toe_locked": true,
+      "event": null,
+      "support_measurement": "Measured rightmost opaque sole within bottom 6 rows of FINAL aligned PNG; alpha > 128"
+    },
+    {
+      "index": 3,
+      "source_rect": {
+        "x": 960,
+        "y": 0,
+        "w": 320,
+        "h": 320
+      },
+      "root_anchor": {
+        "x": 144,
+        "y": 212
+      },
+      "head_reference": {
+        "face_center": {
+          "x": 215.666,
+          "y": 140.039
+        },
+        "face_size": {
+          "w": 72.178,
+          "h": 78.633
+        },
+        "normalized_face_area_px": 2470
+      },
+      "duration_ms": 140,
+      "source_registration": {
+        "source_rect": {
+          "left": 1318,
+          "top": 27,
+          "width": 397,
+          "height": 426
+        },
+        "pelvis_in_source_crop": {
+          "x": 153,
+          "y": 301
+        },
+        "uniform_scale": 0.5868107499582427,
+        "offset": {
+          "x": 54,
+          "y": 35
+        }
+      },
+      "support_anchor": {
+        "x": 177,
+        "y": 283
+      },
+      "toe_locked": true,
+      "event": null,
+      "support_measurement": "Measured rightmost opaque sole within bottom 6 rows of FINAL aligned PNG; alpha > 128"
+    },
+    {
+      "index": 4,
+      "source_rect": {
+        "x": 0,
+        "y": 320,
+        "w": 320,
+        "h": 320
+      },
+      "root_anchor": {
+        "x": 144,
+        "y": 212
+      },
+      "head_reference": {
+        "face_center": {
+          "x": 209.35,
+          "y": 147.496
+        },
+        "face_size": {
+          "w": 71.523,
+          "h": 78.675
+        },
+        "normalized_face_area_px": 2470
+      },
+      "duration_ms": 140,
+      "source_registration": {
+        "source_rect": {
+          "left": 15,
+          "top": 459,
+          "width": 396,
+          "height": 418
+        },
+        "pelvis_in_source_crop": {
+          "x": 154,
+          "y": 286
+        },
+        "uniform_scale": 0.5960220981099205,
+        "offset": {
+          "x": 52,
+          "y": 42
+        }
+      },
+      "support_anchor": {
+        "x": 194,
+        "y": 289
+      },
+      "toe_locked": true,
+      "event": null,
+      "support_measurement": "Measured rightmost opaque sole within bottom 6 rows of FINAL aligned PNG; alpha > 128"
+    },
+    {
+      "index": 5,
+      "source_rect": {
+        "x": 320,
+        "y": 320,
+        "w": 320,
+        "h": 320
+      },
+      "root_anchor": {
+        "x": 144,
+        "y": 212
+      },
+      "head_reference": {
+        "face_center": {
+          "x": 219.696,
+          "y": 152.434
+        },
+        "face_size": {
+          "w": 75.171,
+          "h": 72.707
+        },
+        "normalized_face_area_px": 2470
+      },
+      "duration_ms": 120,
+      "source_registration": {
+        "source_rect": {
+          "left": 452,
+          "top": 462,
+          "width": 438,
+          "height": 372
+        },
+        "pelvis_in_source_crop": {
+          "x": 180,
+          "y": 260
+        },
+        "uniform_scale": 0.6161570856994248,
+        "offset": {
+          "x": 33,
+          "y": 52
+        }
+      },
+      "support_anchor": null,
+      "toe_locked": false,
+      "event": "toe-off"
+    },
+    {
+      "index": 6,
+      "source_rect": {
+        "x": 640,
+        "y": 320,
+        "w": 320,
+        "h": 320
+      },
+      "root_anchor": {
+        "x": 144,
+        "y": 212
+      },
+      "head_reference": {
+        "face_center": {
+          "x": 219.638,
+          "y": 178.554
+        },
+        "face_size": {
+          "w": 76.589,
+          "h": 74.057
+        },
+        "normalized_face_area_px": 2470
+      },
+      "duration_ms": 140,
+      "source_registration": {
+        "source_rect": {
+          "left": 894,
+          "top": 496,
+          "width": 431,
+          "height": 308
+        },
+        "pelvis_in_source_crop": {
+          "x": 188,
+          "y": 224
+        },
+        "uniform_scale": 0.6329682646124435,
+        "offset": {
+          "x": 25,
+          "y": 70
+        }
+      },
+      "support_anchor": null,
+      "toe_locked": false,
+      "event": null
+    },
+    {
+      "index": 7,
+      "source_rect": {
+        "x": 960,
+        "y": 320,
+        "w": 320,
+        "h": 320
+      },
+      "root_anchor": {
+        "x": 144,
+        "y": 212
+      },
+      "head_reference": {
+        "face_center": {
+          "x": 223.222,
+          "y": 183.642
+        },
+        "face_size": {
+          "w": 74.653,
+          "h": 75.291
+        },
+        "normalized_face_area_px": 2470
+      },
+      "duration_ms": 160,
+      "source_registration": {
+        "source_rect": {
+          "left": 1335,
+          "top": 506,
+          "width": 433,
+          "height": 289
+        },
+        "pelvis_in_source_crop": {
+          "x": 195,
+          "y": 208
+        },
+        "uniform_scale": 0.638059940668023,
+        "offset": {
+          "x": 20,
+          "y": 79
+        }
+      },
+      "support_anchor": null,
+      "toe_locked": false,
+      "event": "exit-ready"
+    }
+  ],
+  "toe_off_frame": 5,
+  "lean_is_baked": true,
+  "toe_off_time_ms": 640
+}

@@ -2,49 +2,18 @@
   "format": "WebP",
   "verified": [
     {
-      "file": "assets/sprites/cat-hit-recover-v2.webp",
-      "bytes": 580970,
-      "sha256": "070097436650679b79e6fff3fbfee878cbe37948ea38fcb7e9d9b1f33cb19b62",
-      "width": 1536,
-      "height": 1024,
-      "alpha": true,
-      "encoding": "lossless",
-      "source_bytes": 1623216,
-      "source_sha256": "3122c108f70276e522094c03340fad79e3364084d243c419de9a1e17430a7b0a",
+      "file": "assets/background/library-background-sideview.webp",
+      "bytes": 138392,
+      "sha256": "242d7ecdec2b2670575f25ebd44c8a3120945e83e37624604105c771c6787967",
+      "width": 1736,
+      "height": 906,
+      "alpha": false,
+      "encoding": "quality90",
+      "source_bytes": 1589214,
+      "source_sha256": "d9e71c1dc9e1ea55f0d4e296c8afb2399c67e31b691abb64f7899f7706122653",
       "alpha_exact": true,
-      "visible_rgb_exact": true,
-      "psnr_db": null,
-      "psnr_note": "Lossless displayed pixels and alpha verified exactly; hidden RGB under zero alpha is not compared."
-    },
-    {
-      "file": "assets/sprites/cat-run-thin-v2.webp",
-      "bytes": 559586,
-      "sha256": "568699710c8080a592aa6b95780d2683e7fd6210a55ddf9cd50f6617413717aa",
-      "width": 1536,
-      "height": 1024,
-      "alpha": true,
-      "encoding": "lossless",
-      "source_bytes": 1596748,
-      "source_sha256": "097179e196fdd0394f7cdb58ecaf89a9fdd0b46c6d29abfb5872e3fd7a177813",
-      "alpha_exact": true,
-      "visible_rgb_exact": true,
-      "psnr_db": null,
-      "psnr_note": "Lossless displayed pixels and alpha verified exactly; hidden RGB under zero alpha is not compared."
-    },
-    {
-      "file": "assets/sprites/librarian-run.webp",
-      "bytes": 829124,
-      "sha256": "3c0fd06c92ccadc4a854cdcce90c34492bf51e4650b3d09145ad4686b4a302cd",
-      "width": 1536,
-      "height": 1024,
-      "alpha": true,
-      "encoding": "lossless",
-      "source_bytes": 2006858,
-      "source_sha256": "07b5b2490ea9fdcdd7848bfe4650c283d10af350e78a09f9fc30ad93cc14e136",
-      "alpha_exact": true,
-      "visible_rgb_exact": true,
-      "psnr_db": null,
-      "psnr_note": "Lossless displayed pixels and alpha verified exactly; hidden RGB under zero alpha is not compared."
+      "visible_rgb_exact": false,
+      "psnr_db": 39.9
     },
     {
       "file": "assets/ending/ending-01-chase.webp",
@@ -117,6 +86,54 @@
       "psnr_db": 36.53
     },
     {
+      "file": "assets/librarian/librarian-run-aligned.webp",
+      "bytes": 195000,
+      "sha256": "6019741ec9e220d693aed22a3b1339fe80d324650191a7d391f1cd693eef491d",
+      "width": 1280,
+      "height": 640,
+      "alpha": true,
+      "encoding": "lossless",
+      "source": "catch-librarian-motion-update.zip",
+      "alpha_exact": true,
+      "visible_rgb_exact": true
+    },
+    {
+      "file": "assets/librarian/librarian-stumble-aligned.webp",
+      "bytes": 199808,
+      "sha256": "ed08d987ac47d5cf4b2e7bf3ac3a38802e61fd2f3291580c7e02d338993e08f0",
+      "width": 1280,
+      "height": 640,
+      "alpha": true,
+      "encoding": "lossless",
+      "source": "catch-librarian-motion-update.zip",
+      "alpha_exact": true,
+      "visible_rgb_exact": true
+    },
+    {
+      "file": "assets/librarian/librarian-throw-aligned.webp",
+      "bytes": 141576,
+      "sha256": "d9278457a8d4cb5f3035bb1ed34b6492679f87ee68f6db30e7291dc854ecb74b",
+      "width": 960,
+      "height": 640,
+      "alpha": true,
+      "encoding": "lossless",
+      "source": "catch-librarian-motion-update.zip",
+      "alpha_exact": true,
+      "visible_rgb_exact": true
+    },
+    {
+      "file": "assets/props/book-stack-double.webp",
+      "bytes": 12986,
+      "sha256": "e0c4d1bcfe3df02b95e1a3d9f43fe305a6c973538e735e97287e96a001ae3c17",
+      "width": 240,
+      "height": 300,
+      "alpha": true,
+      "encoding": "lossless",
+      "source": "catch-librarian-motion-update.zip",
+      "alpha_exact": true,
+      "visible_rgb_exact": true
+    },
+    {
       "file": "assets/props/library-props-sideview.webp",
       "bytes": 445744,
       "sha256": "ac9038d5b43d3490cf46e6c0ac93fdfc8a2d9fc30a840d1a17acb067a0299979",
@@ -132,23 +149,39 @@
       "psnr_note": "Lossless displayed pixels and alpha verified exactly; hidden RGB under zero alpha is not compared."
     },
     {
-      "file": "assets/background/library-background-sideview.webp",
-      "bytes": 138392,
-      "sha256": "242d7ecdec2b2670575f25ebd44c8a3120945e83e37624604105c771c6787967",
-      "width": 1736,
-      "height": 906,
-      "alpha": false,
-      "encoding": "quality90",
-      "source_bytes": 1589214,
-      "source_sha256": "d9e71c1dc9e1ea55f0d4e296c8afb2399c67e31b691abb64f7899f7706122653",
-      "alpha_exact": true,
-      "visible_rgb_exact": false,
-      "psnr_db": 39.9
-    },
-    {
       "file": "assets/puzzle/fold-guide.svg",
       "bytes": 1678,
       "sha256": "47e5153fc63be052ca2e53856bda92bb60c364dda31c402aa73f7746f8ca12cc"
+    },
+    {
+      "file": "assets/sprites/cat-hit-recover-v2.webp",
+      "bytes": 580970,
+      "sha256": "070097436650679b79e6fff3fbfee878cbe37948ea38fcb7e9d9b1f33cb19b62",
+      "width": 1536,
+      "height": 1024,
+      "alpha": true,
+      "encoding": "lossless",
+      "source_bytes": 1623216,
+      "source_sha256": "3122c108f70276e522094c03340fad79e3364084d243c419de9a1e17430a7b0a",
+      "alpha_exact": true,
+      "visible_rgb_exact": true,
+      "psnr_db": null,
+      "psnr_note": "Lossless displayed pixels and alpha verified exactly; hidden RGB under zero alpha is not compared."
+    },
+    {
+      "file": "assets/sprites/cat-run-thin-v2.webp",
+      "bytes": 559586,
+      "sha256": "568699710c8080a592aa6b95780d2683e7fd6210a55ddf9cd50f6617413717aa",
+      "width": 1536,
+      "height": 1024,
+      "alpha": true,
+      "encoding": "lossless",
+      "source_bytes": 1596748,
+      "source_sha256": "097179e196fdd0394f7cdb58ecaf89a9fdd0b46c6d29abfb5872e3fd7a177813",
+      "alpha_exact": true,
+      "visible_rgb_exact": true,
+      "psnr_db": null,
+      "psnr_note": "Lossless displayed pixels and alpha verified exactly; hidden RGB under zero alpha is not compared."
     }
   ],
   "original_sources": [
@@ -216,6 +249,8 @@
   "before_active_image_bytes": 16644702,
   "before_all_image_bytes": 18155521,
   "equivalent_png_with_new_art_bytes": 19622600,
-  "after_image_bytes": 3917168,
-  "initial_image_bytes": 2553816
+  "after_image_bytes": 3637414,
+  "initial_image_bytes": 2274062,
+  "motion_previous_image_bytes": 3917168,
+  "motion_runtime_note": "Only aligned three WebP clips plus double stack added. Legacy librarian sheet removed. Source PNGs, references, single frames excluded."
 }

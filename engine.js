@@ -1,13 +1,14 @@
-import {createProp} from './props.js?v=20261023-chase3';
-import { CONFIG } from './config.js?v=20261023-chase3';
-import { boxPolygon, obstaclePolygons, penetration, sweepPolygons } from './collision.js?v=20261023-chase3';
+import {createProp} from './props.js?v=20261023-motion4';
+import {heldBookPose,endingRootPose} from './librarian-motion.js?v=20261023-motion4';
+import { CONFIG } from './config.js?v=20261023-motion4';
+import { boxPolygon, obstaclePolygons, penetration, sweepPolygons } from './collision.js?v=20261023-motion4';
 export const WORLD=Object.freeze({width:960,height:500,floor:415,catX:240,librarianX:780});
 export const normalizeAnswer=value=>value.normalize('NFC').replace(/[\s!.！。．]/gu,'');
 const acceptedAnswer=String.fromCodePoint(44256,50577,51060,50752,32,49324,49436,44032,32,46028,50500,50772,45796);
 export const isCorrectAnswer=value=>normalizeAnswer(value)===normalizeAnswer(acceptedAnswer);
 export class Chase {
  constructor(config=CONFIG){this.config=config;this.reset()}
- reset(){Object.assign(this,{state:'ready',elapsed:0,health:this.config.health,x:WORLD.catX,vx:0,y:0,vy:0,jumps:2,invincible:0,obstacles:[],spawnAt:this.config.warmup,serial:0,bookSerial:0,distance:0,recoil:0,hits:0,hitStop:0,stun:0,hitActive:false,hitAge:0,landingAge:null,defeatAge:0,discoveryAge:0,contacts:[],maxPenetration:0})}
+ reset(){Object.assign(this,{state:'ready',elapsed:0,health:this.config.health,x:WORLD.catX,vx:0,y:0,vy:0,jumps:2,invincible:0,obstacles:[],spawnAt:this.config.warmup,serial:0,bookSerial:0,distance:0,recoil:0,hits:0,hitStop:0,stun:0,hitActive:false,hitAge:0,landingAge:null,defeatAge:0,discoveryAge:0,throwAction:null,queuedThrow:null,doubleStackCount:0,endingAge:0,endingStartX:null,endingStartY:null,endingToe:null,endingRoot:null,endingStarted:false,contacts:[],maxPenetration:0})}
  start(){this.reset();this.state='playing'}
  jump(){
   if(this.state!=='playing'||this.health<=0||this.stun>0||this.hitStop>0||this.jumps===0)return false;
@@ -18,20 +19,67 @@ export class Chase {
   o.lift??=0;o.angle??=0;o.vx??=0;o.vy??=0;o.angularVelocity??=0;o.reactionAge??=0;o.age??=0;o.bounces??=0;
   o.damageConsumed??=Boolean(o.hit);o.reacting??=false;return o;
  }
- spawn(){
-  const kinds=['stack','high','basket','low','box','basket','high'],kind=kinds[this.serial%kinds.length];
-  const airborne=kind==='high'||kind==='low',spriteId=airborne?['book-red','book-green','book-blue'][(this.bookSerial+Math.floor(this.bookSerial/3))%3]:kind==='stack'?'book-stack':kind;
+ spawn(kindOverride=null){
+  if(this.state!=='playing'||this.health<=0)return false;
+  const kinds=['stack','high','double-stack','low','box','basket','double-stack','high','low'];
+  let kind=kindOverride||kinds[this.serial%kinds.length];
+  if(kind==='double-stack'&&!kindOverride&&(this.elapsed<8||this.doubleStackCount>=2))kind='stack';
+  const airborne=kind==='high'||kind==='low';
+  // A running throw owns a single immutable choice and at most one pending choice.
+  if(airborne&&this.throwAction&&this.queuedThrow)return false;
+  const form=airborne?['book-red','book-green','book-blue'][(this.bookSerial+Math.floor(this.bookSerial/3))%3]:kind==='stack'?'book-stack':kind;
   const trajectory=airborne?Math.floor(this.bookSerial/9)%3:0;
-  const o=createProp(spriteId,{id:this.serial,kind,trajectory,lift:0});
-  o.x=WORLD.librarianX-this.config.librarianHeight*.28-o.w/2;
-  // Lift is the artwork's bottom, so each natural book height shares the hand center.
-  o.launchLift=this.config.librarianHeight*.56-o.h/2;o.lift=airborne?o.launchLift:0;
+  const request={id:this.serial++,kind,form,trajectory,age:0,released:false};
   if(airborne){
-   o.vy=(kind==='high'?this.config.bookThrowHigh:this.config.bookThrowLow)[trajectory];
-   o.angle=-.18+trajectory*.12;o.angularVelocity=[1.4,-1.7,2.1][trajectory];
+   this.bookSerial++;
+   if(this.throwAction)this.queuedThrow=request;else this.throwAction=request;
+  }else{
+   const o=createProp(form,{id:request.id,kind,trajectory,lift:0});
+   o.x=WORLD.librarianX-this.config.librarianHeight*.28-o.w/2;
+   this.obstacles.push(this.prepareObstacle(o));
+   if(kind==='double-stack')this.doubleStackCount++;
   }
-  this.serial++;if(airborne)this.bookSerial++;
-  this.obstacles.push(this.prepareObstacle(o));this.recoil=.25;return true;
+  return true;
+ }
+ releaseBook(action,newAge=action.age){
+  // Sample the hand at the exact release time, even when this update skipped frames.
+  const releaseGame={...this,elapsed:this.elapsed-Math.max(0,newAge-this.config.throwRelease)};
+  const pose=heldBookPose(releaseGame,{...action,age:this.config.throwRelease});
+  const o=createProp(action.form,{id:action.id,kind:action.kind,trajectory:action.trajectory,...pose});
+  o.launchLift=o.lift;o.vy=(action.kind==='high'?this.config.bookThrowHigh:this.config.bookThrowLow)[action.trajectory];
+  o.angularVelocity=[1.4,-1.7,2.1][action.trajectory];
+  this.obstacles.push(this.prepareObstacle(o));this.recoil=.25;
+ }
+ updateThrow(dt){
+  let remaining=dt;
+  while(this.throwAction&&remaining>1e-9){
+   const a=this.throwAction,oldAge=a.age,used=Math.min(remaining,this.config.throwDuration-oldAge),newAge=oldAge+used;
+   a.age=newAge;
+   if(!a.released&&oldAge<this.config.throwRelease&&newAge>=this.config.throwRelease){a.released=true;this.releaseBook(a,newAge)}
+   remaining-=used;
+   if(newAge>=this.config.throwDuration-1e-9){this.throwAction=this.queuedThrow;this.queuedThrow=null}else break;
+  }
+ }
+ cancelThrows(){this.throwAction=null;this.queuedThrow=null}
+ beginEnding(){
+  if(this.endingStarted||this.health<=0)return false;
+  this.endingStarted=true;this.state='ending-trip';this.endingAge=0;this.endingStartX=this.x;this.endingStartY=this.y;
+  this.endingToe={x:814,y:WORLD.floor};this.endingRoot=endingRootPose(this,0);
+  this.cancelThrows();this.hitActive=false;this.stun=0;this.hitStop=0;this.vx=0;
+  return true;
+ }
+ updateEnding(dt){
+  this.endingAge=Math.min(this.config.endingDuration,this.endingAge+dt);
+  this.state=this.endingAge>=this.config.endingDuration-1e-9?'ending-complete':this.endingAge>=this.config.endingStumble-1e-9?'ending-gap':this.endingAge>=this.config.endingToeOff-1e-9?'ending-fly':'ending-trip';
+  this.endingRoot=endingRootPose(this,this.endingAge);
+  // Input and contacts are disabled, but the cat settles and deflected props finish fading.
+  this.vy-=this.config.gravity*dt;this.y=Math.max(0,this.y+this.vy*dt);if(!this.y)this.vy=0;
+  for(const o of this.obstacles){
+   this.prepareObstacle(o);o.age+=dt;
+   if(o.reacting){o.reactionAge+=dt;o.x+=o.vx*dt;this.moveProp(o,dt);o.vx*=Math.exp(-.35*dt)}
+   else if(o.kind==='high'||o.kind==='low'){o.x-=(this.config.runSpeed+this.config.speedIncrease)*dt;this.moveProp(o,dt)}
+  }
+  this.obstacles=this.obstacles.filter(o=>o.x+o.w> -100&&o.x<WORLD.width+130&&(!o.reacting||o.reactionAge<this.config.propLifetime));
  }
  groundLift(o,angle=o.angle){
   // Measured outlines, including their shared sprite pivot, determine the floor.
@@ -91,9 +139,10 @@ export class Chase {
   return this.vy>35?2:this.vy< -35?4:3;
  }
  update(dt){
-  if(this.state!=='playing'||!Number.isFinite(dt)||dt<=0)return;
+  if(!['playing','ending-trip','ending-fly','ending-gap'].includes(this.state)||!Number.isFinite(dt)||dt<=0)return;
   let remaining=Math.min(dt,.5);this.contacts=[];
-  while(remaining>1e-9&&this.state==='playing'){
+  while(remaining>1e-9&&['playing','ending-trip','ending-fly','ending-gap'].includes(this.state)){
+   if(this.state!=='playing'){const endStep=Math.min(remaining,1/120);this.updateEnding(endStep);remaining-=endStep;continue}
    if(this.hitStop>0){const frozen=Math.min(remaining,this.hitStop);this.hitStop=Math.max(0,this.hitStop-frozen);remaining-=frozen;continue}
    const cameraSpeed=this.config.runSpeed+this.config.speedIncrease*this.elapsed/this.config.duration;
    const maxMotion=Math.max(300,Math.abs(this.vx)+Math.abs(this.vy),...this.obstacles.map(o=>(o.reacting?Math.abs(o.vx||0):cameraSpeed)+Math.abs(o.vy||0)));
@@ -103,10 +152,11 @@ export class Chase {
  }
  step(dt){
   if(this.health>0)dt=Math.min(dt,this.config.duration-this.elapsed);
-  if(dt<=0){this.state='discovery';return}
+  if(dt<=0){this.beginEnding();return}
   const clockDt=Math.min(dt,Math.max(0,this.config.duration-this.elapsed));
   const previous={x:this.x,y:this.y};
   this.elapsed=Math.min(this.config.duration,this.elapsed+clockDt);
+  if(this.config.duration-this.elapsed<1e-9)this.elapsed=this.config.duration;
   this.invincible=Math.max(0,this.invincible-dt);this.stun=Math.max(0,this.stun-dt);this.recoil=Math.max(0,this.recoil-dt);
   if(this.hitActive){this.hitAge+=dt;if(this.landingAge!==null){this.landingAge+=dt;if(this.landingAge>=.26){this.hitActive=false;this.landingAge=null}}}
   const speed=this.config.runSpeed+this.config.speedIncrease*(this.elapsed-clockDt/2)/this.config.duration;
@@ -128,6 +178,7 @@ export class Chase {
   }
   // Continuous translation test catches fast books before an end-step overlap.
   for(const o of this.obstacles){
+   if(!o.previous)continue;
    const prev=o.previous,from={...o,x:prev.x,lift:prev.lift,angle:prev.angle};
    const collision=obstaclePolygons(from,WORLD.floor).map(poly=>sweepPolygons(this.catPolygon(previous.x,previous.y),poly,{x:this.x-previous.x,y:previous.y-this.y},{x:o.x-prev.x,y:prev.lift-o.lift})).filter(Boolean).sort((a,b)=>a.time-b.time)[0];
    if(collision){
@@ -148,8 +199,10 @@ export class Chase {
   }
   this.maxPenetration=Math.max(0,...this.obstacles.flatMap(o=>obstaclePolygons(o,WORLD.floor).map(poly=>penetration(this.catPolygon(),poly)?.depth||0)));
   this.obstacles=this.obstacles.filter(o=>o.x+o.w> -100&&o.x< WORLD.width+130&&(!o.reacting||o.reactionAge<this.config.propLifetime));
-  if(this.health<=0){this.defeatAge+=dt;if(this.defeatAge>=this.config.defeatDelay)this.state='failed'}
-  else if(this.elapsed>=this.config.duration)this.state='discovery';
+  // Resolve fatal contacts and the active-time limit before releasing any pending book.
+  if(this.health>0&&this.elapsed<this.config.duration)this.updateThrow(dt);else this.cancelThrows();
+  if(this.health<=0){this.cancelThrows();this.defeatAge+=dt;if(this.defeatAge>=this.config.defeatDelay)this.state='failed'}
+  else if(this.elapsed>=this.config.duration)this.beginEnding();
  }
  separate(o,n,depth){
   const distance=depth+this.config.contactGap;

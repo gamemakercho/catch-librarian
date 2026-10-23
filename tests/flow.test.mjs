@@ -6,7 +6,7 @@ import {CONFIG} from '../config.js';
 import { readFile } from 'node:fs/promises';
 const html=await readFile(new URL('../index.html',import.meta.url),'utf8');
 const layout=JSON.parse(await readFile(new URL('../assets/sprites/sprite-layout-v2.json',import.meta.url),'utf8'));
-let source='';for(const f of ['scene-data.js','config.js','props.js','collision.js','engine.js','renderer.js','app.js'])source+=(await readFile(new URL('../'+f,import.meta.url),'utf8')).replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'')+'\n';
+let source='';for(const f of ['scene-data.js','config.js','props.js','collision.js','librarian-motion.js','engine.js','renderer.js','app.js'])source+=(await readFile(new URL('../'+f,import.meta.url),'utf8')).replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'')+'\n';
 source+='\nglobalThis.subject={game,getState:()=>state};';
 class Element {
  constructor(){this.listeners={};this.hidden=false;this.disabled=false;this.value='';this.textContent='';this.innerHTML='';this.attrs={};this.classList={toggle(){}}}
@@ -30,11 +30,13 @@ async function setup({fail=false,offline=false}={}){
 }
 function finishChase(t,{showComic=true}={}){
  for(let i=0;i<2400&&t.subject.getState()==='playing';i++){
-  const g=t.subject.game;if(g.y===0&&g.obstacles.some(o=>o.kind!=='high'&&o.x>g.x+50&&o.x<g.x+160&&!o.hit))t.fire('game','pointerdown',{isPrimary:true,button:0});
+  const g=t.subject.game;const next=g.obstacles.find(o=>o.kind!=='high'&&!o.hit&&o.x>g.x);
+  if(g.y===0&&next&&next.x<g.x+(next.kind==='double-stack'?280:160)){t.fire('game','pointerdown',{isPrimary:true,button:0});g.testJumpTime=g.elapsed;g.testDouble=next.kind==='double-stack'}
+  else if(g.testDouble&&g.jumps===1&&g.elapsed-g.testJumpTime>=.33)t.fire('game','pointerdown',{isPrimary:true,button:0});
   t.advance(1/60);
  }
- assert.equal(t.subject.getState(),'discovery');assert.equal(t.subject.game.elapsed,30);
- if(showComic)t.advance(CONFIG.discoverySeconds+.05);
+ assert.ok(['ending-trip','ending-fly'].includes(t.subject.getState()),t.subject.getState());assert.equal(t.subject.game.elapsed,30);
+ if(showComic)t.advance(CONFIG.endingDuration+.05);
 }
 test('asset load gate, single pointer input, double jump, space and explicit pause/resume',async()=>{const t=await setup();assert.equal(t.subject.getState(),'ready');assert.equal(t.errors.length,0);t.fire('start','click');assert.equal(t.subject.getState(),'playing');t.fire('jump','pointerdown',{isPrimary:true,button:0});assert.equal(t.subject.game.jumps,1);t.fire('jump','click',{detail:1});assert.equal(t.subject.game.jumps,1);t.fire('game','pointerdown',{isPrimary:true,button:0});assert.equal(t.subject.game.jumps,0);t.advance(1.5);assert.equal(t.subject.game.jumps,2);t.window.dispatchEvent({type:'keydown',code:'Space',target:t.elements.game,repeat:false});assert.equal(t.subject.game.jumps,1);t.fire('pause','click');const elapsed=t.subject.game.elapsed;t.advance(5);assert.equal(t.subject.game.elapsed,elapsed);t.fire('start','click');assert.equal(t.subject.getState(),'playing');t.document.hidden=true;t.document.dispatchEvent({type:'visibilitychange'});assert.equal(t.subject.getState(),'paused');t.document.hidden=false;t.fire('start','click');t.advance(.1);assert.ok(t.subject.game.elapsed>elapsed)});
 test('actual complete 30s flow, all 5 original panels, wrong answers, composition guard, completion event and persistence',async()=>{const t=await setup();t.fire('start','click');finishChase(t);assert.equal(t.subject.getState(),'comic');assert.equal(t.elements['run-screen'].hidden,true);assert.equal(t.elements['comic-screen'].hidden,false);const before=t.subject.game.y;t.fire('jump','pointerdown',{isPrimary:true,button:0});assert.equal(t.subject.game.y,before);t.fire('comic-auto','click');for(let p=1;p<=5;p++){assert.equal(t.elements['comic-count'].textContent,`${p} / 5`);assert.ok(t.elements['comic-image'].src.includes(`0${p}-`));t.fire('next','click')}assert.equal(t.subject.getState(),'puzzle');t.elements.answer.value='고양이';t.fire('answer-form','submit');assert.ok(t.elements['answer-feedback'].textContent.includes('다시'));t.fire('answer','compositionstart');t.elements.answer.value='고양이와사서가돌아왔다!';t.fire('answer-form','submit');assert.equal(t.subject.getState(),'puzzle');t.fire('answer','compositionend');t.fire('answer-form','submit');assert.equal(t.subject.getState(),'puzzle');t.advance(.2);let count=0;t.window.addEventListener('escape-room:complete',e=>{count++;assert.equal(e.detail.completed,true)});t.fire('answer-form','submit');assert.equal(t.subject.getState(),'complete');assert.equal(count,1);assert.equal(t.storage.size,1);t.fire('answer-form','submit');assert.equal(count,1);t.fire('replay','click');assert.equal(t.subject.getState(),'ready');assert.equal(t.subject.game.health,3)});
@@ -43,14 +45,14 @@ test('failed image loading offers a recoverable error, never starts game',async(
 
 test('standalone offline HTML loads its actual embedded script and starts the game',async()=>{const t=await setup({offline:true});assert.equal(t.subject.getState(),'ready');assert.equal(t.errors.length,0);t.fire('start','click');t.fire('jump','pointerdown',{isPrimary:true,button:0});t.advance(.1);assert.equal(t.subject.getState(),'playing');assert.ok(t.subject.game.y>0);assert.equal(t.subject.game.jumps,1)});
 
-test('initial scene requests only five WebP runner images, then preloads comics after start',async()=>{const t=await setup();assert.equal(t.requests.length,5);assert.ok(t.requests.every(src=>src.endsWith('.webp')&&!src.includes('/ending/')));t.fire('start','click');assert.equal(t.requests.filter(src=>src.includes('/ending/')).length,5)});
+test('initial scene requests only eight WebP runner images, then preloads comics after start',async()=>{const t=await setup();assert.equal(t.requests.length,8);assert.ok(t.requests.every(src=>src.endsWith('.webp')&&!src.includes('/ending/')));t.fire('start','click');assert.equal(t.requests.filter(src=>src.includes('/ending/')).length,5)});
 
-test('30s freezes the stage, discovers the treat inside the game, then opens comics at the top',async()=>{
+test('30s freezes the stage, toe-locks and flies out, pauses when hidden, then opens comics at the top',async()=>{
  const t=await setup();t.fire('start','click');finishChase(t,{showComic:false});
  assert.equal(t.elements['run-screen'].hidden,false);assert.notEqual(t.elements['comic-screen'].hidden,false);
- assert.equal(t.elements.jump.disabled,true);assert.equal(t.elements.pause.hidden,true);assert.ok(t.elements['game-message'].textContent.includes('츄르'));
- const snapshot=[t.subject.game.elapsed,t.subject.game.distance,t.subject.game.x,t.subject.game.y];
- t.fire('game','pointerdown',{isPrimary:true,button:0});t.advance(.8);assert.deepEqual([t.subject.game.elapsed,t.subject.game.distance,t.subject.game.x,t.subject.game.y],snapshot);
- const age=t.subject.game.discoveryAge;t.document.hidden=true;t.advance(5);assert.equal(t.subject.game.discoveryAge,age);t.document.hidden=false;
- t.advance(CONFIG.discoverySeconds-.8+.05);assert.equal(t.subject.getState(),'comic');assert.equal(t.elements['comic-screen'].hidden,false);assert.equal(t.elements['comic-count'].textContent,'1 / 5');
+ assert.equal(t.elements.jump.disabled,true);assert.equal(t.elements.pause.hidden,false);assert.ok(t.elements['game-message'].textContent.includes('츄르'));
+ const snapshot=[t.subject.game.elapsed,t.subject.game.distance,t.subject.game.x];
+ t.fire('game','pointerdown',{isPrimary:true,button:0});t.advance(.8);assert.deepEqual([t.subject.game.elapsed,t.subject.game.distance,t.subject.game.x],snapshot);
+ const age=t.subject.game.endingAge;t.document.hidden=true;t.document.dispatchEvent({type:'visibilitychange'});t.advance(5);assert.equal(t.subject.game.endingAge,age);assert.equal(t.subject.getState(),'paused');t.document.hidden=false;t.fire('start','click');
+ t.advance(CONFIG.endingDuration-.8+.05);assert.equal(t.subject.getState(),'comic');assert.equal(t.elements['comic-screen'].hidden,false);assert.equal(t.elements['comic-count'].textContent,'1 / 5');
 });

@@ -1,26 +1,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {obstacleOpacity,discoveryPose,Renderer} from '../renderer.js';
-import {SPRITE_LAYOUT} from '../scene-data.js';
+import {obstacleOpacity,endingCatPose,Renderer} from '../renderer.js';
+import {SPRITE_LAYOUT,SCENE_IMAGE_FILES,PROPS_LAYOUT} from '../scene-data.js';
+import {createProp} from '../props.js';
 import {CONFIG} from '../config.js';
-test('deflected props fade continuously and become invisible within one second including hit-stop',()=>{
- const ages=[0,CONFIG.propFadeStart,.4,.65,CONFIG.propLifetime],alpha=ages.map(reactionAge=>obstacleOpacity({reacting:true,reactionAge}));
- assert.equal(alpha[0],1);assert.equal(alpha[1],1);assert.equal(alpha.at(-1),0);assert.ok(alpha[2]<1&&alpha[2]>alpha[3]);assert.ok(CONFIG.propLifetime+CONFIG.hitStop<=1);
- assert.equal(obstacleOpacity({reacting:false,reactionAge:10}),1);
+test('deflected props fade continuously within one second including hit-stop',()=>{
+ const alpha=[0,CONFIG.propFadeStart,.4,.65,CONFIG.propLifetime].map(reactionAge=>obstacleOpacity({reacting:true,reactionAge}));assert.equal(alpha[0],1);assert.equal(alpha[1],1);assert.equal(alpha.at(-1),0);assert.ok(alpha[2]<1&&alpha[2]>alpha[3]);assert.ok(CONFIG.propLifetime+CONFIG.hitStop<=1);assert.equal(obstacleOpacity({reacting:false,reactionAge:10}),1);
 });
-test('discovery settles airborne cat onto the same floor and keeps the treat inside the canvas',()=>{
- const game={x:230,y:100,discoveryStartX:230,discoveryStartY:100};
- const begin=discoveryPose({...game,discoveryAge:0}),settled=discoveryPose({...game,discoveryAge:.5});
- assert.equal(begin.catX,230);assert.equal(begin.catY,100);assert.equal(settled.catY,0);assert.equal(settled.catX,262);assert.equal(settled.librarianX,790);
- const texts=[],images=[],c=new Proxy({drawImage:(...a)=>images.push(a),fillText:text=>texts.push(text),createRadialGradient:()=>({addColorStop(){}})}, {get:(t,k)=>t[k]||(()=>{})});
- const renderer=new Renderer({getContext:()=>c,getBoundingClientRect:()=>({width:960})},[{},{},{},{},{}],SPRITE_LAYOUT);
- renderer.draw({...game,obstacles:[],state:'discovery',elapsed:30,distance:1000,discoveryAge:1},0);
- assert.ok(texts.includes('츄르'));assert.ok(texts.includes('츄르?!'));assert.ok(texts.includes('!'));assert.ok(images.length>=4);
+test('ending settles the cat while the small treat and mat remain inside the game',()=>{
+ const game={x:230,y:100,endingStartX:230,endingStartY:100};assert.deepEqual(endingCatPose({...game,endingAge:0}),{catX:230,catY:100});assert.deepEqual(endingCatPose({...game,endingAge:.5}),{catX:250,catY:0});const texts=[],images=[],c=new Proxy({drawImage:(...a)=>images.push(a),fillText:text=>texts.push(text),createRadialGradient:()=>({addColorStop(){}})}, {get:(t,k)=>t[k]||(()=>{})}),assets=Object.fromEntries(SCENE_IMAGE_FILES.map(p=>[p,{}])),r=new Renderer({getContext:()=>c,getBoundingClientRect:()=>({width:960})},assets,SPRITE_LAYOUT);r.draw({...game,obstacles:[],state:'ending-trip',elapsed:30,distance:1000,endingAge:.3},0);assert.ok(texts.includes('츄르'));assert.ok(texts.includes('!'));assert.ok(images.length>=4);
 });
-test('main HTML has no outer promotional intro or footer and keeps all screen/progress IDs',()=>{
- const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
- assert.equal(/<header|<footer|class="intro"|쉿, 사서가 달아나고 있어!/.test(html),false);assert.equal((html.match(/<h1>/g)||[]).length,1);
- for(const id of ['step-run','step-comic','step-puzzle','run-screen','comic-screen','puzzle-screen','complete-screen'])assert.ok(html.includes('id="'+id+'"'));
- assert.ok(html.includes('journey visually-hidden'));
+test('danger alpha outlines are cached once and follow rotated fading artwork',()=>{
+ const draws=[],cache=[],main=new Proxy({drawImage:(...a)=>draws.push(['draw',...a]),rotate:a=>draws.push(['rotate',a])}, {get:(t,k)=>t[k]||(()=>{})}),ownerDocument={createElement:()=>({getContext:()=>new Proxy({drawImage:(...a)=>cache.push(a)}, {get:(t,k)=>t[k]||(()=>{})})})},assets=Object.fromEntries(SCENE_IMAGE_FILES.map(p=>[p,{}])),r=new Renderer({ownerDocument,getContext:()=>main,getBoundingClientRect:()=>({width:960})},assets,SPRITE_LAYOUT),o=createProp('book-green',{kind:'low',x:400,lift:80,angle:.4,reacting:true,reactionAge:.4});r.obstacle(o);const count=cache.length;assert.equal(r.outlineCache.size,1);assert.ok(count>=14);assert.equal(draws.find(x=>x[0]==='rotate')[1],.4);assert.ok(main.globalAlpha<1);r.obstacle({...o,angle:.8,reactionAge:.6});assert.equal(cache.length,count);assert.equal(r.outlineCache.size,1);assert.ok(main.globalAlpha<obstacleOpacity(o));assert.equal(draws.at(-1)[0],'draw');const tall=PROPS_LAYOUT.frames.find(f=>f.id==='double-stack');assert.ok(tall.image);
+});
+test('compact main HTML keeps all screen IDs without an outer promotional intro',()=>{
+ const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');assert.equal(/<header|<footer|class="intro"|쉿, 사서가 달아나고 있어!/.test(html),false);assert.equal((html.match(/<h1>/g)||[]).length,1);for(const id of ['step-run','step-comic','step-puzzle','run-screen','comic-screen','puzzle-screen','complete-screen'])assert.ok(html.includes('id="'+id+'"'));assert.ok(html.includes('journey visually-hidden'));
 });

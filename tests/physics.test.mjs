@@ -4,7 +4,7 @@ import {Chase} from '../engine.js';
 import {CONFIG} from '../config.js';
 import {createProp} from '../props.js';
 const tick=(g,seconds)=>{for(let remaining=seconds;remaining>1e-9;remaining-=1/120)g.update(Math.min(remaining,1/120))};
-test('camera, incoming obstacles and both sprite gaits run at exactly twice the previous speed',()=>{
+test('camera and incoming obstacles keep doubled speed while the cat retains its 24fps gait',()=>{
  assert.equal(CONFIG.runSpeed,205*2);assert.equal(CONFIG.speedIncrease,42*2);assert.equal(CONFIG.spriteFPS,12*2);
  const g=new Chase();g.start();g.spawnAt=1000;g.obstacles=[createProp('box',{id:0,kind:'box',x:800,lift:0})];g.update(.5);
  const expected=410*.5+(84/30)*.5*.5/2;assert.ok(Math.abs(g.distance-expected)<1e-8);assert.ok(Math.abs(g.obstacles[0].x-(800-expected))<1e-8);

@@ -1,6 +1,6 @@
 {
   "name": "catch-librarian",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,6 +8,7 @@
     "build:scene": "node scripts/build-scene-data.mjs",
     "test": "node --test tests/*.test.mjs",
     "check": "node scripts/check-assets.mjs",
-    "build:offline": "node build-offline.mjs"
+    "build:offline": "node build-offline.mjs",
+    "test:stack-sweep": "node tests/double-stack-probe.mjs"
   }
 }
