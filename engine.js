@@ -1,5 +1,5 @@
-import { CONFIG } from './config.js';
-import { boxPolygon, obstaclePolygon, penetration, sweepPolygons } from './collision.js';
+import { CONFIG } from './config.js?v=20261023-v2';
+import { boxPolygon, obstaclePolygon, penetration, sweepPolygons } from './collision.js?v=20261023-v2';
 export const WORLD=Object.freeze({width:960,height:500,floor:415,catX:240,librarianX:780});
 export const normalizeAnswer=value=>value.normalize('NFC').replace(/[\s!.！。．]/gu,'');
 const acceptedAnswer=String.fromCodePoint(44256,50577,51060,50752,32,49324,49436,44032,32,46028,50500,50772,45796);

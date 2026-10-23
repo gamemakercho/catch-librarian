@@ -1,6 +1,6 @@
-import { CONFIG } from './config.js';
-import { WORLD } from './engine.js';
-import { obstaclePolygon } from './collision.js';
+import { CONFIG } from './config.js?v=20261023-v2';
+import { WORLD } from './engine.js?v=20261023-v2';
+import { obstaclePolygon } from './collision.js?v=20261023-v2';
 const {floor,catX,librarianX} = WORLD;
 function rect(c,x,y,w,h,color){c.fillStyle=color;c.fillRect(x,y,w,h)}
 function rounded(c,x,y,w,h,r,color){c.fillStyle=color;c.beginPath();c.roundRect(x,y,w,h,r);c.fill()}
