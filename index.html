@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5eddf"><meta name="description" content="고양이와 함께 사서를 쫓고, 종이 엽서에 숨은 이야기를 완성하세요."><title>사서를 잡아라! · 도서관의 마지막 모험</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E🐾%3C/text%3E%3C/svg%3E"><link rel="stylesheet" href="styles.css?v=20261023-motion4">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E🐾%3C/text%3E%3C/svg%3E"><link rel="stylesheet" href="styles.css?v=20261024-after5">
+<link rel="stylesheet" href="after-ending/after-ending.css?v=20261024-after5">
 </head>
 <body>
 <main>
@@ -16,6 +17,8 @@
 </section>
 <section id="comic-screen" class="screen story-screen" hidden aria-label="마지막 이야기"><div class="section-heading"><h2>마지막 이야기</h2><span id="comic-count">1 / 5</span></div><figure class="comic-frame"><img id="comic-image" alt=""></figure><div class="story-actions"><div class="comic-progress" id="comic-progress" aria-hidden="true"></div><button id="comic-auto" class="text-button" aria-pressed="true">자동 넘김 끄기</button><button id="next" class="primary">다음 <span aria-hidden="true">→</span></button></div></section>
 <section id="puzzle-screen" class="screen puzzle-screen" hidden><p class="eyebrow">이제, 화면 밖에서 이어지는 이야기</p><h2>마지막 장면은<br>너의 손끝에 있어.</h2><p class="puzzle-copy">엽서의 노란 모서리를 접어 두 친구의 마지막 장면을 완성해 줘! 완성된 문장을 입력해 봐.</p><div class="fold-paper"><img src="assets/puzzle/fold-guide.svg" alt="가지고 있는 종이 엽서의 노란 모서리를 안쪽으로 접는 방법"></div><p class="paper-note">가지고 있는 <strong>실제 종이 엽서</strong>를 접어 주세요.</p><form id="answer-form" novalidate><label for="answer">완성된 문장</label><div class="answer-row"><input id="answer" type="text" placeholder="엽서에서 찾은 문장을 적어 주세요" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="100" aria-describedby="answer-feedback"><button type="submit" class="primary">확인</button></div><p id="answer-feedback" class="feedback" aria-live="polite"></p></form></section>
+<section id="after-answer-screen" class="screen" hidden></section>
 <section id="complete-screen" class="screen complete-screen" hidden><div class="completion-seal" aria-hidden="true">✦</div><p class="eyebrow">마지막 페이지까지, 함께한 너에게</p><h2>두 친구가<br>돌아왔어요!</h2><p id="completed-sentence"></p><p class="completion-copy">두 친구는 원래의 모습으로 돌아왔어요.<br>비밀의 도서관 방탈출, 모든 모험을 마쳤습니다.</p><div class="completed-stamp">방탈출 최종 완료 <span aria-hidden="true">✓</span></div><button id="replay" class="text-button">이야기 처음부터 다시 보기 ↻</button></section>
-</main><script type="module" src="app.js?v=20261023-motion4"></script>
+</main><script src="after-ending/after-ending.js?v=20261024-after5"></script>
+<script type="module" src="app.js?v=20261024-after5"></script>
 </body></html>

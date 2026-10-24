@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>정답 이후 장면 · 개발 미리보기</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3efe6;color:#493d31;font-family:"Malgun Gothic",system-ui,sans-serif}main{max-width:1100px;padding:16px;margin:auto}h1{font-size:23px;margin:0 0 8px}p{font-size:13px;line-height:1.6;margin:0 0 12px}.tools{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin-bottom:12px}label{font-size:13px;font-weight:700}select,button{font:inherit;min-height:42px;padding:8px 11px;border:1px solid #c4b797;border-radius:5px;background:#fff9ec;color:#315b47}button{cursor:pointer}button:focus-visible,select:focus-visible{outline:3px solid #509d94;outline-offset:2px}.frame-shell{max-width:100%;overflow:auto;border:1px solid #bba881;border-radius:7px;background:#dcd2be;padding:8px}iframe{display:block;box-sizing:content-box;border:0;background:#f3efe6;margin:0 auto;width:320px;height:720px}output{display:block;margin-top:12px;padding:12px;background:#fff9ec;border:1px solid #dfd0b7;border-radius:5px;font:12px/1.5 monospace;white-space:pre-wrap;overflow-wrap:anywhere}.hint{color:#7d705b}
+</style>
+</head>
+<body><main>
+<h1>정답 이후 장면 · 개발 미리보기</h1>
+<p>실제 후반 장면 컴포넌트와 게임 CSS를 같은 출처의 프레임에서 확인합니다. 아래 너비는 프레임 안의 실제 화면 너비이며, 낮은 높이는 휴대전화 키보드가 열린 상황을 점검하기 위한 값입니다.</p>
+<div class="tools">
+<label for="preview-width">미리보기 너비</label><select id="preview-width"><option value="320">320px</option><option value="360">360px</option><option value="390">390px</option><option value="760">760px</option></select>
+<label for="preview-height">미리보기 높이</label><select id="preview-height"><option value="720">720px</option><option value="500">500px</option><option value="360">360px · 키보드 공간</option></select>
+<button type="button" id="first">첫 장면</button><button type="button" id="restore">저장한 단계 복원</button><button type="button" id="rapid">다음 버튼 5회 연타</button>
+</div>
+<p class="hint">장면 속 실제 다음 버튼으로 진행합니다. 복원은 이 검증 페이지 전용 세션 기록을 읽으며 게임의 정답·완료 기록을 바꾸지 않습니다.</p>
+<div class="frame-shell"><iframe id="story-frame" title="실제 정답 이후 장면" width="320" height="720"></iframe></div>
+<output id="status" aria-live="polite">프레임을 준비하고 있습니다.</output>
+</main>
+<script>
+(function(){
+ 'use strict';
+ const frame=document.getElementById('story-frame'),width=document.getElementById('preview-width'),height=document.getElementById('preview-height'),status=document.getElementById('status');
+ const targetOrigin=location.origin==='null'?'*':location.origin;
+ let latest=null;
+ function paint(){status.textContent=JSON.stringify({requestedWidth:Number(width.value),requestedHeight:Number(height.value),iframeClientWidth:frame.clientWidth,iframeClientHeight:frame.clientHeight,frame:latest},null,2)}
+ function resize(){frame.style.width=width.value+'px';frame.style.height=height.value+'px';paint()}
+ function send(command){frame.contentWindow.postMessage({type:'after-ending-preview:command',command},targetOrigin)}
+ function source(restore=false){const url=new URL('./after-ending-frame.html',location.href);url.searchParams.set('v','20261024-after5');if(restore)url.searchParams.set('restore','1');return url.href}
+ width.addEventListener('change',resize);height.addEventListener('change',resize);
+ document.getElementById('first').addEventListener('click',()=>send('first'));
+ document.getElementById('restore').addEventListener('click',()=>{latest=null;paint();frame.src=source(true)});
+ document.getElementById('rapid').addEventListener('click',()=>send('rapid'));
+ window.addEventListener('message',event=>{if(event.source!==frame.contentWindow||event.origin!==location.origin||event.data?.type!=='after-ending-preview:status')return;latest=event.data.status;paint()});
+ frame.addEventListener('load',()=>send('report'));
+ resize();frame.src=source();
+})();
+</script>
+</body></html>

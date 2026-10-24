@@ -182,6 +182,17 @@
       "visible_rgb_exact": true,
       "psnr_db": null,
       "psnr_note": "Lossless displayed pixels and alpha verified exactly; hidden RGB under zero alpha is not compared."
+    },
+    {
+      "file": "after-ending/assets/returned-scene.webp",
+      "bytes": 69496,
+      "sha256": "32ed7e819967a471f2729043e7e15bdf1612895a6c3209fa04dc9e0caab9d118",
+      "width": 720,
+      "height": 540,
+      "alpha": false,
+      "encoding": "provided-WebP",
+      "source": "엔딩달리기_정답후복구_삽입키트_20261024.zip",
+      "load_stage": "after-answer only"
     }
   ],
   "original_sources": [
@@ -249,8 +260,10 @@
   "before_active_image_bytes": 16644702,
   "before_all_image_bytes": 18155521,
   "equivalent_png_with_new_art_bytes": 19622600,
-  "after_image_bytes": 3637414,
+  "after_image_bytes": 3706910,
   "initial_image_bytes": 2274062,
   "motion_previous_image_bytes": 3917168,
-  "motion_runtime_note": "Only aligned three WebP clips plus double stack added. Legacy librarian sheet removed. Source PNGs, references, single frames excluded."
+  "motion_runtime_note": "Only aligned three WebP clips plus double stack added. Legacy librarian sheet removed. Source PNGs, references, single frames excluded.",
+  "before_after_answer_image_bytes": 3637414,
+  "after_answer_runtime_note": "Only the 69496 byte composite is included and loaded after correct answer; no source PNG, separate lobby, impact reference, original sheets."
 }

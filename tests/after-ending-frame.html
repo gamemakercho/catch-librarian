@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>실제 후반 장면 검증 프레임</title>
+<link rel="stylesheet" href="../styles.css?v=20261024-after5">
+<link rel="stylesheet" href="../after-ending/after-ending.css?v=20261024-after5">
+</head>
+<body>
+<main class="after-story-active"><section id="after-answer-screen" class="screen"></section></main>
+<output id="frame-status" hidden></output>
+<script src="../after-ending/after-ending.js?v=20261024-after5"></script>
+<script>
+(function(){
+ 'use strict';
+ const host=document.getElementById('after-answer-screen'),output=document.getElementById('frame-status'),storageKey='catch-librarian:after-ending-preview:v1',targetOrigin=location.origin==='null'?'*':location.origin;
+ let story=null,saved=null,finishes=0,events=0,restarts=0,rapidTest=null;
+ const changes=[];
+ function read(){try{return JSON.parse(sessionStorage.getItem(storageKey))}catch{return null}}
+ function write(value){saved={...value};try{sessionStorage.setItem(storageKey,JSON.stringify(saved))}catch{}}
+ const round=value=>Math.round(value*1000)/1000;
+ function box(element){if(!element)return null;const r=element.getBoundingClientRect();return {x:round(r.x),y:round(r.y),width:round(r.width),height:round(r.height),right:round(r.right),bottom:round(r.bottom)}}
+ function report(){
+  const snapshot=story?.snapshot()||saved,section=host.querySelector('.after-ending'),image=host.querySelector('.ae-image'),next=host.querySelector('.ae-next');
+  const status={step:snapshot?.step??null,finished:Boolean(snapshot?.finished),finishCallbacks:finishes,completionEvents:events,restarts,restored:new URLSearchParams(location.search).get('restore')==='1',changes:changes.slice(-12),rapidTest,viewport:{innerWidth:window.innerWidth,innerHeight:window.innerHeight,clientWidth:document.documentElement.clientWidth,clientHeight:document.documentElement.clientHeight,scrollWidth:document.documentElement.scrollWidth,scrollHeight:document.documentElement.scrollHeight,smallMedia:matchMedia('(max-width:360px)').matches},stage:section?.dataset.step??null,title:host.querySelector('.ae-title')?.textContent??'',speaker:host.querySelector('.ae-speaker')?.textContent??'',dialogue:host.querySelector('.ae-text')?.textContent??'',nextText:next?.textContent??'',image:{source:image?.getAttribute('src')??'',complete:Boolean(image?.complete),naturalWidth:image?.naturalWidth||0,naturalHeight:image?.naturalHeight||0},geometry:{main:box(document.querySelector('main')),section:box(section),picture:box(host.querySelector('.ae-picture')),dialogue:box(host.querySelector('.ae-dialogue')),next:box(next)}};
+  output.textContent=JSON.stringify(status,null,2);if(window.parent!==window)window.parent.postMessage({type:'after-ending-preview:status',status},targetOrigin);
+ }
+ host.addEventListener('after-ending:complete',()=>{events++;report()});
+ host.addEventListener('load',()=>requestAnimationFrame(report),true);
+ story=window.CatLibrarianAfterEnding.mount(host,{onChange(snapshot){write(snapshot);changes.push({step:snapshot.step,finished:snapshot.finished});report()},onFinish(){finishes++;report()},onRestart(){restarts++;story.show({step:0});report()}});
+ const restored=new URLSearchParams(location.search).get('restore')==='1'?read():null;
+ story.show(restored||{step:0});
+ window.addEventListener('resize',()=>requestAnimationFrame(report));
+ window.addEventListener('message',event=>{
+  if(event.source!==window.parent||event.origin!==location.origin||event.data?.type!=='after-ending-preview:command')return;
+  const command=event.data.command;
+  if(command==='first'){finishes=0;events=0;restarts=0;rapidTest=null;changes.length=0;story.show({step:0})}
+  else if(command==='rapid'){const before=story.snapshot().step,button=host.querySelector('.ae-next');for(let i=0;i<5;i++)button.click();rapidTest={attempts:5,before,after:story.snapshot().step}}
+  report();
+ });
+ report();
+})();
+</script>
+</body></html>
