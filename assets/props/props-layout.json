@@ -28,14 +28,14 @@
       },
       "pivot_local": {
         "x": 157.5,
-        "y": 176.0
+        "y": 176
       },
       "ground_anchor_local": {
         "x": 157.5,
         "y": 349
       },
       "render_width_world": 35.72254,
-      "natural_height_world": 40.0,
+      "natural_height_world": 40,
       "collision_points_normalized": [
         {
           "x": 0.00324,
@@ -138,14 +138,14 @@
         "h": 299
       },
       "pivot_local": {
-        "x": 234.0,
+        "x": 234,
         "y": 152.5
       },
       "ground_anchor_local": {
-        "x": 234.0,
+        "x": 234,
         "y": 302
       },
-      "render_width_world": 48.0,
+      "render_width_world": 48,
       "natural_height_world": 31.06494,
       "collision_points_normalized": [
         {
@@ -174,7 +174,7 @@
         },
         {
           "x": 0.81602,
-          "y": 0.0
+          "y": 0
         },
         {
           "x": 0.99134,
@@ -244,7 +244,7 @@
         },
         {
           "x": 0.81602,
-          "y": 0.0
+          "y": 0
         },
         {
           "x": 0.99134,
@@ -285,7 +285,7 @@
         "y": 362
       },
       "render_width_world": 38.02228,
-      "natural_height_world": 42.0,
+      "natural_height_world": 42,
       "collision_points_normalized": [
         {
           "x": 0.00308,
@@ -404,14 +404,14 @@
         "h": 256
       },
       "pivot_local": {
-        "x": 208.0,
-        "y": 131.0
+        "x": 208,
+        "y": 131
       },
       "ground_anchor_local": {
-        "x": 208.0,
+        "x": 208,
         "y": 259
       },
-      "render_width_world": 64.0,
+      "render_width_world": 64,
       "natural_height_world": 39.96098,
       "collision_points_normalized": [
         {
@@ -522,7 +522,7 @@
         "x": 201.5,
         "y": 258
       },
-      "render_width_world": 66.0,
+      "render_width_world": 66,
       "natural_height_world": 42.39295,
       "collision_points_normalized": [
         {
@@ -633,7 +633,7 @@
         "x": 218.5,
         "y": 212
       },
-      "render_width_world": 64.0,
+      "render_width_world": 64,
       "natural_height_world": 31.0348,
       "collision_points_normalized": [
         {
@@ -744,12 +744,12 @@
         "x": 120,
         "y": 294
       },
-      "render_width_world": 104.98245614035088,
-      "natural_height_world": 136,
+      "render_width_world": 78,
+      "natural_height_world": 124,
       "collision_points_normalized": [
         {
           "x": 0.118182,
-          "y": 0.0
+          "y": 0
         },
         {
           "x": 0.090909,
@@ -772,7 +772,7 @@
           "y": 0.164912
         },
         {
-          "x": 0.0,
+          "x": 0,
           "y": 0.210526
         },
         {
@@ -820,7 +820,7 @@
           "y": 0.670175
         },
         {
-          "x": 0.0,
+          "x": 0,
           "y": 0.715789
         },
         {
@@ -933,13 +933,13 @@
         },
         {
           "x": 0.945455,
-          "y": 0.0
+          "y": 0
         }
       ],
       "collision_outline_normalized": [
         {
           "x": 0.118182,
-          "y": 0.0
+          "y": 0
         },
         {
           "x": 0.090909,
@@ -962,7 +962,7 @@
           "y": 0.164912
         },
         {
-          "x": 0.0,
+          "x": 0,
           "y": 0.210526
         },
         {
@@ -1010,7 +1010,7 @@
           "y": 0.670175
         },
         {
-          "x": 0.0,
+          "x": 0,
           "y": 0.715789
         },
         {
@@ -1123,13 +1123,15 @@
         },
         {
           "x": 0.945455,
-          "y": 0.0
+          "y": 0
         }
       ],
-      "measurement": "Opaque book silhouette alpha >128; side recesses retained with 2px source simplification; one obstacle id and damageConsumed."
+      "measurement": "Opaque book silhouette alpha >128; side recesses retained with 2px source simplification; one obstacle id and damageConsumed.",
+      "render_height_world": 124,
+      "render_note": "User-requested slimmer double stack: explicit 78x124 world size. The same independent X/Y scales apply to artwork, pivot, outline, collision and floor contact; source WebP pixels stay unchanged."
     }
   ],
-  "render_note": "Scale=render_width_world/visible_bounds_local.w. Preserve this scale on BOTH axes. Draw full source_rect about pivot_local/ground_anchor_local. First3 have different natural silhouettes and sizes.",
+  "render_note": "Use render_width_world/visible_bounds_local.w for X. Only double-stack has explicit render_height_world/visible_bounds_local.h for Y, following the user request for slimmer width with only slightly reduced height. Other six props keep the X scale uniformly on BOTH axes. Draw about the measured pivot/ground anchor.",
   "collision_note": "Normalized points use visible_bounds_local. Rotate them with the sprite. Convex envelope is an initial approximation; avoid treating large empty spaces of open pages as solid. Verify in game. Open/fluttering page notches are excluded by a concave outline, decomposed into convex parts by props.js; original measured hull points remain for provenance.",
   "ids_note": "book-red/green/blue are legacy-compatible IDs for closed/open/fluttering FORMS; select forms independently of trajectory and speed."
 }

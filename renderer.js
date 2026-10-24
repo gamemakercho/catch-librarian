@@ -1,9 +1,9 @@
-import {CONFIG} from './config.js?v=20261023-motion4';
-import {WORLD} from './engine.js?v=20261023-motion4';
-import {obstaclePolygons} from './collision.js?v=20261023-motion4';
-import {BACKGROUND_LAYOUT,PROPS_LAYOUT} from './scene-data.js?v=20261023-motion4';
-import {createProp,propTransform} from './props.js?v=20261023-motion4';
-import {librarianPose,heldBookPose,LIBRARIAN_SCALE} from './librarian-motion.js?v=20261023-motion4';
+import {CONFIG} from './config.js?v=20261024-balance6';
+import {WORLD} from './engine.js?v=20261024-balance6';
+import {obstaclePolygons} from './collision.js?v=20261024-balance6';
+import {BACKGROUND_LAYOUT,PROPS_LAYOUT} from './scene-data.js?v=20261024-balance6';
+import {createProp,propTransform} from './props.js?v=20261024-balance6';
+import {librarianPose,heldBookPose,LIBRARIAN_SCALE} from './librarian-motion.js?v=20261024-balance6';
 const {floor}=WORLD;
 function rect(c,x,y,w,h,color){c.fillStyle=color;c.fillRect(x,y,w,h)}
 export function backgroundTiles(distance,section,width=WORLD.width){
@@ -12,7 +12,8 @@ export function backgroundTiles(distance,section,width=WORLD.width){
 }
 export function obstacleOpacity(o,config=CONFIG,ageOffset=0){
  if(!o.reacting)return 1;
- return Math.max(0,Math.min(1,(config.propLifetime-o.reactionAge-ageOffset)/(config.propLifetime-config.propFadeStart)));
+ const lifetime=o.reactionLifetime??config.propLifetime,fadeStart=o.fadeStart??config.propFadeStart;
+ return Math.max(0,Math.min(1,(lifetime-o.reactionAge-ageOffset)/(lifetime-fadeStart)));
 }
 export function endingCatPose(game){
  const age=game.endingAge||0,ease=1-(1-Math.min(1,age/.45))**3;
@@ -48,7 +49,7 @@ export class Renderer {
   const c=this.c;c.clearRect(0,0,960,500);this.background(game.distance);
   const ending=(String(game.state).startsWith('ending-')||(game.state==='paused'&&game.endingStarted)),t=game.state==='ready'?ambient:game.elapsed+(ending?game.endingAge||0:0),cat=ending?endingCatPose(game):{catX:game.x,catY:game.y};
   const shadow=(x,y,w)=>{c.fillStyle='#4c322530';c.beginPath();c.ellipse(x,y,w,5,0,0,Math.PI*2);c.fill()};shadow(cat.catX,floor+3,Math.max(7,25-cat.catY*.06));
-  if(!ending||game.state==='ending-trip')shadow(WORLD.librarianX,floor+4,35);
+  if(!ending||(game.endingAge||0)<(game.config?.discoverySeconds??CONFIG.discoverySeconds)+.64)shadow(WORLD.librarianX,floor+4,35);
   if(game.state==='playing'&&!game.hitActive)for(let j=0;j<3;j++){const f=(t*3+j/3)%1;c.fillStyle='rgba(255,236,201,'+((1-f)*.6)+')';c.beginPath();c.ellipse(game.x-30-f*40,floor-3-f*13,3+f*5,2+f*4,0,0,Math.PI*2);c.fill()}
   for(const o of game.obstacles)this.obstacle(o,ending?Math.max(0,1-(game.endingAge||0)/.2):1,game.state==='failed'?game.failedVisualAge||0:0);
   const pose=this.librarian(game,t);
@@ -69,19 +70,19 @@ export class Renderer {
    }
   }
  }
- outlinedProp(frame,scale,image){
-  if(this.outlineCache.has(frame.id))return this.outlineCache.get(frame.id);
+ outlinedProp(frame,scaleX,image,scaleY=scaleX){
+  const cacheKey=frame.id+':'+scaleX+':'+scaleY;if(this.outlineCache.has(cacheKey))return this.outlineCache.get(cacheKey);
   const make=()=>this.canvas.ownerDocument?.createElement('canvas')||globalThis.document?.createElement?.('canvas');
-  const mask=make(),out=make();if(!mask||!out){this.outlineCache.set(frame.id,null);return null}
-  const r=frame.source_rect,pad=5,ratio=2,w=r.w*scale,h=r.h*scale;
+  const mask=make(),out=make();if(!mask||!out){this.outlineCache.set(cacheKey,null);return null}
+  const r=frame.source_rect,pad=5,ratio=2,w=r.w*scaleX,h=r.h*scaleY;
   mask.width=out.width=Math.ceil((w+pad*2)*ratio);mask.height=out.height=Math.ceil((h+pad*2)*ratio);
-  const m=mask.getContext('2d'),o=out.getContext('2d');if(!m||!o){this.outlineCache.set(frame.id,null);return null}
+  const m=mask.getContext('2d'),o=out.getContext('2d');if(!m||!o){this.outlineCache.set(cacheKey,null);return null}
   m.scale(ratio,ratio);m.drawImage(image,r.x,r.y,r.w,r.h,pad,pad,w,h);m.globalCompositeOperation='source-in';m.fillStyle='#fff6d8';m.fillRect(0,0,mask.width,mask.height);
   o.scale(ratio,ratio);o.shadowColor='#39251c38';o.shadowBlur=2*ratio;o.shadowOffsetY=ratio;
   // Dilate a cached alpha mask; no frame loop reads or scans source pixels.
   for(let i=0;i<12;i++){const a=i*Math.PI/6;o.drawImage(mask,Math.cos(a)*1.7,Math.sin(a)*1.7,mask.width/ratio,mask.height/ratio)}
   o.shadowColor='transparent';o.shadowBlur=o.shadowOffsetY=0;o.drawImage(image,r.x,r.y,r.w,r.h,pad,pad,w,h);
-  const cached={canvas:out,pad,w:out.width/ratio,h:out.height/ratio};this.outlineCache.set(frame.id,cached);return cached;
+  const cached={canvas:out,pad,w:out.width/ratio,h:out.height/ratio};this.outlineCache.set(cacheKey,cached);return cached;
  }
  obstacle(o,opacity=1,ageOffset=0,danger=true){
   const t=propTransform(o,floor);if(!t.frame)return;
@@ -89,20 +90,23 @@ export class Renderer {
   c.save();c.globalAlpha=obstacleOpacity(o,CONFIG,ageOffset)*opacity;
   if(danger&&!o.reacting&&!['low','high'].includes(o.kind)){c.fillStyle='#3c2b2229';c.beginPath();c.ellipse(o.x+o.w/2,floor+2,Math.max(9,o.w*.36),3,0,0,Math.PI*2);c.fill()}
   c.translate(t.x,t.y);c.rotate(o.angle||0);
-  const outline=danger?this.outlinedProp(t.frame,t.scale,image):null;
-  if(outline)c.drawImage(outline.canvas,-p.x*t.scale-outline.pad,-p.y*t.scale-outline.pad,outline.w,outline.h);
-  else{if(danger){c.shadowColor='#fff6d8';c.shadowBlur=3.4}c.drawImage(image,r.x,r.y,r.w,r.h,-p.x*t.scale,-p.y*t.scale,r.w*t.scale,r.h*t.scale)}
+  const outline=danger?this.outlinedProp(t.frame,t.scaleX,image,t.scaleY):null;
+  if(outline)c.drawImage(outline.canvas,-p.x*t.scaleX-outline.pad,-p.y*t.scaleY-outline.pad,outline.w,outline.h);
+  else{if(danger){c.shadowColor='#fff6d8';c.shadowBlur=3.4}c.drawImage(image,r.x,r.y,r.w,r.h,-p.x*t.scaleX,-p.y*t.scaleY,r.w*t.scaleX,r.h*t.scaleY)}
   if(danger&&o.kind==='double-stack'){
-   const b=t.frame.visible_bounds_local,x=(b.x+b.w/2-p.x)*t.scale,y=(b.y-p.y)*t.scale-8;
+   const b=t.frame.visible_bounds_local,x=(b.x+b.w/2-p.x)*t.scaleX,y=(b.y-p.y)*t.scaleY-8;
    c.shadowColor='transparent';c.lineWidth=2.5;c.strokeStyle='#76513c';c.fillStyle='#f7d47a';c.font='bold 17px sans-serif';c.textAlign='center';c.textBaseline='bottom';c.strokeText('↑↑',x,y);c.fillText('↑↑',x,y);
   }
   c.restore();
  }
  ending(game,cat){
-  const c=this.c,age=game.endingAge||0,toe=game.endingToe||{x:814,y:floor};
+  const c=this.c,age=game.endingAge||0,hold=game.config?.discoverySeconds??CONFIG.discoverySeconds,toe=game.endingToe||{x:814,y:floor};
   c.save();c.strokeStyle='#765139';c.lineWidth=3;c.beginPath();c.moveTo(toe.x-12,floor+1);c.lineTo(toe.x+16,floor+1);c.lineTo(toe.x+19,floor-3);c.stroke();
   c.save();c.translate(863,floor-11);c.rotate(-.14);c.fillStyle='#f6d268';c.strokeStyle='#70452f';c.lineWidth=1.5;c.beginPath();c.roundRect(-24,-8,48,16,3);c.fill();c.stroke();c.fillStyle='#c76d65';c.fillRect(-22,-6,7,12);c.fillRect(16,-6,6,12);c.fillStyle='#805239';c.font='bold 9px "Malgun Gothic",sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText('츄르',1,0);c.restore();
-  if(age>.12&&age<.65){c.fillStyle='#fff7df';c.strokeStyle='#765139';c.lineWidth=1.5;c.beginPath();c.roundRect(cat.catX+9,floor-cat.catY-99,28,34,9);c.fill();c.stroke();c.fillStyle='#60452f';c.font='bold 23px sans-serif';c.textAlign='center';c.fillText('!',cat.catX+23,floor-cat.catY-75)}
+  if(age>.12&&age<hold+.65){c.fillStyle='#fff7df';c.strokeStyle='#765139';c.lineWidth=1.5;c.beginPath();c.roundRect(cat.catX+9,floor-cat.catY-99,28,34,9);c.fill();c.stroke();c.fillStyle='#60452f';c.font='bold 23px sans-serif';c.textAlign='center';c.fillText('!',cat.catX+23,floor-cat.catY-75)}
+  if(age<hold){
+   c.fillStyle='#fff7df';c.strokeStyle='#765139';c.lineWidth=1.5;c.beginPath();c.roundRect(WORLD.librarianX-44,floor-222,88,35,10);c.fill();c.stroke();c.fillStyle='#60452f';c.font='bold 18px "Malgun Gothic",sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText('츄르!',WORLD.librarianX,floor-204);
+  }
   c.restore();
  }
  drawDebug(game,pose=librarianPose(game)){

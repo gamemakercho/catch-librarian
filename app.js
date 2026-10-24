@@ -1,7 +1,7 @@
-import {SPRITE_LAYOUT,SCENE_IMAGE_FILES} from './scene-data.js?v=20261023-motion4';
-import { CONFIG } from './config.js?v=20261023-motion4';
-import { Chase, isCorrectAnswer } from './engine.js?v=20261023-motion4';
-import { Renderer } from './renderer.js?v=20261023-motion4';
+import {SPRITE_LAYOUT,SCENE_IMAGE_FILES} from './scene-data.js?v=20261024-balance6';
+import { CONFIG } from './config.js?v=20261024-balance6';
+import { Chase, isCorrectAnswer } from './engine.js?v=20261024-balance6';
+import { Renderer } from './renderer.js?v=20261024-balance6';
 const $ = id => document.getElementById(id);
 const game = new Chase();
 const comicFiles = ['01-chase','02-treat','03-sparkle','04-trip','05-jump'].map(x=>`assets/ending/ending-${x}.webp`);
@@ -20,7 +20,7 @@ let previousHUD='';function syncHUD(){const key=[Math.ceil(CONFIG.duration-game.
 function showScreen(name){document.querySelector('main')?.classList.toggle('after-story-active',name==='after-answer');for(const id of ['run','comic','puzzle','after-answer','complete'])$(id+'-screen').hidden=id!==name;if(name!=='after-answer')afterStory?.hide();for(const id of ['run','comic','puzzle']){const el=$('step-'+id);if(id===name||(['after-answer','complete'].includes(name)&&id==='puzzle'))el.setAttribute('aria-current','step');else el.removeAttribute('aria-current')}window.scrollTo?.({top:0,left:0,behavior:'auto'})}
 function overlay(title,copy,button,label='도서관의 마지막 추격전'){$('overlay').hidden=false;$('overlay-title').textContent=title;$('overlay-copy').textContent=copy;$('overlay-label').textContent=label;$('start').textContent=button;$('start').disabled=false;$('pause').hidden=true;$('jump').disabled=true}
 let pausedState='playing';
-const endingStates=['ending-trip','ending-fly','ending-gap'];
+const endingStates=['ending-discovery','ending-trip','ending-fly','ending-gap'];
 let comicPreloads;function preloadComics(){comicPreloads??=comicFiles.map(src=>{const img=new Image();img.decoding='async';img.src=src;return img})}
 function start(){preloadComics();game.start();state='playing';priorHits=0;lastTime=null;$('overlay').hidden=true;$('pause').hidden=false;$('jump').disabled=false;$('game-message').textContent='책장 사이로 출발!';syncHUD()}
 function jump(){if(state!=='playing')return;game.jump();syncHUD()}

@@ -22,12 +22,12 @@
     "x": 120,
     "y": 294
   },
-  "render_width_world": 104.98245614035088,
-  "natural_height_world": 136,
+  "render_width_world": 78,
+  "natural_height_world": 124,
   "collision_points_normalized": [
     {
       "x": 0.118182,
-      "y": 0.0
+      "y": 0
     },
     {
       "x": 0.090909,
@@ -50,7 +50,7 @@
       "y": 0.164912
     },
     {
-      "x": 0.0,
+      "x": 0,
       "y": 0.210526
     },
     {
@@ -98,7 +98,7 @@
       "y": 0.670175
     },
     {
-      "x": 0.0,
+      "x": 0,
       "y": 0.715789
     },
     {
@@ -211,13 +211,13 @@
     },
     {
       "x": 0.945455,
-      "y": 0.0
+      "y": 0
     }
   ],
   "collision_outline_normalized": [
     {
       "x": 0.118182,
-      "y": 0.0
+      "y": 0
     },
     {
       "x": 0.090909,
@@ -240,7 +240,7 @@
       "y": 0.164912
     },
     {
-      "x": 0.0,
+      "x": 0,
       "y": 0.210526
     },
     {
@@ -288,7 +288,7 @@
       "y": 0.670175
     },
     {
-      "x": 0.0,
+      "x": 0,
       "y": 0.715789
     },
     {
@@ -401,8 +401,10 @@
     },
     {
       "x": 0.945455,
-      "y": 0.0
+      "y": 0
     }
   ],
-  "measurement": "Opaque book silhouette alpha >128; side recesses retained with 2px source simplification; one obstacle id and damageConsumed."
+  "measurement": "Opaque book silhouette alpha >128; side recesses retained with 2px source simplification; one obstacle id and damageConsumed.",
+  "render_height_world": 124,
+  "render_note": "User-requested slimmer double stack: explicit 78x124 world size. The same independent X/Y scales apply to artwork, pivot, outline, collision and floor contact; source WebP pixels stay unchanged."
 }

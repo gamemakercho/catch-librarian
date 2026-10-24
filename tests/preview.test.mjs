@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFile} from 'node:fs/promises';
 import {SCENE_IMAGE_FILES} from '../scene-data.js';
+import {CONFIG} from '../config.js';
 const root=new URL('../',import.meta.url),html=await readFile(new URL('tests/collision-preview.html',root),'utf8');
 let core='';
 for(const f of ['scene-data.js','config.js','props.js','collision.js','librarian-motion.js','engine.js','renderer.js'])core+=(await readFile(new URL(f,root),'utf8')).replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'')+'\n';
@@ -58,8 +59,10 @@ test('one large manual render step crosses release exactly once and rapid reques
 
 test('real ending boundary freezes clock and scroll, locks the toe through multiple poses, flies fully offscreen, then finishes once',async()=>{
  const page=await boot();page.click('throw');page.click('queue-throw');page.click('finish');
- let s=page.status();assert.equal(s.state,'ending-trip');near(s.time,30);near(s.ending.age,0);assert.equal(s.throwAction,null);assert.equal(s.queuedThrow,null);
+ let s=page.status();assert.equal(s.state,'ending-discovery');near(s.time,30);near(s.ending.age,0);assert.equal(s.throwAction,null);assert.equal(s.queuedThrow,null);
  const distance=s.distance,toe=s.ending.toe,frames=new Set();
+ for(let i=0;i<28;i++){page.click('step');const hold=page.status();assert.equal(hold.state,'ending-discovery');near(hold.time,30);near(hold.distance,distance);assert.equal(hold.motion.clip,'run')}
+ page.click('step');page.click('step');near(page.status().ending.age,CONFIG.discoverySeconds);
  for(let i=0;i<7;i++){
   s=page.status();assert.equal(s.state,'ending-trip');assert.equal(s.motion.toeLocked,true);near(s.motion.support.x,toe.x);near(s.motion.support.y,toe.y);near(s.time,30);near(s.distance,distance);frames.add(s.motion.frame);
   if(i<6)page.click('step');
@@ -67,12 +70,22 @@ test('real ending boundary freezes clock and scroll, locks the toe through multi
  assert.ok(frames.size>=4,'toe must remain locked through several distinct stumble drawings');
  const lastRoot=s.motion.root.x;page.click('step');s=page.status();assert.equal(s.state,'ending-fly');assert.equal(s.motion.toeLocked,false);assert.equal(s.motion.support,null);assert.ok(s.motion.root.x>lastRoot);
  page.click('step-release');page.click('step');page.click('step');s=page.status();assert.equal(s.state,'ending-gap');assert.equal(s.ending.fullyOutside,true);assert.ok(s.ending.leftEdge>960);near(s.distance,distance);
- page.click('step');s=page.status();assert.equal(s.state,'ending-complete');near(s.ending.age,1.16);const done=s.ending.age;page.click('step-release');near(page.status().ending.age,done);assert.equal(page.status().state,'ending-complete');
+ page.click('step');s=page.status();assert.equal(s.state,'ending-complete');near(s.ending.age,CONFIG.endingDuration);const done=s.ending.age;page.click('step-release');near(page.status().ending.age,done);assert.equal(page.status().state,'ending-complete');
  page.click('reset');s=page.status();near(s.ending.age,0);assert.equal(s.ending.root,null);assert.equal(s.throwAction,null);assert.equal(s.queuedThrow,null);assert.equal(s.state,'playing');
 });
 
 test('preview gallery has seven real silhouettes and the two-layer contact consumes only one health point',async()=>{
  const page=await boot();page.click('gallery');let s=page.status();assert.equal(s.props.length,7);assert.equal(new Set(s.props.map(o=>o.id)).size,7);assert.ok(s.props.every(o=>Number.isFinite(o.vy)&&Number.isFinite(o.height)));
- const tall=s.props.find(o=>o.id==='double-stack');near(tall.height,136);assert.ok(tall.width>100&&tall.width<110);
+ const tall=s.props.find(o=>o.id==='double-stack');near(tall.height,124);near(tall.width,78);
  page.elements.scenario.value='double-stack';page.elements.scenario.fire('change');page.click('impact');s=page.status();assert.equal(s.health,2);assert.equal(s.props.length,1);assert.equal(s.props[0].id,'double-stack');assert.equal(s.props[0].damageConsumed,true);assert.ok(s.penetration<.002);
+});
+
+
+test('developer burst controls launch exactly three or four distinct books and reset pending pattern state',async()=>{
+ for(const [button,count]of [['burst-three',3],['burst-four',4]]){
+  const page=await boot();page.elements.scenario.value='high';page.click(button);assert.equal(page.status().burst.count,count);assert.equal(page.status().props.length,0);
+  for(let i=0;i<35;i++)page.click('step');const s=page.status();assert.equal(s.releases.length,count);assert.equal(new Set(s.releases.map(o=>o.id)).size,count);assert.equal(s.burst,null);assert.equal(s.throwAction,null);
+  for(let i=1;i<count;i++)near(s.releases[i].time-s.releases[i-1].time,CONFIG.burstHighInterval,.009);
+  page.click('reset');assert.equal(page.status().burst,null);assert.equal(page.status().releases.length,0);
+ }
 });

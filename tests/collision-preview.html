@@ -1,18 +1,19 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>충돌·사서 모션 검증 · 사서를 잡아라!</title><link rel="stylesheet" href="../styles.css?v=20261023-motion4"><style>main{width:min(1060px,calc(100% - 24px));padding:10px 0}h1{font-size:24px}.tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:15px 0}button,select{min-height:44px;padding:8px 12px}label{margin:0}canvas{border:4px solid #61442f;border-radius:8px}output{display:block;margin:15px 0;padding:12px;background:#fff9ec;font-family:monospace;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px}p{font-size:13px}</style></head>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>충돌·사서 모션 검증 · 사서를 잡아라!</title><link rel="stylesheet" href="../styles.css?v=20261024-balance6"><style>main{width:min(1060px,calc(100% - 24px));padding:10px 0}h1{font-size:24px}.tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:15px 0}button,select{min-height:44px;padding:8px 12px}label{margin:0}canvas{border:4px solid #61442f;border-radius:8px}output{display:block;margin:15px 0;padding:12px;background:#fff9ec;font-family:monospace;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px}p{font-size:13px}</style></head>
 <body><main><h1>충돌·사서 모션 검증</h1><p>실제 게임의 물리·렌더러·모션 데이터를 사용하는 개발 확인 화면입니다. 단계 진행으로 손의 책, 한 번의 투척, 발끝 고정과 화면 밖 비행을 확인할 수 있습니다.</p>
 <div class="tools"><label for="scenario">상황</label><select id="scenario"><option value="stack">바닥 책 더미</option><option value="double-stack">두 층 책 더미 · 2단 점프</option><option value="box">상자</option><option value="basket">바구니</option><option value="low">낮은 책</option><option value="high">높은 책 · 공중</option><option value="top">위에서 착지</option><option value="under">아래쪽 접촉</option><option value="fatal">마지막 체력</option></select>
 <label for="bookform">책 모양</label><select id="bookform"><option value="book-red">닫힌 책</option><option value="book-green">펼쳐진 책</option><option value="book-blue">팔락이는 책</option></select><label for="speed">속도</label><select id="speed"><option value="normal">기본</option><option value="fast">5000px/s</option></select>
-<button id="throw">책 던지기 준비</button><button id="queue-throw">추가 투척 요청</button><button id="finish">30초 종료 연출</button><button id="gallery">소품 7종 보기</button><button id="debug">충돌·모션 진단 전환</button><button id="scroll">배경 1000px 이동</button><button id="reset">다시 준비</button><button id="impact">충돌 순간</button><button id="step-fine">0.01초 진행</button><button id="step">0.1초 진행</button><button id="step-release">0.23초 진행</button><button id="auto">자동 재생</button><button id="jump">점프</button></div>
+<button id="throw">책 던지기 준비</button><button id="queue-throw">추가 투척 요청</button><button id="burst-three">연속 3권</button><button id="burst-four">연속 4권</button><button id="finish">30초 종료 연출</button><button id="gallery">소품 7종 보기</button><button id="debug">충돌·모션 진단 전환</button><button id="scroll">배경 1000px 이동</button><button id="reset">다시 준비</button><button id="impact">충돌 순간</button><button id="step-fine">0.01초 진행</button><button id="step">0.1초 진행</button><button id="step-release">0.23초 진행</button><button id="auto">자동 재생</button><button id="jump">점프</button></div>
 <canvas id="preview" width="960" height="500" aria-label="실제 러너 충돌과 사서 모션"></canvas><output id="status" aria-live="polite">그림을 준비하고 있습니다.</output></main>
 <script type="module">
-import {SPRITE_LAYOUT,PROPS_LAYOUT,SCENE_IMAGE_FILES} from '../scene-data.js?v=20261023-motion4';
-import {createProp} from '../props.js?v=20261023-motion4';
-import {Chase,WORLD} from '../engine.js?v=20261023-motion4';
-import {Renderer,obstacleOpacity} from '../renderer.js?v=20261023-motion4';
-import {CONFIG} from '../config.js?v=20261023-motion4';
-import {librarianPose,sampleMotion,handWorld} from '../librarian-motion.js?v=20261023-motion4';
+import {SPRITE_LAYOUT,PROPS_LAYOUT,SCENE_IMAGE_FILES} from '../scene-data.js?v=20261024-balance6';
+import {createProp} from '../props.js?v=20261024-balance6';
+import {Chase,WORLD} from '../engine.js?v=20261024-balance6';
+import {Renderer,obstacleOpacity} from '../renderer.js?v=20261024-balance6';
+import {CONFIG} from '../config.js?v=20261024-balance6';
+import {librarianPose,sampleMotion,handWorld} from '../librarian-motion.js?v=20261024-balance6';
 const $=id=>document.getElementById(id),game=new Chase();let automatic=false,last=null;
+const releaseLog=[],originalRelease=game.releaseBook.bind(game);game.releaseBook=(action,newAge)=>{originalRelease(action,newAge);releaseLog.push({id:action.id,kind:action.kind,form:action.form,burstId:action.burstId,time:game.elapsed})};
 const images=Object.fromEntries(await Promise.all(SCENE_IMAGE_FILES.map(src=>new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve([src,image]);image.onerror=()=>reject(new Error(src));image.src='../'+src}))));
 const renderer=new Renderer($('preview'),images,SPRITE_LAYOUT);renderer.debug=true;
 const rounded=value=>Number.isFinite(value)?+value.toFixed(6):null;
@@ -22,11 +23,11 @@ function paint(){
  renderer.draw(game,game.elapsed);
  const pose=librarianPose(game),anchor=pose.frame.root_anchor,toWorld=p=>p?point({x:pose.root.x+(p.x-anchor.x)*pose.scale,y:pose.root.y+(p.y-anchor.y)*pose.scale}):null;
  const support=toWorld(pose.frame.support_anchor),head=pose.frame.head_reference;
- $('status').textContent=JSON.stringify({health:game.health,state:game.state,time:rounded(game.elapsed),distance:rounded(game.distance),hitFrame:game.hitFrame,x:rounded(game.x),y:rounded(game.y),vx:rounded(game.vx),propVx:rounded(game.obstacles[0]?.vx||0),hitStop:rounded(game.hitStop),penetration:rounded(game.maxPenetration),throwAction:actionStatus(game.throwAction),queuedThrow:actionStatus(game.queuedThrow),motion:{clip:pose.name,frame:pose.frameIndex,runFrame:pose.runFrameIndex,scale:rounded(pose.scale),root:point(pose.root),support,toeLocked:Boolean(pose.frame.toe_locked),head:head?{center:toWorld(head.face_center),width:rounded(head.face_size.w*pose.scale),height:rounded(head.face_size.h*pose.scale)}:null,hand:point(handWorld(game))},ending:{state:game.state,age:rounded(game.endingAge||0),toe:point(game.endingToe),root:point(game.endingRoot),leftEdge:rounded(pose.root.x-anchor.x*pose.scale),fullyOutside:pose.root.x-anchor.x*pose.scale>WORLD.width},props:game.obstacles.map(o=>({id:o.spriteId,obstacleId:o.id,kind:o.kind,width:rounded(o.w),height:rounded(o.h),x:rounded(o.x),lift:rounded(o.lift),vy:rounded(o.vy||0),bounces:o.bounces||0,opacity:rounded(obstacleOpacity(o)),damageConsumed:Boolean(o.damageConsumed)}))},null,2);
+ $('status').textContent=JSON.stringify({health:game.health,state:game.state,time:rounded(game.elapsed),distance:rounded(game.distance),hitFrame:game.hitFrame,x:rounded(game.x),y:rounded(game.y),vx:rounded(game.vx),propVx:rounded(game.obstacles[0]?.vx||0),hitStop:rounded(game.hitStop),penetration:rounded(game.maxPenetration),throwAction:actionStatus(game.throwAction),queuedThrow:actionStatus(game.queuedThrow),burst:game.burst?{count:game.burst.count,index:game.burst.index,interval:game.burst.interval,nextAt:rounded(game.burst.nextAt)}:null,releases:releaseLog.map(o=>({...o,time:rounded(o.time)})),motion:{clip:pose.name,frame:pose.frameIndex,runFrame:pose.runFrameIndex,scale:rounded(pose.scale),root:point(pose.root),support,toeLocked:Boolean(pose.frame.toe_locked),head:head?{center:toWorld(head.face_center),width:rounded(head.face_size.w*pose.scale),height:rounded(head.face_size.h*pose.scale)}:null,hand:point(handWorld(game))},ending:{state:game.state,age:rounded(game.endingAge||0),toe:point(game.endingToe),root:point(game.endingRoot),leftEdge:rounded(pose.root.x-anchor.x*pose.scale),fullyOutside:pose.root.x-anchor.x*pose.scale>WORLD.width},props:game.obstacles.map(o=>({id:o.spriteId,obstacleId:o.id,kind:o.kind,width:rounded(o.w),height:rounded(o.h),x:rounded(o.x),lift:rounded(o.lift),vy:rounded(o.vy||0),bounces:o.bounces||0,opacity:rounded(obstacleOpacity(o)),damageConsumed:Boolean(o.damageConsumed)}))},null,2);
 }
 function stop(){automatic=false;last=null;$('auto').textContent='자동 재생'}
 function reset(){
- stop();game.start();game.spawnAt=1000;
+ stop();releaseLog.length=0;game.start();game.spawnAt=1000;
  const scenario=$('scenario').value,kind=scenario==='fatal'||scenario==='top'?'stack':scenario==='under'?'high':scenario,airborne=['high','low'].includes(kind);
  game.obstacles=[createProp(airborne?$('bookform').value:kind==='stack'?'book-stack':kind,{id:1,kind,x:270,lift:kind==='high'?128:kind==='low'?20:0,age:2})];
  if($('speed').value==='fast')Object.assign(game.obstacles[0],{x:420,reacting:true,vx:-5000,vy:0,angularVelocity:8});
@@ -36,6 +37,7 @@ function reset(){
 function advance(dt){game.update(dt)}
 function selectedThrow(){return $('scenario').value==='high'?'high':'low'}
 $('throw').addEventListener('click',()=>{reset();game.obstacles=[];game.bookSerial=['book-red','book-green','book-blue'].indexOf($('bookform').value);game.x=70;game.spawn(selectedThrow());paint()});
+for(const [id,count]of [['burst-three',3],['burst-four',4]])$(id).addEventListener('click',()=>{reset();game.obstacles=[];game.x=70;game.spawnBurst(selectedThrow(),count);paint()});
 $('queue-throw').addEventListener('click',()=>{stop();game.spawn(selectedThrow());paint()});
 $('finish').addEventListener('click',()=>{reset();game.obstacles=[];game.elapsed=CONFIG.duration-.01;advance(.01);renderer.debug=true;paint()});
 $('scenario').addEventListener('change',reset);$('bookform').addEventListener('change',reset);$('speed').addEventListener('change',reset);

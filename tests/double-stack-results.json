@@ -2,8 +2,8 @@
   "verification": "Actual Chase.update + collision.js continuous SAT sweep; not an analytic-only trajectory probe.",
   "dt_seconds": 0.004166666666666667,
   "visible_size": {
-    "w": 104.98245614035088,
-    "h": 136
+    "w": 78,
+    "h": 124
   },
   "lead_seconds": 0.8,
   "single_timing_scan_ms": {
@@ -12,280 +12,729 @@
     "step": 10
   },
   "double_timing_scan_ms": {
-    "first_from": 150,
-    "first_to": 400,
+    "first_from": 100,
+    "first_to": 500,
     "first_step": 25,
-    "second_delay_from": 200,
-    "second_delay_to": 550,
+    "second_delay_from": 150,
+    "second_delay_to": 650,
     "second_delay_step": 25
   },
   "clearance_method": "Full-height silhouette roof over the cat collider width, including one simulation step of horizontal preview, minus a conservative temporal displacement bound. All accepted cases also have zero actual SAT contacts.",
   "temporal_margin_px": 4.546875,
+  "comparison": {
+    "previous_verified_sweep": {
+      "visible_size": {
+        "w": 104.98245614035088,
+        "h": 136
+      },
+      "grid": {
+        "first_from": 150,
+        "first_to": 400,
+        "first_step": 25,
+        "second_delay_from": 200,
+        "second_delay_to": 550,
+        "second_delay_step": 25
+      },
+      "safe_pairs_total": 436,
+      "per_speed": [
+        {
+          "speed": 410,
+          "safe_pairs": 50
+        },
+        {
+          "speed": 424,
+          "safe_pairs": 57
+        },
+        {
+          "speed": 438,
+          "safe_pairs": 58
+        },
+        {
+          "speed": 450,
+          "safe_pairs": 63
+        },
+        {
+          "speed": 466,
+          "safe_pairs": 65
+        },
+        {
+          "speed": 480,
+          "safe_pairs": 69
+        },
+        {
+          "speed": 494,
+          "safe_pairs": 74
+        }
+      ]
+    },
+    "width_reduction_percent": 25.702,
+    "height_reduction_percent": 8.824,
+    "same_legacy_grid_current_safe_pairs": 684,
+    "same_legacy_grid_improvement_percent": 56.881
+  },
   "source_sha256": {
-    "engine.js": "251ee91f6b85655576c3629a022fb0abecae8475f9168498c0538d9d18a8d747",
-    "config.js": "4d3def94d05904f270b6e4d1c609e8ef744312b21b3fa183032ca90e7c6c22a6",
-    "props.js": "1db44295b767be43fde9bc1e8266dbddab932b62cb04b288ec99eac471562596",
-    "collision.js": "6a7d8f024abbc757243f1280a9d2b07bcec095313243a93f86ae9a9b1b5fd0a3",
-    "assets/props/props-layout.json": "923bfd24533ea9b462ecc502869e4013d9a363ed0502aaa2ba6df607eab27fb0"
+    "engine.js": "83af473b4e49dfb3ed3efa757adc074ad7339adac0e8db5466e6cd30c697a442",
+    "config.js": "801b6db73c1fdd052641a4a68c9d86cbc7f4bb32aac9cffcfde52a30996f4828",
+    "props.js": "545ea7c1145e2e8b40dd0fb4c31bbe66e84bfcb4f745422de46f2f6559b7c03a",
+    "collision.js": "66881ea2954da07aee569d6bdb5dd3b8882a0869faafc77a2e760bc4de4f3622",
+    "scene-data.js": "3c9d2c1924b255f6dc13be7ae677f5c4eaf6c6731b661070188b6bbaa9d276dc",
+    "assets/props/props-layout.json": "00bf0077dea3655ad4a3ef0bda7c2c23b06a3a56fc7dd94f4ae7cf703c6d7d85",
+    "assets/props/book-stack-double.json": "64b70fba03b0da567e95bf8c272827df55c9407efc57c370a698e16ab7ffd4c1"
   },
   "results": [
     {
       "speed": 410,
       "single_attempts": 121,
       "single_passes": 0,
-      "double_attempts": 165,
-      "double_safe_pairs": 50,
-      "minimum_safe_clearance_px": 3.234,
+      "double_attempts": 357,
+      "double_safe_pairs": 129,
+      "legacy_grid_safe_pairs": 93,
+      "minimum_safe_clearance_px": 3.438,
       "valid_double_pairs": [
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 8.516
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 17.297
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 24.203
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 29.234
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 32.391
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 31.203
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 550,
+          "minimum_clearance_px": 18.266
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 575,
+          "minimum_clearance_px": 3.453
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 9
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 18.719
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 26.563
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 32.531
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 36.625
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 36.375
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 24.375
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 550,
+          "minimum_clearance_px": 10.5
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 8.547
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 19.203
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 27.984
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 34.891
+        },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 7.688
+          "minimum_clearance_px": 39.922
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 13.188
+          "minimum_clearance_px": 40.609
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 500,
-          "minimum_clearance_px": 16.813
+          "minimum_clearance_px": 29.547
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 525,
-          "minimum_clearance_px": 4.609
+          "minimum_clearance_px": 16.609
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 7.156
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 18.75
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 28.469
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 36.313
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 10.047
+          "minimum_clearance_px": 42.281
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 16.484
+          "minimum_clearance_px": 43.906
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 21.047
+          "minimum_clearance_px": 33.781
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 500,
-          "minimum_clearance_px": 9.781
+          "minimum_clearance_px": 21.781
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 7.906
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 4.828
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 17.359
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 28.016
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 36.797
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 11.469
+          "minimum_clearance_px": 43.703
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 18.844
+          "minimum_clearance_px": 46.266
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 24.344
+          "minimum_clearance_px": 37.078
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 14.016
+          "minimum_clearance_px": 26.016
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 13.078
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 15.031
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 26.625
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 36.344
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 11.953
+          "minimum_clearance_px": 44.188
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 20.266
+          "minimum_clearance_px": 47.688
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 26.703
+          "minimum_clearance_px": 39.438
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 450,
+          "minimum_clearance_px": 29.313
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 475,
           "minimum_clearance_px": 17.313
         },
         {
           "first_tap_ms": 225,
-          "second_delay_ms": 475,
-          "minimum_clearance_px": 5.313
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 3.438
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 11.766
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 24.297
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 34.953
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 11.5
+          "minimum_clearance_px": 43.734
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 20.75
+          "minimum_clearance_px": 48.172
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 28.125
+          "minimum_clearance_px": 40.859
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 19.672
+          "minimum_clearance_px": 31.672
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 8.609
+          "minimum_clearance_px": 20.609
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 7.672
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 7.563
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 21.031
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 32.625
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 10.109
+          "minimum_clearance_px": 42.344
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 20.297
+          "minimum_clearance_px": 47.719
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 28.609
+          "minimum_clearance_px": 41.344
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 21.094
+          "minimum_clearance_px": 33.094
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 425,
+          "minimum_clearance_px": 22.969
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 450,
           "minimum_clearance_px": 10.969
         },
         {
           "first_tap_ms": 300,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 16.828
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 29.359
+        },
+        {
+          "first_tap_ms": 300,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 7.781
+          "minimum_clearance_px": 40.016
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 18.906
+          "minimum_clearance_px": 46.328
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 28.156
+          "minimum_clearance_px": 40.891
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 21.578
+          "minimum_clearance_px": 33.578
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 12.391
+          "minimum_clearance_px": 24.391
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 13.328
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 11.688
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 25.156
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 4.516
+          "minimum_clearance_px": 36.75
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 16.578
+          "minimum_clearance_px": 44
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 26.766
+          "minimum_clearance_px": 39.5
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 21.125
+          "minimum_clearance_px": 33.125
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 12.875
+          "minimum_clearance_px": 24.875
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 14.75
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 5.609
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 20.016
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 32.547
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 13.313
+          "minimum_clearance_px": 40.734
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 24.438
+          "minimum_clearance_px": 37.172
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 19.734
+          "minimum_clearance_px": 31.734
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 12.422
+          "minimum_clearance_px": 24.422
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 3.234
+          "minimum_clearance_px": 15.234
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 4.172
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 13.938
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 27.406
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 9.109
+          "minimum_clearance_px": 36.531
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 21.172
+          "minimum_clearance_px": 33.906
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 17.406
+          "minimum_clearance_px": 29.406
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 11.031
+          "minimum_clearance_px": 23.031
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 14.781
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 4.656
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 6.922
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 21.328
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 225,
-          "minimum_clearance_px": 3.969
+          "minimum_clearance_px": 31.391
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 16.969
+          "minimum_clearance_px": 29.703
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 14.141
+          "minimum_clearance_px": 26.141
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 8.703
+          "minimum_clearance_px": 20.703
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 13.391
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 4.203
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 14.313
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 25.313
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 24.563
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 21.938
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 17.438
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 11.063
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 6.359
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 18.297
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 18.484
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 16.797
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 13.234
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 7.797
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 10.344
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 11.469
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 10.719
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 8.094
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 3.594
+        },
+        {
+          "first_tap_ms": 500,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 3.516
+        },
+        {
+          "first_tap_ms": 500,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 3.703
         }
       ]
     },
@@ -293,294 +742,675 @@
       "speed": 424,
       "single_attempts": 121,
       "single_passes": 0,
-      "double_attempts": 165,
-      "double_safe_pairs": 57,
-      "minimum_safe_clearance_px": 3.031,
+      "double_attempts": 357,
+      "double_safe_pairs": 133,
+      "legacy_grid_safe_pairs": 95,
+      "minimum_safe_clearance_px": 3.094,
       "valid_double_pairs": [
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 3.547
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 13.734
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 22.047
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 28.484
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 33.047
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 35.734
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 31.203
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 550,
+          "minimum_clearance_px": 18.266
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 575,
+          "minimum_clearance_px": 3.453
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 3.094
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 14.219
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 23.469
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 30.844
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 36.344
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 39.969
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 36.375
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 24.375
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 550,
+          "minimum_clearance_px": 10.5
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 13.766
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 23.953
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 32.266
+        },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 5.297
+          "minimum_clearance_px": 38.703
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 12.203
+          "minimum_clearance_px": 43.266
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 17.234
+          "minimum_clearance_px": 40.609
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 500,
-          "minimum_clearance_px": 17.547
+          "minimum_clearance_px": 29.547
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 525,
-          "minimum_clearance_px": 4.609
+          "minimum_clearance_px": 16.609
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 12.375
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 23.5
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 32.75
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 6.719
+          "minimum_clearance_px": 40.125
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 14.563
+          "minimum_clearance_px": 45.625
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 20.531
+          "minimum_clearance_px": 43.906
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 21.781
+          "minimum_clearance_px": 33.781
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 500,
-          "minimum_clearance_px": 9.781
+          "minimum_clearance_px": 21.781
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 7.906
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 10.047
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 22.109
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 32.297
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 7.203
+          "minimum_clearance_px": 40.609
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 15.984
+          "minimum_clearance_px": 47.047
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 22.891
+          "minimum_clearance_px": 46.266
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 25.078
+          "minimum_clearance_px": 37.078
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 14.016
+          "minimum_clearance_px": 26.016
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 13.078
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 6.781
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 19.781
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 30.906
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 6.75
+          "minimum_clearance_px": 40.156
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 16.469
+          "minimum_clearance_px": 47.531
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 24.313
+          "minimum_clearance_px": 47.688
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 27.438
+          "minimum_clearance_px": 39.438
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 450,
+          "minimum_clearance_px": 29.313
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 475,
           "minimum_clearance_px": 17.313
         },
         {
           "first_tap_ms": 225,
-          "second_delay_ms": 475,
-          "minimum_clearance_px": 5.313
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 3.438
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 16.516
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 28.578
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 5.359
+          "minimum_clearance_px": 38.766
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 16.016
+          "minimum_clearance_px": 47.078
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 24.797
+          "minimum_clearance_px": 48.172
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 28.859
+          "minimum_clearance_px": 40.859
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 19.672
+          "minimum_clearance_px": 31.672
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 8.609
+          "minimum_clearance_px": 20.609
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 7.672
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 12.313
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 25.313
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 3.031
+          "minimum_clearance_px": 36.438
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 14.625
+          "minimum_clearance_px": 45.688
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 24.344
+          "minimum_clearance_px": 47.719
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 29.344
+          "minimum_clearance_px": 41.344
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 21.094
+          "minimum_clearance_px": 33.094
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 425,
+          "minimum_clearance_px": 22.969
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 450,
           "minimum_clearance_px": 10.969
         },
         {
           "first_tap_ms": 300,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 7.172
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 21.109
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 33.172
+        },
+        {
+          "first_tap_ms": 300,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 12.297
+          "minimum_clearance_px": 43.359
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 22.953
+          "minimum_clearance_px": 46.328
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 28.891
+          "minimum_clearance_px": 40.891
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 21.578
+          "minimum_clearance_px": 33.578
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 12.391
+          "minimum_clearance_px": 24.391
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 13.328
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 15.969
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 28.969
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 9.031
+          "minimum_clearance_px": 40.094
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 20.625
+          "minimum_clearance_px": 44
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 27.5
+          "minimum_clearance_px": 39.5
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 21.125
+          "minimum_clearance_px": 33.125
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 12.875
+          "minimum_clearance_px": 24.875
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 14.75
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 9.891
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 23.828
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 4.828
+          "minimum_clearance_px": 35.891
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 17.359
+          "minimum_clearance_px": 40.734
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 25.172
+          "minimum_clearance_px": 37.172
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 19.734
+          "minimum_clearance_px": 31.734
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 12.422
+          "minimum_clearance_px": 24.422
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 3.234
+          "minimum_clearance_px": 15.234
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 4.172
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 17.75
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 30.75
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 13.156
+          "minimum_clearance_px": 36.531
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 21.906
+          "minimum_clearance_px": 33.906
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 17.406
+          "minimum_clearance_px": 29.406
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 11.031
+          "minimum_clearance_px": 23.031
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 14.781
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 4.656
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 10.734
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 24.672
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 225,
-          "minimum_clearance_px": 8.016
+          "minimum_clearance_px": 31.391
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 17.703
+          "minimum_clearance_px": 29.703
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 14.141
+          "minimum_clearance_px": 26.141
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 8.703
+          "minimum_clearance_px": 20.703
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 13.391
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 4.203
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 17.656
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 25.313
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 24.563
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 21.938
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 17.438
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 11.063
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 9.703
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 18.297
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 18.484
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 16.797
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 13.234
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 7.797
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 10.344
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 11.469
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 10.719
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 8.094
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 3.594
+        },
+        {
+          "first_tap_ms": 500,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 3.516
+        },
+        {
+          "first_tap_ms": 500,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 3.703
         }
       ]
     },
@@ -588,299 +1418,665 @@
       "speed": 438,
       "single_attempts": 121,
       "single_passes": 0,
-      "double_attempts": 165,
-      "double_safe_pairs": 58,
-      "minimum_safe_clearance_px": 3.224,
+      "double_attempts": 357,
+      "double_safe_pairs": 131,
+      "legacy_grid_safe_pairs": 95,
+      "minimum_safe_clearance_px": 3.036,
       "valid_double_pairs": [
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 7.208
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 17.083
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 25.083
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 31.208
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 35.458
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 37.833
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 30.13
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 550,
+          "minimum_clearance_px": 17.036
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 6.755
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 17.568
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 26.505
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 33.568
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 38.755
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 42.068
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 35.302
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 23.146
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 550,
+          "minimum_clearance_px": 9.115
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 5.365
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 17.115
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 26.99
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 34.99
+        },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 10.047
+          "minimum_clearance_px": 41.115
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 16.484
+          "minimum_clearance_px": 45.365
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 21.047
+          "minimum_clearance_px": 39.536
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 500,
-          "minimum_clearance_px": 16.318
+          "minimum_clearance_px": 28.318
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 525,
-          "minimum_clearance_px": 3.224
+          "minimum_clearance_px": 15.224
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 3.036
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 15.724
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 26.536
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 35.474
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 11.469
+          "minimum_clearance_px": 42.536
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 18.844
+          "minimum_clearance_px": 47.724
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 24.344
+          "minimum_clearance_px": 42.833
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 20.552
+          "minimum_clearance_px": 32.552
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 500,
-          "minimum_clearance_px": 8.396
+          "minimum_clearance_px": 20.396
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 6.365
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 13.396
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 25.146
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 35.021
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 11.953
+          "minimum_clearance_px": 43.021
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 20.266
+          "minimum_clearance_px": 49.146
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 26.703
+          "minimum_clearance_px": 45.193
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 23.849
+          "minimum_clearance_px": 35.849
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 12.63
+          "minimum_clearance_px": 24.63
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 11.536
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 10.13
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 22.818
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 33.63
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 11.5
+          "minimum_clearance_px": 42.568
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 20.75
+          "minimum_clearance_px": 49.63
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 28.125
+          "minimum_clearance_px": 46.615
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 26.208
+          "minimum_clearance_px": 38.208
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 15.927
+          "minimum_clearance_px": 27.927
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 3.771
+          "minimum_clearance_px": 15.771
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 5.927
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 19.552
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 31.302
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 10.109
+          "minimum_clearance_px": 41.177
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 20.297
+          "minimum_clearance_px": 49.177
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 28.609
+          "minimum_clearance_px": 47.099
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 27.63
+          "minimum_clearance_px": 39.63
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 18.286
+          "minimum_clearance_px": 30.286
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 7.068
+          "minimum_clearance_px": 19.068
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 5.974
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 15.349
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 28.036
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 7.781
+          "minimum_clearance_px": 38.849
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 18.906
+          "minimum_clearance_px": 47.786
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 28.156
+          "minimum_clearance_px": 46.646
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 28.115
+          "minimum_clearance_px": 40.115
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 19.708
+          "minimum_clearance_px": 31.708
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 9.427
+          "minimum_clearance_px": 21.427
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 9.271
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 10.208
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 23.833
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 4.516
+          "minimum_clearance_px": 35.583
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 16.578
+          "minimum_clearance_px": 45.458
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 26.766
+          "minimum_clearance_px": 45.255
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 27.661
+          "minimum_clearance_px": 39.661
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 20.193
+          "minimum_clearance_px": 32.193
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 10.849
+          "minimum_clearance_px": 22.849
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 11.63
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 4.13
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 18.693
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 31.38
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 13.313
+          "minimum_clearance_px": 42.193
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 24.438
+          "minimum_clearance_px": 42.927
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 26.271
+          "minimum_clearance_px": 38.271
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 19.74
+          "minimum_clearance_px": 31.74
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 11.333
+          "minimum_clearance_px": 23.333
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 13.052
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 12.615
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 26.24
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 9.109
+          "minimum_clearance_px": 37.99
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 21.172
+          "minimum_clearance_px": 39.661
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 23.943
+          "minimum_clearance_px": 35.943
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 18.349
+          "minimum_clearance_px": 30.349
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 10.88
+          "minimum_clearance_px": 22.88
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 13.536
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 5.599
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 20.161
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 225,
-          "minimum_clearance_px": 3.969
+          "minimum_clearance_px": 32.849
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 16.969
+          "minimum_clearance_px": 35.458
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 20.677
+          "minimum_clearance_px": 32.677
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 16.021
+          "minimum_clearance_px": 28.021
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 9.49
+          "minimum_clearance_px": 21.49
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 13.083
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 13.146
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 26.771
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 225,
-          "minimum_clearance_px": 11.828
+          "minimum_clearance_px": 30.318
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 16.474
+          "minimum_clearance_px": 28.474
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 12.755
+          "minimum_clearance_px": 24.755
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 7.161
+          "minimum_clearance_px": 19.161
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 11.693
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 5.193
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 19.755
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 24.24
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 23.333
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 20.552
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 15.896
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 9.365
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 11.802
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 17.224
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 17.255
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 15.411
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 11.693
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 6.099
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 9.271
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 10.24
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 9.333
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 6.552
         }
       ]
     },
@@ -888,324 +2084,675 @@
       "speed": 450,
       "single_attempts": 121,
       "single_passes": 0,
-      "double_attempts": 165,
-      "double_safe_pairs": 63,
-      "minimum_safe_clearance_px": 3.224,
+      "double_attempts": 357,
+      "double_safe_pairs": 133,
+      "legacy_grid_safe_pairs": 97,
+      "minimum_safe_clearance_px": 3.328,
       "valid_double_pairs": [
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 10.766
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 20.328
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 28.016
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 33.828
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 37.766
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 39.828
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 30.13
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 550,
+          "minimum_clearance_px": 17.036
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 10.313
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 20.813
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 29.438
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 36.188
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 41.063
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 44.063
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 35.302
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 23.146
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 550,
+          "minimum_clearance_px": 9.115
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 8.922
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 20.359
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 29.922
+        },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 5.083
+          "minimum_clearance_px": 37.609
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 13.083
+          "minimum_clearance_px": 43.422
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 19.208
+          "minimum_clearance_px": 47.359
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 23.458
+          "minimum_clearance_px": 39.536
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 500,
-          "minimum_clearance_px": 16.318
+          "minimum_clearance_px": 28.318
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 525,
-          "minimum_clearance_px": 3.224
+          "minimum_clearance_px": 15.224
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 6.594
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 18.969
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 29.469
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 5.568
+          "minimum_clearance_px": 38.094
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 14.505
+          "minimum_clearance_px": 44.844
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 21.568
+          "minimum_clearance_px": 49.719
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 26.755
+          "minimum_clearance_px": 42.833
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 20.552
+          "minimum_clearance_px": 32.552
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 500,
-          "minimum_clearance_px": 8.396
+          "minimum_clearance_px": 20.396
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 6.365
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 3.328
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 16.641
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 28.078
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 5.115
+          "minimum_clearance_px": 37.641
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 14.99
+          "minimum_clearance_px": 45.328
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 22.99
+          "minimum_clearance_px": 51.141
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 29.115
+          "minimum_clearance_px": 45.193
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 23.849
+          "minimum_clearance_px": 35.849
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 12.63
+          "minimum_clearance_px": 24.63
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 11.536
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 13.375
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 25.75
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 3.724
+          "minimum_clearance_px": 36.25
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 14.536
+          "minimum_clearance_px": 44.875
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 23.474
+          "minimum_clearance_px": 51.625
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 30.536
+          "minimum_clearance_px": 46.615
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 26.208
+          "minimum_clearance_px": 38.208
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 15.927
+          "minimum_clearance_px": 27.927
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 3.771
+          "minimum_clearance_px": 15.771
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 9.172
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 22.484
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 33.922
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 13.146
+          "minimum_clearance_px": 43.484
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 23.021
+          "minimum_clearance_px": 51.172
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 31.021
+          "minimum_clearance_px": 47.099
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 27.63
+          "minimum_clearance_px": 39.63
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 18.286
+          "minimum_clearance_px": 30.286
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 7.068
+          "minimum_clearance_px": 19.068
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 5.974
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 4.031
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 18.281
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 30.656
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 10.818
+          "minimum_clearance_px": 41.156
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 21.63
+          "minimum_clearance_px": 49.781
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 30.568
+          "minimum_clearance_px": 46.646
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 28.115
+          "minimum_clearance_px": 40.115
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 19.708
+          "minimum_clearance_px": 31.708
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 9.427
+          "minimum_clearance_px": 21.427
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 9.271
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 13.141
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 26.453
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 7.552
+          "minimum_clearance_px": 37.891
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 19.302
+          "minimum_clearance_px": 47.453
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 29.177
+          "minimum_clearance_px": 45.255
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 27.661
+          "minimum_clearance_px": 39.661
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 20.193
+          "minimum_clearance_px": 32.193
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 10.849
+          "minimum_clearance_px": 22.849
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 11.63
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 7.063
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 21.313
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 3.349
+          "minimum_clearance_px": 33.688
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 16.036
+          "minimum_clearance_px": 44.188
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 26.849
+          "minimum_clearance_px": 42.927
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 26.271
+          "minimum_clearance_px": 38.271
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 19.74
+          "minimum_clearance_px": 31.74
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 11.333
+          "minimum_clearance_px": 23.333
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 13.052
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 15.234
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 28.547
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 11.833
+          "minimum_clearance_px": 39.984
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 23.583
+          "minimum_clearance_px": 39.661
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 23.943
+          "minimum_clearance_px": 35.943
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 18.349
+          "minimum_clearance_px": 30.349
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 10.88
+          "minimum_clearance_px": 22.88
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 13.536
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 8.219
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 22.469
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 225,
-          "minimum_clearance_px": 6.693
+          "minimum_clearance_px": 34.844
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 19.38
+          "minimum_clearance_px": 35.458
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 20.677
+          "minimum_clearance_px": 32.677
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 16.021
+          "minimum_clearance_px": 28.021
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 9.49
+          "minimum_clearance_px": 21.49
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 13.083
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 15.453
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 28.766
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 225,
-          "minimum_clearance_px": 14.24
+          "minimum_clearance_px": 30.318
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 16.474
+          "minimum_clearance_px": 28.474
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 12.755
+          "minimum_clearance_px": 24.755
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 7.161
+          "minimum_clearance_px": 19.161
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 11.693
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 7.5
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 21.75
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 24.24
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 23.333
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 20.552
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 15.896
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 9.365
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 13.797
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 17.224
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 17.255
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 15.411
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 11.693
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 6.099
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 9.271
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 10.24
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 9.333
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 6.552
         }
       ]
     },
@@ -1213,334 +2760,700 @@
       "speed": 466,
       "single_attempts": 121,
       "single_passes": 0,
-      "double_attempts": 165,
-      "double_safe_pairs": 65,
-      "minimum_safe_clearance_px": 3.224,
+      "double_attempts": 357,
+      "double_safe_pairs": 138,
+      "legacy_grid_safe_pairs": 98,
+      "minimum_safe_clearance_px": 3.547,
       "valid_double_pairs": [
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 4.938
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 15.906
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 25
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 32.219
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 37.563
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 41.031
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 41.349
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 30.13
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 550,
+          "minimum_clearance_px": 17.036
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 3.547
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 15.453
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 25.484
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 33.641
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 39.922
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 44.328
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 45.583
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 35.302
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 23.146
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 550,
+          "minimum_clearance_px": 9.115
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 14.063
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 25.031
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 34.125
+        },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 9.911
+          "minimum_clearance_px": 41.344
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 17.443
+          "minimum_clearance_px": 46.688
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 23.099
+          "minimum_clearance_px": 48.88
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 26.88
+          "minimum_clearance_px": 39.536
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 500,
-          "minimum_clearance_px": 16.318
+          "minimum_clearance_px": 28.318
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 525,
-          "minimum_clearance_px": 3.224
+          "minimum_clearance_px": 15.224
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 11.734
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 23.641
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 33.672
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 10.396
+          "minimum_clearance_px": 41.828
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 18.865
+          "minimum_clearance_px": 48.109
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 25.458
+          "minimum_clearance_px": 51.24
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 30.177
+          "minimum_clearance_px": 42.833
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 20.552
+          "minimum_clearance_px": 32.552
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 500,
-          "minimum_clearance_px": 8.396
+          "minimum_clearance_px": 20.396
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 6.365
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 8.469
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 21.313
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 32.281
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 9.943
+          "minimum_clearance_px": 41.375
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 19.349
+          "minimum_clearance_px": 48.594
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 26.88
+          "minimum_clearance_px": 52.661
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 32.536
+          "minimum_clearance_px": 45.193
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 23.849
+          "minimum_clearance_px": 35.849
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 12.63
+          "minimum_clearance_px": 24.63
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 11.536
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 4.266
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 18.047
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 29.953
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 8.552
+          "minimum_clearance_px": 39.984
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 18.896
+          "minimum_clearance_px": 48.141
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 27.365
+          "minimum_clearance_px": 53.146
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 33.958
+          "minimum_clearance_px": 46.615
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 26.208
+          "minimum_clearance_px": 38.208
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 15.927
+          "minimum_clearance_px": 27.927
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 3.771
+          "minimum_clearance_px": 15.771
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 13.844
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 26.688
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 6.224
+          "minimum_clearance_px": 37.656
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 17.505
+          "minimum_clearance_px": 46.75
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 26.911
+          "minimum_clearance_px": 52.693
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 34.443
+          "minimum_clearance_px": 47.099
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 27.63
+          "minimum_clearance_px": 39.63
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 18.286
+          "minimum_clearance_px": 30.286
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 7.068
+          "minimum_clearance_px": 19.068
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 5.974
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 8.703
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 22.484
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 34.391
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 15.177
+          "minimum_clearance_px": 44.422
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 25.521
+          "minimum_clearance_px": 51.302
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 33.99
+          "minimum_clearance_px": 46.646
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 28.115
+          "minimum_clearance_px": 40.115
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 19.708
+          "minimum_clearance_px": 31.708
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 9.427
+          "minimum_clearance_px": 21.427
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 9.271
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 17.344
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 30.188
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 11.911
+          "minimum_clearance_px": 41.156
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 23.193
+          "minimum_clearance_px": 48.974
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 32.599
+          "minimum_clearance_px": 45.255
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 27.661
+          "minimum_clearance_px": 39.661
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 20.193
+          "minimum_clearance_px": 32.193
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 10.849
+          "minimum_clearance_px": 22.849
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 11.63
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 11.266
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 25.047
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 7.708
+          "minimum_clearance_px": 36.953
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 19.927
+          "minimum_clearance_px": 45.708
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 30.271
+          "minimum_clearance_px": 42.927
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 26.271
+          "minimum_clearance_px": 38.271
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 19.74
+          "minimum_clearance_px": 31.74
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 11.333
+          "minimum_clearance_px": 23.333
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 13.052
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 4.25
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 18.969
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 31.813
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 15.724
+          "minimum_clearance_px": 41.505
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 27.005
+          "minimum_clearance_px": 39.661
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 23.943
+          "minimum_clearance_px": 35.943
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 18.349
+          "minimum_clearance_px": 30.349
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 10.88
+          "minimum_clearance_px": 22.88
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 13.536
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 11.953
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 25.734
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 225,
-          "minimum_clearance_px": 10.583
+          "minimum_clearance_px": 36.365
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 22.802
+          "minimum_clearance_px": 35.458
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 20.677
+          "minimum_clearance_px": 32.677
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 16.021
+          "minimum_clearance_px": 28.021
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 9.49
+          "minimum_clearance_px": 21.49
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 13.083
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 4
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 18.719
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 200,
-          "minimum_clearance_px": 4.505
+          "minimum_clearance_px": 30.286
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 225,
-          "minimum_clearance_px": 17.661
+          "minimum_clearance_px": 30.318
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 16.474
+          "minimum_clearance_px": 28.474
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 12.755
+          "minimum_clearance_px": 24.755
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 7.161
+          "minimum_clearance_px": 19.161
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 11.693
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 10.766
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 23.271
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 24.24
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 23.333
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 20.552
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 15.896
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 9.365
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 15.318
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 17.224
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 17.255
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 15.411
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 11.693
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 6.099
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 9.271
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 10.24
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 9.333
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 6.552
         }
       ]
     },
@@ -1548,354 +3461,710 @@
       "speed": 480,
       "single_attempts": 121,
       "single_passes": 0,
-      "double_attempts": 165,
-      "double_safe_pairs": 69,
-      "minimum_safe_clearance_px": 3.224,
+      "double_attempts": 357,
+      "double_safe_pairs": 140,
+      "legacy_grid_safe_pairs": 100,
+      "minimum_safe_clearance_px": 4.828,
       "valid_double_pairs": [
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 8.547
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 19.203
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 27.984
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 34.891
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 39.922
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 43.078
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 41.349
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 30.13
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 550,
+          "minimum_clearance_px": 17.036
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 7.156
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 18.75
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 28.469
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 36.313
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 42.281
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 46.375
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 45.583
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 35.302
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 23.146
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 550,
+          "minimum_clearance_px": 9.115
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 4.828
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 17.359
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 28.016
+        },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 3.906
+          "minimum_clearance_px": 36.797
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 13
+          "minimum_clearance_px": 43.703
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 20.219
+          "minimum_clearance_px": 48.734
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 25.563
+          "minimum_clearance_px": 48.88
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 27.536
+          "minimum_clearance_px": 39.536
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 500,
-          "minimum_clearance_px": 16.318
+          "minimum_clearance_px": 28.318
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 525,
-          "minimum_clearance_px": 3.224
+          "minimum_clearance_px": 15.224
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 15.031
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 26.625
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 3.453
+          "minimum_clearance_px": 36.344
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 13.484
+          "minimum_clearance_px": 44.188
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 21.641
+          "minimum_clearance_px": 50.156
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 27.922
+          "minimum_clearance_px": 51.24
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 30.833
+          "minimum_clearance_px": 42.833
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 20.552
+          "minimum_clearance_px": 32.552
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 500,
-          "minimum_clearance_px": 8.396
+          "minimum_clearance_px": 20.396
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 6.365
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 11.766
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 24.297
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 34.953
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 13.031
+          "minimum_clearance_px": 43.734
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 22.125
+          "minimum_clearance_px": 50.641
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 29.344
+          "minimum_clearance_px": 52.661
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 33.193
+          "minimum_clearance_px": 45.193
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 23.849
+          "minimum_clearance_px": 35.849
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 12.63
+          "minimum_clearance_px": 24.63
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 11.536
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 7.563
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 21.031
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 32.625
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 11.641
+          "minimum_clearance_px": 42.344
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 21.672
+          "minimum_clearance_px": 50.188
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 29.828
+          "minimum_clearance_px": 53.146
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 34.615
+          "minimum_clearance_px": 46.615
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 26.208
+          "minimum_clearance_px": 38.208
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 15.927
+          "minimum_clearance_px": 27.927
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 3.771
+          "minimum_clearance_px": 15.771
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 16.828
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 29.359
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 9.313
+          "minimum_clearance_px": 40.016
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 20.281
+          "minimum_clearance_px": 48.797
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 29.375
+          "minimum_clearance_px": 52.693
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 35.099
+          "minimum_clearance_px": 47.099
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 27.63
+          "minimum_clearance_px": 39.63
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 18.286
+          "minimum_clearance_px": 30.286
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 7.068
+          "minimum_clearance_px": 19.068
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 5.974
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 11.688
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 25.156
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 6.047
+          "minimum_clearance_px": 36.75
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 17.953
+          "minimum_clearance_px": 46.469
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 27.984
+          "minimum_clearance_px": 51.302
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 34.646
+          "minimum_clearance_px": 46.646
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 28.115
+          "minimum_clearance_px": 40.115
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 19.708
+          "minimum_clearance_px": 31.708
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 9.427
+          "minimum_clearance_px": 21.427
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 9.271
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 5.609
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 20.016
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 32.547
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 14.688
+          "minimum_clearance_px": 43.203
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 25.656
+          "minimum_clearance_px": 48.974
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 33.255
+          "minimum_clearance_px": 45.255
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 27.661
+          "minimum_clearance_px": 39.661
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 20.193
+          "minimum_clearance_px": 32.193
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 10.849
+          "minimum_clearance_px": 22.849
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 11.63
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 13.938
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 27.406
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 10.484
+          "minimum_clearance_px": 39
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 22.391
+          "minimum_clearance_px": 45.708
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 30.927
+          "minimum_clearance_px": 42.927
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 26.271
+          "minimum_clearance_px": 38.271
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 19.74
+          "minimum_clearance_px": 31.74
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 11.333
+          "minimum_clearance_px": 23.333
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 13.052
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 6.922
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 21.328
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 225,
-          "minimum_clearance_px": 5.344
+          "minimum_clearance_px": 33.859
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 18.188
+          "minimum_clearance_px": 41.505
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 27.661
+          "minimum_clearance_px": 39.661
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 23.943
+          "minimum_clearance_px": 35.943
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 18.349
+          "minimum_clearance_px": 30.349
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 10.88
+          "minimum_clearance_px": 22.88
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 13.536
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 14.313
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 27.781
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 225,
-          "minimum_clearance_px": 13.047
+          "minimum_clearance_px": 36.365
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 23.458
+          "minimum_clearance_px": 35.458
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 20.677
+          "minimum_clearance_px": 32.677
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 16.021
+          "minimum_clearance_px": 28.021
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 9.49
+          "minimum_clearance_px": 21.49
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 13.083
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 6.359
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 20.766
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 200,
-          "minimum_clearance_px": 6.969
+          "minimum_clearance_px": 30.286
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 225,
-          "minimum_clearance_px": 18.318
+          "minimum_clearance_px": 30.318
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 16.474
+          "minimum_clearance_px": 28.474
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 12.755
+          "minimum_clearance_px": 24.755
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 7.161
+          "minimum_clearance_px": 19.161
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 11.693
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 12.813
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 23.271
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 24.24
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 23.333
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 20.552
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 15.896
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 9.365
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 15.318
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 17.224
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 17.255
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 15.411
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 11.693
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 6.099
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 9.271
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 10.24
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 9.333
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 6.552
         }
       ]
     },
@@ -1903,379 +4172,760 @@
       "speed": 494,
       "single_attempts": 121,
       "single_passes": 0,
-      "double_attempts": 165,
-      "double_safe_pairs": 74,
-      "minimum_safe_clearance_px": 3.234,
+      "double_attempts": 357,
+      "double_safe_pairs": 150,
+      "legacy_grid_safe_pairs": 106,
+      "minimum_safe_clearance_px": 3.438,
       "valid_double_pairs": [
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 12.052
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 22.396
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 30.865
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 37.458
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 42.177
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 45.021
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 42.266
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 31.203
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 550,
+          "minimum_clearance_px": 18.266
+        },
+        {
+          "first_tap_ms": 100,
+          "second_delay_ms": 575,
+          "minimum_clearance_px": 3.453
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 10.661
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 21.943
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 31.349
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 38.88
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 44.536
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 450,
+          "minimum_clearance_px": 48.318
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 46.5
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 36.375
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 24.375
+        },
+        {
+          "first_tap_ms": 125,
+          "second_delay_ms": 550,
+          "minimum_clearance_px": 10.5
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 8.333
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 20.552
+        },
+        {
+          "first_tap_ms": 150,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 30.896
+        },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 8.813
+          "minimum_clearance_px": 39.365
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 17.438
+          "minimum_clearance_px": 45.958
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 24.188
+          "minimum_clearance_px": 50.677
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 29.063
+          "minimum_clearance_px": 49.797
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 28.609
+          "minimum_clearance_px": 40.609
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 500,
-          "minimum_clearance_px": 17.547
+          "minimum_clearance_px": 29.547
         },
         {
           "first_tap_ms": 150,
           "second_delay_ms": 525,
-          "minimum_clearance_px": 4.609
+          "minimum_clearance_px": 16.609
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 5.068
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 18.224
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 29.505
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 8.359
+          "minimum_clearance_px": 38.911
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 17.922
+          "minimum_clearance_px": 46.443
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 25.609
+          "minimum_clearance_px": 52.099
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 31.422
+          "minimum_clearance_px": 52.156
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 31.906
+          "minimum_clearance_px": 43.906
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 21.781
+          "minimum_clearance_px": 33.781
         },
         {
           "first_tap_ms": 175,
           "second_delay_ms": 500,
-          "minimum_clearance_px": 9.781
+          "minimum_clearance_px": 21.781
+        },
+        {
+          "first_tap_ms": 175,
+          "second_delay_ms": 525,
+          "minimum_clearance_px": 7.906
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 14.958
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 27.177
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 6.969
+          "minimum_clearance_px": 37.521
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 17.469
+          "minimum_clearance_px": 45.99
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 26.094
+          "minimum_clearance_px": 52.583
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 32.844
+          "minimum_clearance_px": 53.578
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 34.266
+          "minimum_clearance_px": 46.266
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 25.078
+          "minimum_clearance_px": 37.078
         },
         {
           "first_tap_ms": 200,
           "second_delay_ms": 475,
-          "minimum_clearance_px": 14.016
+          "minimum_clearance_px": 26.016
+        },
+        {
+          "first_tap_ms": 200,
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 13.078
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 10.755
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 23.911
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 4.641
+          "minimum_clearance_px": 35.193
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 16.078
+          "minimum_clearance_px": 44.599
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 25.641
+          "minimum_clearance_px": 52.13
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 33.328
+          "minimum_clearance_px": 54.063
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 35.688
+          "minimum_clearance_px": 47.688
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 27.438
+          "minimum_clearance_px": 39.438
         },
         {
           "first_tap_ms": 225,
           "second_delay_ms": 450,
+          "minimum_clearance_px": 29.313
+        },
+        {
+          "first_tap_ms": 225,
+          "second_delay_ms": 475,
           "minimum_clearance_px": 17.313
         },
         {
           "first_tap_ms": 225,
-          "second_delay_ms": 475,
-          "minimum_clearance_px": 5.313
+          "second_delay_ms": 500,
+          "minimum_clearance_px": 3.438
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 5.615
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 19.708
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 31.927
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 13.75
+          "minimum_clearance_px": 42.271
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 24.25
+          "minimum_clearance_px": 50.74
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 32.875
+          "minimum_clearance_px": 53.609
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 36.172
+          "minimum_clearance_px": 48.172
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 28.859
+          "minimum_clearance_px": 40.859
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 425,
-          "minimum_clearance_px": 19.672
+          "minimum_clearance_px": 31.672
         },
         {
           "first_tap_ms": 250,
           "second_delay_ms": 450,
-          "minimum_clearance_px": 8.609
+          "minimum_clearance_px": 20.609
+        },
+        {
+          "first_tap_ms": 250,
+          "second_delay_ms": 475,
+          "minimum_clearance_px": 7.672
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 14.568
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 27.724
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 10.484
+          "minimum_clearance_px": 39.005
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 21.922
+          "minimum_clearance_px": 48.411
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 31.484
+          "minimum_clearance_px": 52.219
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 35.719
+          "minimum_clearance_px": 47.719
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 29.344
+          "minimum_clearance_px": 41.344
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 21.094
+          "minimum_clearance_px": 33.094
         },
         {
           "first_tap_ms": 275,
           "second_delay_ms": 425,
+          "minimum_clearance_px": 22.969
+        },
+        {
+          "first_tap_ms": 275,
+          "second_delay_ms": 450,
           "minimum_clearance_px": 10.969
         },
         {
           "first_tap_ms": 300,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 8.49
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 22.583
+        },
+        {
+          "first_tap_ms": 300,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 6.281
+          "minimum_clearance_px": 34.802
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 18.656
+          "minimum_clearance_px": 45.146
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 29.156
+          "minimum_clearance_px": 49.891
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 34.328
+          "minimum_clearance_px": 46.328
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 28.891
+          "minimum_clearance_px": 40.891
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 21.578
+          "minimum_clearance_px": 33.578
         },
         {
           "first_tap_ms": 300,
           "second_delay_ms": 400,
-          "minimum_clearance_px": 12.391
+          "minimum_clearance_px": 24.391
+        },
+        {
+          "first_tap_ms": 300,
+          "second_delay_ms": 425,
+          "minimum_clearance_px": 13.328
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 16.505
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 29.661
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 14.453
+          "minimum_clearance_px": 40.943
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 25.891
+          "minimum_clearance_px": 46.625
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 32
+          "minimum_clearance_px": 44
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 27.5
+          "minimum_clearance_px": 39.5
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 21.125
+          "minimum_clearance_px": 33.125
         },
         {
           "first_tap_ms": 325,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 12.875
+          "minimum_clearance_px": 24.875
+        },
+        {
+          "first_tap_ms": 325,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 14.75
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 9.49
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 23.583
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 225,
-          "minimum_clearance_px": 9.313
+          "minimum_clearance_px": 35.802
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 21.688
+          "minimum_clearance_px": 42.422
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 28.734
+          "minimum_clearance_px": 40.734
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 25.172
+          "minimum_clearance_px": 37.172
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 19.734
+          "minimum_clearance_px": 31.734
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 350,
-          "minimum_clearance_px": 12.422
+          "minimum_clearance_px": 24.422
         },
         {
           "first_tap_ms": 350,
           "second_delay_ms": 375,
-          "minimum_clearance_px": 3.234
+          "minimum_clearance_px": 15.234
+        },
+        {
+          "first_tap_ms": 350,
+          "second_delay_ms": 400,
+          "minimum_clearance_px": 4.172
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 16.568
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 200,
-          "minimum_clearance_px": 3.234
+          "minimum_clearance_px": 29.724
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 225,
-          "minimum_clearance_px": 16.547
+          "minimum_clearance_px": 37.281
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 24.531
+          "minimum_clearance_px": 36.531
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 21.906
+          "minimum_clearance_px": 33.906
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 17.406
+          "minimum_clearance_px": 29.406
         },
         {
           "first_tap_ms": 375,
           "second_delay_ms": 325,
-          "minimum_clearance_px": 11.031
+          "minimum_clearance_px": 23.031
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 14.781
+        },
+        {
+          "first_tap_ms": 375,
+          "second_delay_ms": 375,
+          "minimum_clearance_px": 4.656
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 8.615
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 22.708
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 200,
-          "minimum_clearance_px": 10.469
+          "minimum_clearance_px": 31.203
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 225,
-          "minimum_clearance_px": 19.391
+          "minimum_clearance_px": 31.391
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 250,
-          "minimum_clearance_px": 17.703
+          "minimum_clearance_px": 29.703
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 275,
-          "minimum_clearance_px": 14.141
+          "minimum_clearance_px": 26.141
         },
         {
           "first_tap_ms": 400,
           "second_delay_ms": 300,
-          "minimum_clearance_px": 8.703
+          "minimum_clearance_px": 20.703
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 325,
+          "minimum_clearance_px": 13.391
+        },
+        {
+          "first_tap_ms": 400,
+          "second_delay_ms": 350,
+          "minimum_clearance_px": 4.203
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 14.755
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 24.188
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 25.313
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 24.563
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 21.938
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 17.438
+        },
+        {
+          "first_tap_ms": 425,
+          "second_delay_ms": 300,
+          "minimum_clearance_px": 11.063
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 16.234
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 18.297
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 18.484
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 16.797
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 13.234
+        },
+        {
+          "first_tap_ms": 450,
+          "second_delay_ms": 275,
+          "minimum_clearance_px": 7.797
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 10.344
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 11.469
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 200,
+          "minimum_clearance_px": 10.719
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 225,
+          "minimum_clearance_px": 8.094
+        },
+        {
+          "first_tap_ms": 475,
+          "second_delay_ms": 250,
+          "minimum_clearance_px": 3.594
+        },
+        {
+          "first_tap_ms": 500,
+          "second_delay_ms": 150,
+          "minimum_clearance_px": 3.516
+        },
+        {
+          "first_tap_ms": 500,
+          "second_delay_ms": 175,
+          "minimum_clearance_px": 3.703
         }
       ]
     }

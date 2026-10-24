@@ -1,6 +1,6 @@
-import {CONFIG} from './config.js?v=20261023-motion4';
-import {MOTION_LAYOUT} from './scene-data.js?v=20261023-motion4';
-import {createProp,propFrame} from './props.js?v=20261023-motion4';
+import {CONFIG} from './config.js?v=20261024-balance6';
+import {MOTION_LAYOUT} from './scene-data.js?v=20261024-balance6';
+import {createProp,propFrame} from './props.js?v=20261024-balance6';
 const STAGE={width:960,floor:415,librarianX:780};
 export const LIBRARIAN_SCALE=CONFIG.librarianHeight/MOTION_LAYOUT.clips.run.reference_height_px;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -26,19 +26,23 @@ function runRootY(sample){
  const supportY=frames[before].support_anchor.y+(frames[after].support_anchor.y-frames[before].support_anchor.y)*smooth;
  return STAGE.floor-(supportY-root.y)*LIBRARIAN_SCALE-Math.sin(Math.PI*u)*1.5;
 }
+export function endingClipAge(game,age=game.endingAge||0){return Math.max(0,age-(game.config?.discoverySeconds??CONFIG.discoverySeconds))}
 export function endingRootPose(game,age=game.endingAge||0){
- const clip=MOTION_LAYOUT.clips.stumble,scale=LIBRARIAN_SCALE,toe=game.endingToe||{x:814,y:STAGE.floor},off=clip.toe_off_time_ms/1000;
- const frame=age<off?sampleMotion('stumble',age,false).frame:clip.frames[clip.toe_off_frame-1],support=frame.support_anchor,root=frame.root_anchor;
+ const hold=game.config?.discoverySeconds??CONFIG.discoverySeconds;
+ if(age<hold-1e-9)return {x:STAGE.librarianX,y:runRootY(sampleMotion('run',game.elapsed||0))};
+ const clipAge=endingClipAge(game,age),clip=MOTION_LAYOUT.clips.stumble,scale=LIBRARIAN_SCALE,toe=game.endingToe||{x:814,y:STAGE.floor},off=clip.toe_off_time_ms/1000;
+ const frame=clipAge<off-1e-9?sampleMotion('stumble',clipAge,false).frame:clip.frames[clip.toe_off_frame-1],support=frame.support_anchor,root=frame.root_anchor;
  const origin={x:toe.x-(support.x-root.x)*scale,y:toe.y-(support.y-root.y)*scale};
- if(age<off)return origin;
- const u=clamp((age-off)/.4,0,1),exit=STAGE.width+clip.frame_canvas.w*scale/2+4;
+ if(clipAge<off)return origin;
+ const u=clamp((clipAge-off)/.4,0,1),exit=STAGE.width+clip.frame_canvas.w*scale/2+4;
  return {x:origin.x+(exit-origin.x)*u,y:origin.y-Math.sin(Math.PI*u)*24-10*u};
 }
 export function librarianPose(game,sampleTime=game.elapsed||0){
- const ending=(String(game.state).startsWith('ending-')||(game.state==='paused'&&game.endingStarted)),run=sampleMotion('run',sampleTime),action=game.throwAction;
- const pose=ending?sampleMotion('stumble',game.endingAge||0,false):action?sampleMotion('throw',action.age,false):run;
+ const ending=(String(game.state).startsWith('ending-')||(game.state==='paused'&&game.endingStarted)),age=game.endingAge||0,hold=game.config?.discoverySeconds??CONFIG.discoverySeconds;
+ const discovering=ending&&age<hold-1e-9,run=sampleMotion('run',ending?game.elapsed||0:sampleTime),action=game.throwAction;
+ const pose=ending?(discovering?run:sampleMotion('stumble',endingClipAge(game,age),false)):action?sampleMotion('throw',action.age,false):run;
  const root=ending?(game.endingRoot||endingRootPose(game)):{x:STAGE.librarianX,y:runRootY(run)};
- return {...pose,scale:LIBRARIAN_SCALE,root,runFrame:run.frame,runFrameIndex:run.frameIndex,runSample:run,throwing:!ending&&Boolean(action),ending};
+ return {...pose,scale:LIBRARIAN_SCALE,root,runFrame:run.frame,runFrameIndex:run.frameIndex,runSample:run,throwing:!ending&&Boolean(action),ending,discovering};
 }
 export function handWorld(game,action=game.throwAction){
  const pose=librarianPose({...game,throwAction:action}),hand=pose.frame.hand_anchor;
@@ -57,4 +61,3 @@ export function heldBookPose(game,action=game.throwAction){
  const pivot={x:hand.x-dx*c+dy*s,y:hand.y-dx*s-dy*c};
  return {spriteId,x:pivot.x-(p.x-b.x)*scale,lift:STAGE.floor-pivot.y-(frame.ground_anchor_local.y-p.y)*scale,angle,hand,contactLocal};
 }
-

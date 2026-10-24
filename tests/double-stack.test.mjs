@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {attemptDoubleStack,STACK_SPEEDS} from './double-stack-probe.mjs';
+import {attemptDoubleStack,STACK_SPEEDS,STACK_GRID,PREVIOUS_STACK_SWEEP} from './double-stack-probe.mjs';
 import {Chase} from '../engine.js';
 import {createProp} from '../props.js';
 import {obstaclePolygons,penetration} from '../collision.js';
@@ -10,9 +10,11 @@ import {obstaclePolygons,penetration} from '../collision.js';
 test('integrated double-stack sweep covers the whole 410–494 speed range and multiple safe double inputs',()=>{
  const saved=JSON.parse(readFileSync(new URL('./double-stack-results.json',import.meta.url),'utf8'));
  for(const [path,sha]of Object.entries(saved.source_sha256))assert.equal(createHash('sha256').update(readFileSync(new URL('../'+path,import.meta.url),'utf8').replace(/\r\n/g,'\n')).digest('hex'),sha,path+' changed: rerun node tests/double-stack-probe.mjs');
- assert.deepEqual(saved.results.map(r=>r.speed),STACK_SPEEDS);
+ assert.deepEqual(saved.results.map(r=>r.speed),STACK_SPEEDS);assert.deepEqual(saved.visible_size,{w:78,h:124});assert.deepEqual(saved.double_timing_scan_ms,STACK_GRID);
+ assert.equal(saved.comparison.previous_verified_sweep.safe_pairs_total,436);assert.ok(saved.comparison.same_legacy_grid_current_safe_pairs>=PREVIOUS_STACK_SWEEP.safe_pairs_total*1.25,'same old timing grid must become materially more forgiving');
+ assert.ok(saved.comparison.width_reduction_percent>25);assert.ok(saved.comparison.height_reduction_percent>8&&saved.comparison.height_reduction_percent<10);
  for(const row of saved.results){
-  assert.equal(row.single_attempts,121);assert.equal(row.single_passes,0);assert.ok(row.double_safe_pairs>=10);assert.ok(row.minimum_safe_clearance_px>=3);
+  assert.equal(row.single_attempts,121);assert.equal(row.single_passes,0);assert.equal(row.double_attempts,357);assert.ok(row.double_safe_pairs>=row.legacy_grid_safe_pairs);assert.ok(row.legacy_grid_safe_pairs>PREVIOUS_STACK_SWEEP.per_speed.find(p=>p.speed===row.speed).safe_pairs);assert.ok(row.minimum_safe_clearance_px>=3);
   // Re-run early/middle/late safe inputs against the real engine on every speed.
   const pairs=[row.valid_double_pairs[0],row.valid_double_pairs[Math.floor(row.valid_double_pairs.length/2)],row.valid_double_pairs.at(-1)];
   for(const p of pairs){const actual=attemptDoubleStack(row.speed,p.first_tap_ms/1000,p.second_delay_ms/1000);assert.equal(actual.pass,true);assert.ok(actual.clearance>=3)}

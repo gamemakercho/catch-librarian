@@ -1,4 +1,4 @@
-import {PROPS_LAYOUT} from './scene-data.js?v=20261023-motion4';
+import {PROPS_LAYOUT} from './scene-data.js?v=20261024-balance6';
 const cross=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
 const area=p=>p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a.x*b.y-b.x*a.y},0)/2;
 // Ear clipping keeps the air between open pages out of the contact geometry.
@@ -30,16 +30,16 @@ export const PROP_FRAMES=new Map(PROPS_LAYOUT.frames.map(frame=>{
 export function propFrame(o){return PROP_FRAMES.get(o.spriteId)}
 export function createProp(spriteId,values={}){
  const f=PROP_FRAMES.get(spriteId);if(!f)throw Error('Unknown prop: '+spriteId);
- const scale=f.render_width_world/f.visible_bounds_local.w;
- return {...values,spriteId,w:f.visible_bounds_local.w*scale,h:f.visible_bounds_local.h*scale};
+ const scaleX=f.render_width_world/f.visible_bounds_local.w,scaleY=f.render_height_world===undefined?scaleX:f.render_height_world/f.visible_bounds_local.h;
+ return {...values,spriteId,w:f.visible_bounds_local.w*scaleX,h:f.visible_bounds_local.h*scaleY};
 }
 export function propTransform(o,floor=415){
  const frame=propFrame(o),c=Math.cos(o.angle||0),s=Math.sin(o.angle||0);
  if(!frame)return {x:o.x+o.w/2,y:floor-o.lift-o.h/2,c,s};
- const scale=frame.render_width_world/frame.visible_bounds_local.w;
- return {frame,scale,c,s,x:o.x+(frame.pivot_local.x-frame.visible_bounds_local.x)*scale,y:floor-o.lift-(frame.ground_anchor_local.y-frame.pivot_local.y)*scale};
+ const scaleX=frame.render_width_world/frame.visible_bounds_local.w,scaleY=frame.render_height_world===undefined?scaleX:frame.render_height_world/frame.visible_bounds_local.h;
+ return {frame,scale:scaleX,scaleX,scaleY,c,s,x:o.x+(frame.pivot_local.x-frame.visible_bounds_local.x)*scaleX,y:floor-o.lift-(frame.ground_anchor_local.y-frame.pivot_local.y)*scaleY};
 }
 export function transformPropPoint(o,point,floor=415){
- const t=propTransform(o,floor),x=(point.x-t.frame.pivot_local.x)*t.scale,y=(point.y-t.frame.pivot_local.y)*t.scale;
+ const t=propTransform(o,floor),x=(point.x-t.frame.pivot_local.x)*t.scaleX,y=(point.y-t.frame.pivot_local.y)*t.scaleY;
  return {x:t.x+x*t.c-y*t.s,y:t.y+x*t.s+y*t.c};
 }

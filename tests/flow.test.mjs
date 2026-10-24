@@ -47,7 +47,7 @@ function finishChase(t,{showComic=true}={}){
   else if(g.testDouble&&g.jumps===1&&g.elapsed-g.testJumpTime>=.33)t.fire('game','pointerdown',{isPrimary:true,button:0});
   t.advance(1/60);
  }
- assert.ok(['ending-trip','ending-fly'].includes(t.subject.getState()),t.subject.getState());assert.equal(t.subject.game.elapsed,30);
+ assert.ok(['ending-discovery','ending-trip','ending-fly'].includes(t.subject.getState()),t.subject.getState());assert.equal(t.subject.game.elapsed,30);
  if(showComic)t.advance(CONFIG.endingDuration+.05);
 }
 const AFTER_KEY=CONFIG.completionKey+':after-answer:v1';
@@ -70,14 +70,15 @@ test('standalone offline HTML loads its actual embedded script and starts the ga
 
 test('initial scene requests only eight WebP runner images, then preloads comics after start',async()=>{const t=await setup();assert.equal(t.requests.length,8);assert.ok(t.requests.every(src=>src.endsWith('.webp')&&!src.includes('/ending/')));t.fire('start','click');assert.equal(t.requests.filter(src=>src.includes('/ending/')).length,5)});
 
-test('30s freezes the stage, toe-locks and flies out, pauses when hidden, then opens comics at the top',async()=>{
+test('arrival keeps the treat message readable for three seconds and pauses before the trip, flight and original comics',async()=>{
  const t=await setup();t.fire('start','click');finishChase(t,{showComic:false});
  assert.equal(t.elements['run-screen'].hidden,false);assert.notEqual(t.elements['comic-screen'].hidden,false);
  assert.equal(t.elements.jump.disabled,true);assert.equal(t.elements.pause.hidden,false);assert.ok(t.elements['game-message'].textContent.includes('츄르'));
  const snapshot=[t.subject.game.elapsed,t.subject.game.distance,t.subject.game.x];
- t.fire('game','pointerdown',{isPrimary:true,button:0});t.advance(.8);assert.deepEqual([t.subject.game.elapsed,t.subject.game.distance,t.subject.game.x],snapshot);
+ assert.equal(t.subject.getState(),'ending-discovery');assert.ok(CONFIG.discoverySeconds>=3);
+ t.fire('game','pointerdown',{isPrimary:true,button:0});t.advance(2.5);assert.equal(t.subject.getState(),'ending-discovery');assert.ok(t.elements['game-message'].textContent.includes('츄르'));assert.deepEqual([t.subject.game.elapsed,t.subject.game.distance,t.subject.game.x],snapshot);
  const age=t.subject.game.endingAge;t.document.hidden=true;t.document.dispatchEvent({type:'visibilitychange'});t.advance(5);assert.equal(t.subject.game.endingAge,age);assert.equal(t.subject.getState(),'paused');t.document.hidden=false;t.fire('start','click');
- t.advance(CONFIG.endingDuration-.8+.05);assert.equal(t.subject.getState(),'comic');assert.equal(t.elements['comic-screen'].hidden,false);assert.equal(t.elements['comic-count'].textContent,'1 / 5');
+ t.advance(CONFIG.endingDuration-2.5+.05);assert.equal(t.subject.getState(),'comic');assert.equal(t.elements['comic-screen'].hidden,false);assert.equal(t.elements['comic-count'].textContent,'1 / 5');
 });
 
 test('approved after-answer dialogue advances on input with debounce and final notification exactly once',async()=>{

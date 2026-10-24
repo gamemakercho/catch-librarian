@@ -1,14 +1,14 @@
-import {createProp} from './props.js?v=20261023-motion4';
-import {heldBookPose,endingRootPose} from './librarian-motion.js?v=20261023-motion4';
-import { CONFIG } from './config.js?v=20261023-motion4';
-import { boxPolygon, obstaclePolygons, penetration, sweepPolygons } from './collision.js?v=20261023-motion4';
+import {createProp} from './props.js?v=20261024-balance6';
+import {heldBookPose,endingRootPose} from './librarian-motion.js?v=20261024-balance6';
+import { CONFIG } from './config.js?v=20261024-balance6';
+import { boxPolygon, obstaclePolygons, penetration, sweepPolygons } from './collision.js?v=20261024-balance6';
 export const WORLD=Object.freeze({width:960,height:500,floor:415,catX:240,librarianX:780});
 export const normalizeAnswer=value=>value.normalize('NFC').replace(/[\s!.！。．]/gu,'');
 const acceptedAnswer=String.fromCodePoint(44256,50577,51060,50752,32,49324,49436,44032,32,46028,50500,50772,45796);
 export const isCorrectAnswer=value=>normalizeAnswer(value)===normalizeAnswer(acceptedAnswer);
 export class Chase {
  constructor(config=CONFIG){this.config=config;this.reset()}
- reset(){Object.assign(this,{state:'ready',elapsed:0,health:this.config.health,x:WORLD.catX,vx:0,y:0,vy:0,jumps:2,invincible:0,obstacles:[],spawnAt:this.config.warmup,serial:0,bookSerial:0,distance:0,recoil:0,hits:0,hitStop:0,stun:0,hitActive:false,hitAge:0,landingAge:null,defeatAge:0,discoveryAge:0,throwAction:null,queuedThrow:null,doubleStackCount:0,endingAge:0,endingStartX:null,endingStartY:null,endingToe:null,endingRoot:null,endingStarted:false,contacts:[],maxPenetration:0})}
+ reset(){Object.assign(this,{state:'ready',elapsed:0,health:this.config.health,x:WORLD.catX,vx:0,y:0,vy:0,jumps:2,invincible:0,obstacles:[],spawnAt:this.config.warmup,serial:0,encounterSerial:0,bookSerial:0,burstSerial:0,burst:null,distance:0,recoil:0,hits:0,hitStop:0,stun:0,hitActive:false,hitAge:0,landingAge:null,defeatAge:0,discoveryAge:0,throwAction:null,queuedThrow:null,doubleStackCount:0,endingAge:0,endingStartX:null,endingStartY:null,endingToe:null,endingRoot:null,endingStarted:false,contacts:[],maxPenetration:0})}
  start(){this.reset();this.state='playing'}
  jump(){
   if(this.state!=='playing'||this.health<=0||this.stun>0||this.hitStop>0||this.jumps===0)return false;
@@ -21,8 +21,9 @@ export class Chase {
  }
  spawn(kindOverride=null){
   if(this.state!=='playing'||this.health<=0)return false;
-  const kinds=['stack','high','double-stack','low','box','basket','double-stack','high','low'];
-  let kind=kindOverride||kinds[this.serial%kinds.length];
+  const kinds=['stack','high','double-stack','burst-low','box','basket','double-stack','burst-high','low'];
+  let kind=kindOverride||kinds[this.encounterSerial%kinds.length];
+  if(kind==='burst-low'||kind==='burst-high'){if(!this.spawnBurst(kind==='burst-low'?'low':'high',kind==='burst-low'?3:4))return false;this.encounterSerial++;return true}
   if(kind==='double-stack'&&!kindOverride&&(this.elapsed<8||this.doubleStackCount>=2))kind='stack';
   const airborne=kind==='high'||kind==='low';
   // A running throw owns a single immutable choice and at most one pending choice.
@@ -30,6 +31,7 @@ export class Chase {
   const form=airborne?['book-red','book-green','book-blue'][(this.bookSerial+Math.floor(this.bookSerial/3))%3]:kind==='stack'?'book-stack':kind;
   const trajectory=airborne?Math.floor(this.bookSerial/9)%3:0;
   const request={id:this.serial++,kind,form,trajectory,age:0,released:false};
+  if(!kindOverride)this.encounterSerial++;
   if(airborne){
    this.bookSerial++;
    if(this.throwAction)this.queuedThrow=request;else this.throwAction=request;
@@ -41,11 +43,22 @@ export class Chase {
   }
   return true;
  }
+ spawnBurst(kind='low',count=3){
+  if(this.state!=='playing'||this.health<=0||this.burst||this.throwAction||this.queuedThrow||!['low','high'].includes(kind)||![3,4].includes(count))return false;
+  this.burst={id:this.burstSerial++,kind,count,index:0,nextAt:this.elapsed,interval:kind==='low'?this.config.burstLowInterval:this.config.burstHighInterval};
+  this.updateBurst();return true;
+ }
+ updateBurst(){
+  const b=this.burst;if(!b)return;
+  if(b.index===b.count){if(!this.throwAction&&!this.queuedThrow){this.burst=null;this.spawnAt=Math.max(this.spawnAt,this.elapsed+this.config.burstRecovery)}return}
+  if(this.elapsed+1e-9<b.nextAt||this.throwAction||this.queuedThrow)return;
+  if(this.spawn(b.kind)){this.throwAction.burstId=b.id;this.throwAction.burstIndex=b.index++;b.nextAt=this.elapsed+b.interval}
+ }
  releaseBook(action,newAge=action.age){
   // Sample the hand at the exact release time, even when this update skipped frames.
   const releaseGame={...this,elapsed:this.elapsed-Math.max(0,newAge-this.config.throwRelease)};
   const pose=heldBookPose(releaseGame,{...action,age:this.config.throwRelease});
-  const o=createProp(action.form,{id:action.id,kind:action.kind,trajectory:action.trajectory,...pose});
+  const o=createProp(action.form,{id:action.id,kind:action.kind,trajectory:action.trajectory,burstId:action.burstId,burstIndex:action.burstIndex,...pose});
   o.launchLift=o.lift;o.vy=(action.kind==='high'?this.config.bookThrowHigh:this.config.bookThrowLow)[action.trajectory];
   o.angularVelocity=[1.4,-1.7,2.1][action.trajectory];
   this.obstacles.push(this.prepareObstacle(o));this.recoil=.25;
@@ -53,24 +66,27 @@ export class Chase {
  updateThrow(dt){
   let remaining=dt;
   while(this.throwAction&&remaining>1e-9){
-   const a=this.throwAction,oldAge=a.age,used=Math.min(remaining,this.config.throwDuration-oldAge),newAge=oldAge+used;
+   const a=this.throwAction,oldAge=a.age,used=Math.min(remaining,this.config.throwDuration-oldAge);let newAge=oldAge+used;
+   for(const boundary of [this.config.throwRelease,this.config.throwDuration])if(Math.abs(newAge-boundary)<1e-9)newAge=boundary;
    a.age=newAge;
    if(!a.released&&oldAge<this.config.throwRelease&&newAge>=this.config.throwRelease){a.released=true;this.releaseBook(a,newAge)}
    remaining-=used;
    if(newAge>=this.config.throwDuration-1e-9){this.throwAction=this.queuedThrow;this.queuedThrow=null}else break;
   }
  }
- cancelThrows(){this.throwAction=null;this.queuedThrow=null}
+ cancelThrows(){this.throwAction=null;this.queuedThrow=null;this.burst=null}
  beginEnding(){
   if(this.endingStarted||this.health<=0)return false;
-  this.endingStarted=true;this.state='ending-trip';this.endingAge=0;this.endingStartX=this.x;this.endingStartY=this.y;
+  this.endingStarted=true;this.state='ending-discovery';this.endingAge=0;this.endingStartX=this.x;this.endingStartY=this.y;
   this.endingToe={x:814,y:WORLD.floor};this.endingRoot=endingRootPose(this,0);
   this.cancelThrows();this.hitActive=false;this.stun=0;this.hitStop=0;this.vx=0;
   return true;
  }
  updateEnding(dt){
   this.endingAge=Math.min(this.config.endingDuration,this.endingAge+dt);
-  this.state=this.endingAge>=this.config.endingDuration-1e-9?'ending-complete':this.endingAge>=this.config.endingStumble-1e-9?'ending-gap':this.endingAge>=this.config.endingToeOff-1e-9?'ending-fly':'ending-trip';
+  for(const boundary of [this.config.discoverySeconds,this.config.discoverySeconds+this.config.endingToeOff,this.config.discoverySeconds+this.config.endingStumble,this.config.endingDuration])if(Math.abs(this.endingAge-boundary)<1e-9)this.endingAge=boundary;
+  const clipAge=this.endingAge-this.config.discoverySeconds;
+  this.state=this.endingAge>=this.config.endingDuration-1e-9?'ending-complete':clipAge< -1e-9?'ending-discovery':clipAge>=this.config.endingStumble-1e-9?'ending-gap':clipAge>=this.config.endingToeOff-1e-9?'ending-fly':'ending-trip';
   this.endingRoot=endingRootPose(this,this.endingAge);
   // Input and contacts are disabled, but the cat settles and deflected props finish fading.
   this.vy-=this.config.gravity*dt;this.y=Math.max(0,this.y+this.vy*dt);if(!this.y)this.vy=0;
@@ -79,7 +95,7 @@ export class Chase {
    if(o.reacting){o.reactionAge+=dt;o.x+=o.vx*dt;this.moveProp(o,dt);o.vx*=Math.exp(-.35*dt)}
    else if(o.kind==='high'||o.kind==='low'){o.x-=(this.config.runSpeed+this.config.speedIncrease)*dt;this.moveProp(o,dt)}
   }
-  this.obstacles=this.obstacles.filter(o=>o.x+o.w> -100&&o.x<WORLD.width+130&&(!o.reacting||o.reactionAge<this.config.propLifetime));
+  this.obstacles=this.obstacles.filter(o=>o.x+o.w> -100&&o.x<WORLD.width+130&&(!o.reacting||o.reactionAge<(o.reactionLifetime??this.config.propLifetime)));
  }
  groundLift(o,angle=o.angle){
   // Measured outlines, including their shared sprite pivot, determine the floor.
@@ -115,7 +131,8 @@ export class Chase {
   this.health--;this.hits++;this.invincible=this.config.invincibility;
   this.hitActive=true;this.hitAge=0;this.landingAge=null;
   this.hitStop=this.config.hitStop;this.stun=this.config.stunDuration;this.defeatAge=0;
-  this.spawnAt=Math.max(this.spawnAt,this.elapsed+this.config.spawnRecoverySpace);return true;
+  this.spawnAt=Math.max(this.spawnAt,this.elapsed+this.config.spawnRecoverySpace);
+  if(this.burst)this.burst.nextAt=Math.max(this.burst.nextAt,this.elapsed+this.config.burstHitRecovery);return true;
  }
  react(o,n){
   const newDamage=this.hit(o),firstPhysical=!o.reacting;
@@ -127,6 +144,7 @@ export class Chase {
    o.vx=-n.x*this.config.propKnockback;o.vy=n.y>.5?180:n.y<-.5?-130:155;
    o.angularVelocity=(n.x<=0?1:-1)*(o.kind==='basket'?5:o.kind==='stack'?2.4:8);
    o.reacting=true;o.reactionAge=0;o.grounded=false;
+   if(o.burstId!==undefined){o.reactionLifetime=this.config.burstPropLifetime;o.fadeStart=this.config.burstPropFadeStart}
   }
   // Screen-relative velocity: reacting objects do NOT also subtract camera speed.
   const relativeNormal=(this.vx-o.vx)*n.x+(-this.vy+o.vy)*n.y;
@@ -139,15 +157,17 @@ export class Chase {
   return this.vy>35?2:this.vy< -35?4:3;
  }
  update(dt){
-  if(!['playing','ending-trip','ending-fly','ending-gap'].includes(this.state)||!Number.isFinite(dt)||dt<=0)return;
+  if(!['playing','ending-discovery','ending-trip','ending-fly','ending-gap'].includes(this.state)||!Number.isFinite(dt)||dt<=0)return;
   let remaining=Math.min(dt,.5);this.contacts=[];
-  while(remaining>1e-9&&['playing','ending-trip','ending-fly','ending-gap'].includes(this.state)){
+  while(remaining>1e-9&&['playing','ending-discovery','ending-trip','ending-fly','ending-gap'].includes(this.state)){
    if(this.state!=='playing'){const endStep=Math.min(remaining,1/120);this.updateEnding(endStep);remaining-=endStep;continue}
    if(this.hitStop>0){const frozen=Math.min(remaining,this.hitStop);this.hitStop=Math.max(0,this.hitStop-frozen);remaining-=frozen;continue}
    const cameraSpeed=this.config.runSpeed+this.config.speedIncrease*this.elapsed/this.config.duration;
    const maxMotion=Math.max(300,Math.abs(this.vx)+Math.abs(this.vy),...this.obstacles.map(o=>(o.reacting?Math.abs(o.vx||0):cameraSpeed)+Math.abs(o.vy||0)));
    const angular=Math.max(1,...this.obstacles.map(o=>Math.abs(o.angularVelocity||0)));
-   const step=Math.min(remaining,1/120,4/maxMotion,.04/angular);this.step(step);remaining-=step;
+   const eventBoundary=this.throwAction?(this.throwAction.released?this.config.throwDuration:this.config.throwRelease)-this.throwAction.age:Infinity;
+   const burstBoundary=this.burst&&this.burst.index<this.burst.count?this.burst.nextAt-this.elapsed:Infinity;
+   const step=Math.min(remaining,1/120,4/maxMotion,.04/angular,eventBoundary>1e-9?eventBoundary:Infinity,burstBoundary>1e-9?burstBoundary:Infinity);this.step(step);remaining-=step;
   }
  }
  step(dt){
@@ -165,7 +185,6 @@ export class Chase {
   else this.vx*=Math.exp(-1.5*dt);
   this.x+=this.vx*dt;this.vy-=this.config.gravity*dt;this.y+=this.vy*dt;
   if(this.y<=0){this.y=0;this.vy=Math.max(0,this.vy);this.jumps=2;if(this.hitActive&&this.landingAge===null)this.landingAge=0}
-  if(this.elapsed>=this.spawnAt&&this.elapsed<this.config.duration&&this.health>0){this.spawn();this.spawnAt=this.elapsed+Math.max(this.config.minimumInterval,this.config.obstacleInterval-.4*this.elapsed/this.config.duration)}
   for(const o of this.obstacles){
    this.prepareObstacle(o);o.previous={x:o.x,lift:o.lift,angle:o.angle};o.age+=dt;
    if(o.reacting){
@@ -198,9 +217,12 @@ export class Chase {
    if(!resolved)break;
   }
   this.maxPenetration=Math.max(0,...this.obstacles.flatMap(o=>obstaclePolygons(o,WORLD.floor).map(poly=>penetration(this.catPolygon(),poly)?.depth||0)));
-  this.obstacles=this.obstacles.filter(o=>o.x+o.w> -100&&o.x< WORLD.width+130&&(!o.reacting||o.reactionAge<this.config.propLifetime));
+  this.obstacles=this.obstacles.filter(o=>o.x+o.w> -100&&o.x< WORLD.width+130&&(!o.reacting||o.reactionAge<(o.reactionLifetime??this.config.propLifetime)));
   // Resolve fatal contacts and the active-time limit before releasing any pending book.
-  if(this.health>0&&this.elapsed<this.config.duration)this.updateThrow(dt);else this.cancelThrows();
+  if(this.health>0&&this.elapsed<this.config.duration){
+   this.updateThrow(dt);this.updateBurst();
+   if(!this.burst&&this.elapsed>=this.spawnAt&&this.spawn())this.spawnAt=this.elapsed+Math.max(this.config.minimumInterval,this.config.obstacleInterval-.4*this.elapsed/this.config.duration);
+  }else this.cancelThrows();
   if(this.health<=0){this.cancelThrows();this.defeatAge+=dt;if(this.defeatAge>=this.config.defeatDelay)this.state='failed'}
   else if(this.elapsed>=this.config.duration)this.beginEnding();
  }
