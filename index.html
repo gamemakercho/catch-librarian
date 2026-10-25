@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" class="run-active">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5eddf"><meta name="description" content="고양이와 함께 사서를 쫓고, 종이 엽서에 숨은 이야기를 완성하세요."><title>사서를 잡아라! · 도서관의 마지막 모험</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E🐾%3C/text%3E%3C/svg%3E"><link rel="stylesheet" href="styles.css?v=20261024-after5">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E🐾%3C/text%3E%3C/svg%3E"><link rel="stylesheet" href="styles.css?v=20261025-fullscreen7">
 <link rel="stylesheet" href="after-ending/after-ending.css?v=20261024-after5">
 </head>
 <body>
@@ -11,8 +11,8 @@
 <section id="run-screen" class="screen">
 <div class="game-frame">
 <div class="game-hud"><div class="timer"><span>남은 시간</span><strong id="time">30<small>초</small></strong></div><h1>사서를 잡아라!</h1><div class="health"><span>체력</span><div id="paws" aria-label="체력 3칸"></div></div></div>
-<div class="stage"><canvas id="game" width="960" height="500" aria-label="도서관에서 달리는 고양이. 화면이나 점프 버튼을 눌러 장애물을 피하세요."></canvas><div id="overlay" class="overlay"><div class="overlay-card"><span class="tiny-label" id="overlay-label">도서관의 마지막 추격전</span><h3 id="overlay-title">이야기를 펼치는 중…</h3><p id="overlay-copy">두 친구가 달릴 준비를 하고 있어요.</p><button id="start" class="primary" disabled>이미지 불러오는 중…</button></div></div><button id="pause" class="pause" aria-label="게임 일시 정지" hidden>Ⅱ</button><span id="game-message" class="game-message" aria-live="polite"></span></div>
-<div class="controls"><p class="jump-help"><span>화면 터치 · <kbd>Space</kbd> 점프</span><span>공중에서 한 번 더!</span></p><button id="jump" class="jump-button" disabled><span aria-hidden="true">↑</span> 점프 <span class="jump-dots" id="jump-dots" aria-label="남은 점프 2회">● ●</span></button></div>
+<div class="stage"><canvas id="game" width="960" height="500" aria-label="도서관에서 달리는 고양이. 화면을 터치해 점프하고, 한 번 더 터치해 이단 점프하세요."></canvas><div id="overlay" class="overlay"><div class="overlay-card"><span class="tiny-label" id="overlay-label">도서관의 마지막 추격전</span><h3 id="overlay-title">이야기를 펼치는 중…</h3><p id="overlay-copy">두 친구가 달릴 준비를 하고 있어요.</p><button id="start" class="primary" disabled>이미지 불러오는 중…</button></div></div><button id="pause" class="pause" aria-label="게임 일시 정지" hidden>Ⅱ</button><span id="game-message" class="game-message" aria-live="polite"></span></div>
+<div class="controls"><p class="jump-help">터치 = 점프 · 두 번 터치 = 이단 점프</p><span class="jump-dots" id="jump-dots" aria-label="남은 점프 2회">● ●</span></div>
 </div>
 </section>
 <section id="comic-screen" class="screen story-screen" hidden aria-label="마지막 이야기"><div class="section-heading"><h2>마지막 이야기</h2><span id="comic-count">1 / 5</span></div><figure class="comic-frame"><img id="comic-image" alt=""></figure><div class="story-actions"><div class="comic-progress" id="comic-progress" aria-hidden="true"></div><button id="comic-auto" class="text-button" aria-pressed="true">자동 넘김 끄기</button><button id="next" class="primary">다음 <span aria-hidden="true">→</span></button></div></section>
@@ -20,5 +20,5 @@
 <section id="after-answer-screen" class="screen" hidden></section>
 <section id="complete-screen" class="screen complete-screen" hidden><div class="completion-seal" aria-hidden="true">✦</div><p class="eyebrow">마지막 페이지까지, 함께한 너에게</p><h2>두 친구가<br>돌아왔어요!</h2><p id="completed-sentence"></p><p class="completion-copy">두 친구는 원래의 모습으로 돌아왔어요.<br>비밀의 도서관 방탈출, 모든 모험을 마쳤습니다.</p><div class="completed-stamp">방탈출 최종 완료 <span aria-hidden="true">✓</span></div><button id="replay" class="text-button">이야기 처음부터 다시 보기 ↻</button></section>
 </main><script src="after-ending/after-ending.js?v=20261024-after5"></script>
-<script type="module" src="app.js?v=20261024-balance6"></script>
+<script type="module" src="app.js?v=20261025-fullscreen7"></script>
 </body></html>

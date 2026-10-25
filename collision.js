@@ -1,4 +1,4 @@
-import {propFrame,transformPropPoint} from './props.js?v=20261024-balance6';
+import {propFrame,transformPropPoint} from './props.js?v=20261025-fullscreen7';
 // Convex SAT, plus continuous translation TOI. Screen coordinates: y down.
 const COLLISION_EPS=1e-8;
 export function boxPolygon(x,y,w,h){return [{x,y},{x:x+w,y},{x:x+w,y:y+h},{x,y:y+h}]}

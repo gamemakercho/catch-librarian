@@ -1,9 +1,9 @@
-import {CONFIG} from './config.js?v=20261024-balance6';
-import {WORLD} from './engine.js?v=20261024-balance6';
-import {obstaclePolygons} from './collision.js?v=20261024-balance6';
-import {BACKGROUND_LAYOUT,PROPS_LAYOUT} from './scene-data.js?v=20261024-balance6';
-import {createProp,propTransform} from './props.js?v=20261024-balance6';
-import {librarianPose,heldBookPose,LIBRARIAN_SCALE} from './librarian-motion.js?v=20261024-balance6';
+import {CONFIG} from './config.js?v=20261025-fullscreen7';
+import {WORLD} from './engine.js?v=20261025-fullscreen7';
+import {obstaclePolygons} from './collision.js?v=20261025-fullscreen7';
+import {BACKGROUND_LAYOUT,PROPS_LAYOUT} from './scene-data.js?v=20261025-fullscreen7';
+import {createProp,propTransform} from './props.js?v=20261025-fullscreen7';
+import {librarianPose,heldBookPose,LIBRARIAN_SCALE} from './librarian-motion.js?v=20261025-fullscreen7';
 const {floor}=WORLD;
 function rect(c,x,y,w,h,color){c.fillStyle=color;c.fillRect(x,y,w,h)}
 export function backgroundTiles(distance,section,width=WORLD.width){
@@ -25,7 +25,10 @@ export class Renderer {
   this.sheets=new Map(layout.sheets.map(sheet=>[sheet.id,{...sheet,image:images[sheet.image]}]));
   this.scales={cat:CONFIG.catHeight/layout.scale_groups.cat.reference_height_px,librarian:LIBRARIAN_SCALE};this.outlineCache=new Map();this.resize();
  }
- resize(){const width=this.canvas.getBoundingClientRect?.().width||WORLD.width,dpr=Math.min(3,globalThis.devicePixelRatio||1),pixels=Math.max(1,Math.round(width*dpr));if(this.canvas.width!==pixels){this.canvas.width=pixels;this.canvas.height=Math.round(pixels*WORLD.height/WORLD.width)}this.c.setTransform(this.canvas.width/WORLD.width,0,0,this.canvas.height/WORLD.height,0,0);this.c.imageSmoothingEnabled=true}
+ resize(){const box=this.canvas.getBoundingClientRect?.()||{width:WORLD.width,height:WORLD.height},width=box.width||WORLD.width,height=box.height||width*WORLD.height/WORLD.width,dpr=Math.min(3,globalThis.devicePixelRatio||1);
+  this.canvas.width=Math.max(1,Math.round(width*dpr));this.canvas.height=Math.max(1,Math.round(height*dpr));this.viewWidth=Math.max(WORLD.width,WORLD.height*width/height);this.viewHeight=height*this.viewWidth/width;this.viewX=(this.viewWidth-WORLD.width)/2;this.viewOffset=this.viewHeight-WORLD.height;
+  const scale=this.canvas.width/this.viewWidth;this.c.setTransform(scale,0,0,scale,this.viewX*scale,this.viewOffset*scale);this.c.imageSmoothingEnabled=true;
+ }
  sprite(id,x,y,t,frameIndex=null){
   const sheet=this.sheets.get(id),frame=sheet.frames[frameIndex??Math.floor(t*CONFIG.spriteFPS)%sheet.frames.length],anchor=frame.anchor_local,r=frame.source_rect,scale=this.scales[sheet.scale_group];
   this.c.drawImage(sheet.image,r.x,r.y,r.w,r.h,x-anchor.x*scale,y-anchor.y*scale,r.w*scale,r.h*scale);
@@ -46,7 +49,7 @@ export class Renderer {
   return p;
  }
  draw(game,ambient){
-  const c=this.c;c.clearRect(0,0,960,500);this.background(game.distance);
+  const c=this.c;c.clearRect(-this.viewX,-this.viewOffset,this.viewWidth,this.viewHeight);this.background(game.distance);
   const ending=(String(game.state).startsWith('ending-')||(game.state==='paused'&&game.endingStarted)),t=game.state==='ready'?ambient:game.elapsed+(ending?game.endingAge||0:0),cat=ending?endingCatPose(game):{catX:game.x,catY:game.y};
   const shadow=(x,y,w)=>{c.fillStyle='#4c322530';c.beginPath();c.ellipse(x,y,w,5,0,0,Math.PI*2);c.fill()};shadow(cat.catX,floor+3,Math.max(7,25-cat.catY*.06));
   if(!ending||(game.endingAge||0)<(game.config?.discoverySeconds??CONFIG.discoverySeconds)+.64)shadow(WORLD.librarianX,floor+4,35);
@@ -58,14 +61,18 @@ export class Renderer {
   if(ending&&game.endingAge>.15)this.sprite('cat-hit-recover-v2',cat.catX,floor-cat.catY,t,0);
   else if(game.hitActive)this.sprite('cat-hit-recover-v2',game.x,floor-game.y,t,game.hitFrame);
   else this.sprite('cat-run-thin-v2',cat.catX,floor-cat.catY+bounce,t);c.restore();
-  let v=c.createRadialGradient(480,230,160,480,230,620);v.addColorStop(0,'#46311900');v.addColorStop(1,'#46311938');rect(c,0,0,960,500,v);
+  let v=c.createRadialGradient(480,230,160,480,230,620);v.addColorStop(0,'#46311900');v.addColorStop(1,'#46311938');rect(c,-this.viewX,-this.viewOffset,this.viewWidth,this.viewHeight,v);
   if(ending)this.ending(game,cat);
   if(this.debug)this.drawDebug(game,pose);
  }
  background(distance){
-  const c=this.c;for(const section of [BACKGROUND_LAYOUT.wall,BACKGROUND_LAYOUT.floor]){
-   const r=section.source_rect;for(const tile of backgroundTiles(distance,section)){
-    c.save();c.translate(tile.x+(tile.flipped?tile.width:0),section.destination_y);if(tile.flipped)c.scale(-1,1);
+  const c=this.c,offset=this.viewOffset||0;
+  // Extend the scenery above the play lane. Every image keeps a uniform scale;
+  // characters, collision coordinates and throw timing stay in the original world.
+  const wall={...BACKGROUND_LAYOUT.wall,destination_y:-offset,destination_height:BACKGROUND_LAYOUT.wall.destination_height+offset};
+  for(const section of [wall,BACKGROUND_LAYOUT.floor]){
+   const r=section.source_rect;for(const tile of backgroundTiles(distance,section,this.viewWidth||WORLD.width)){
+    c.save();c.translate(tile.x-(this.viewX||0)+(tile.flipped?tile.width:0),section.destination_y);if(tile.flipped)c.scale(-1,1);
     c.drawImage(this.backgroundImage,r.x,r.y,r.w,r.h,0,0,tile.width,section.destination_height);c.restore();
    }
   }

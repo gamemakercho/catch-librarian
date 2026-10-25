@@ -73,10 +73,10 @@
     "same_legacy_grid_improvement_percent": 56.881
   },
   "source_sha256": {
-    "engine.js": "83af473b4e49dfb3ed3efa757adc074ad7339adac0e8db5466e6cd30c697a442",
+    "engine.js": "29805339b4642e5b04ab244dc4cf8377bf849bbb78de4db8bc80ae9f670c0295",
     "config.js": "801b6db73c1fdd052641a4a68c9d86cbc7f4bb32aac9cffcfde52a30996f4828",
-    "props.js": "545ea7c1145e2e8b40dd0fb4c31bbe66e84bfcb4f745422de46f2f6559b7c03a",
-    "collision.js": "66881ea2954da07aee569d6bdb5dd3b8882a0869faafc77a2e760bc4de4f3622",
+    "props.js": "1d2dc256af36afb11af28c60e0032e829dc2a88833fdb313578a14281f6246a3",
+    "collision.js": "0d5e299b8ece737242c1f6c3578e4713adf568de47f396553bbd410fcdb59a98",
     "scene-data.js": "3c9d2c1924b255f6dc13be7ae677f5c4eaf6c6731b661070188b6bbaa9d276dc",
     "assets/props/props-layout.json": "00bf0077dea3655ad4a3ef0bda7c2c23b06a3a56fc7dd94f4ae7cf703c6d7d85",
     "assets/props/book-stack-double.json": "64b70fba03b0da567e95bf8c272827df55c9407efc57c370a698e16ab7ffd4c1"

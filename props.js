@@ -1,4 +1,4 @@
-import {PROPS_LAYOUT} from './scene-data.js?v=20261024-balance6';
+import {PROPS_LAYOUT} from './scene-data.js?v=20261025-fullscreen7';
 const cross=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
 const area=p=>p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a.x*b.y-b.x*a.y},0)/2;
 // Ear clipping keeps the air between open pages out of the contact geometry.

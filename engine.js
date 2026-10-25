@@ -1,13 +1,13 @@
-import {createProp} from './props.js?v=20261024-balance6';
-import {heldBookPose,endingRootPose} from './librarian-motion.js?v=20261024-balance6';
-import { CONFIG } from './config.js?v=20261024-balance6';
-import { boxPolygon, obstaclePolygons, penetration, sweepPolygons } from './collision.js?v=20261024-balance6';
+import {createProp} from './props.js?v=20261025-fullscreen7';
+import {heldBookPose,endingRootPose} from './librarian-motion.js?v=20261025-fullscreen7';
+import { CONFIG } from './config.js?v=20261025-fullscreen7';
+import { boxPolygon, obstaclePolygons, penetration, sweepPolygons } from './collision.js?v=20261025-fullscreen7';
 export const WORLD=Object.freeze({width:960,height:500,floor:415,catX:240,librarianX:780});
 export const normalizeAnswer=value=>value.normalize('NFC').replace(/[\s!.！。．]/gu,'');
 const acceptedAnswer=String.fromCodePoint(44256,50577,51060,50752,32,49324,49436,44032,32,46028,50500,50772,45796);
 export const isCorrectAnswer=value=>normalizeAnswer(value)===normalizeAnswer(acceptedAnswer);
 export class Chase {
- constructor(config=CONFIG){this.config=config;this.reset()}
+ constructor(config=CONFIG,random=Math.random){this.config=config;this.random=random;this.reset()}
  reset(){Object.assign(this,{state:'ready',elapsed:0,health:this.config.health,x:WORLD.catX,vx:0,y:0,vy:0,jumps:2,invincible:0,obstacles:[],spawnAt:this.config.warmup,serial:0,encounterSerial:0,bookSerial:0,burstSerial:0,burst:null,distance:0,recoil:0,hits:0,hitStop:0,stun:0,hitActive:false,hitAge:0,landingAge:null,defeatAge:0,discoveryAge:0,throwAction:null,queuedThrow:null,doubleStackCount:0,endingAge:0,endingStartX:null,endingStartY:null,endingToe:null,endingRoot:null,endingStarted:false,contacts:[],maxPenetration:0})}
  start(){this.reset();this.state='playing'}
  jump(){
@@ -23,7 +23,7 @@ export class Chase {
   if(this.state!=='playing'||this.health<=0)return false;
   const kinds=['stack','high','double-stack','burst-low','box','basket','double-stack','burst-high','low'];
   let kind=kindOverride||kinds[this.encounterSerial%kinds.length];
-  if(kind==='burst-low'||kind==='burst-high'){if(!this.spawnBurst(kind==='burst-low'?'low':'high',kind==='burst-low'?3:4))return false;this.encounterSerial++;return true}
+  if(kind==='burst-low'||kind==='burst-high'){if(!this.spawnBurst(kind==='burst-low'?'low':'mixed',kind==='burst-low'?3:4))return false;this.encounterSerial++;return true}
   if(kind==='double-stack'&&!kindOverride&&(this.elapsed<8||this.doubleStackCount>=2))kind='stack';
   const airborne=kind==='high'||kind==='low';
   // A running throw owns a single immutable choice and at most one pending choice.
@@ -44,15 +44,18 @@ export class Chase {
   return true;
  }
  spawnBurst(kind='low',count=3){
-  if(this.state!=='playing'||this.health<=0||this.burst||this.throwAction||this.queuedThrow||!['low','high'].includes(kind)||![3,4].includes(count))return false;
-  this.burst={id:this.burstSerial++,kind,count,index:0,nextAt:this.elapsed,interval:kind==='low'?this.config.burstLowInterval:this.config.burstHighInterval};
+  if(this.state!=='playing'||this.health<=0||this.burst||this.throwAction||this.queuedThrow||!['low','high','mixed'].includes(kind)||![3,4].includes(count))return false;
+  const choices=kind==='mixed'?Array.from({length:count},(_,i)=>i<Math.ceil(count/2)?'low':'high'):Array(count).fill(kind);
+  // Freeze the shuffled choices for this finite batch; pause/hits never reroll them.
+  if(kind==='mixed')for(let i=choices.length-1;i>0;i--){const j=Math.floor(Math.max(0,Math.min(.999999999,this.random()))*(i+1));[choices[i],choices[j]]=[choices[j],choices[i]];}
+  this.burst={id:this.burstSerial++,kind,choices,count,index:0,nextAt:this.elapsed,interval:kind==='low'?this.config.burstLowInterval:this.config.burstHighInterval};
   this.updateBurst();return true;
  }
  updateBurst(){
   const b=this.burst;if(!b)return;
   if(b.index===b.count){if(!this.throwAction&&!this.queuedThrow){this.burst=null;this.spawnAt=Math.max(this.spawnAt,this.elapsed+this.config.burstRecovery)}return}
   if(this.elapsed+1e-9<b.nextAt||this.throwAction||this.queuedThrow)return;
-  if(this.spawn(b.kind)){this.throwAction.burstId=b.id;this.throwAction.burstIndex=b.index++;b.nextAt=this.elapsed+b.interval}
+  if(this.spawn(b.choices[b.index])){this.throwAction.burstId=b.id;this.throwAction.burstIndex=b.index++;b.nextAt=this.elapsed+b.interval}
  }
  releaseBook(action,newAge=action.age){
   // Sample the hand at the exact release time, even when this update skipped frames.

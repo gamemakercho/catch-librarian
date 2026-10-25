@@ -1,6 +1,6 @@
-import {CONFIG} from './config.js?v=20261024-balance6';
-import {MOTION_LAYOUT} from './scene-data.js?v=20261024-balance6';
-import {createProp,propFrame} from './props.js?v=20261024-balance6';
+import {CONFIG} from './config.js?v=20261025-fullscreen7';
+import {MOTION_LAYOUT} from './scene-data.js?v=20261025-fullscreen7';
+import {createProp,propFrame} from './props.js?v=20261025-fullscreen7';
 const STAGE={width:960,floor:415,librarianX:780};
 export const LIBRARIAN_SCALE=CONFIG.librarianHeight/MOTION_LAYOUT.clips.run.reference_height_px;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));

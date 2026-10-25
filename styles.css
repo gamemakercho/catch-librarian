@@ -127,3 +127,22 @@ input:focus{outline:2px solid #b7cbb9;outline-offset:1px}
 /* The post-answer dialogue uses its own height budget, independent of the runner. */
 main.after-story-active{width:min(760px,calc(100% - 24px));margin:12px auto}
 @media(max-width:650px){main.after-story-active{width:calc(100% - 16px);margin:8px auto}}
+
+/* One viewport, including embedded play. The lane stays proportional; the wall fills the extra height. */
+.run-active,.run-active body{height:100%;overflow:hidden;overscroll-behavior:none}
+.run-active body{position:fixed;inset:0;background:#523521}
+.run-active main{width:100%;height:var(--run-height,100svh);margin:0;padding:0;max-width:none}
+.run-active #run-screen,.run-active .game-frame{width:100%;height:100%;min-height:0}
+.run-active .game-frame{display:flex;flex-direction:column;border:0;border-radius:0;box-shadow:none}
+.run-active .game-hud{flex:none;padding-top:env(safe-area-inset-top);height:calc(58px + env(safe-area-inset-top))}
+.run-active .stage{flex:1;min-height:0}
+.run-active canvas{width:100%;height:100%;touch-action:none}
+.run-active .controls{flex:none;min-height:44px;justify-content:center;padding:8px 10px calc(8px + env(safe-area-inset-bottom));gap:12px}
+.run-active .jump-help{display:block;font-size:12px;font-weight:700;text-align:center}
+.run-active .jump-dots{font-size:11px;letter-spacing:2px}
+.run-active .overlay-card{max-height:100%;overflow:auto;overscroll-behavior:contain;touch-action:pan-y}
+.run-active .overlay h3{font-size:clamp(20px,4.2vw,28px)}
+.run-active .overlay p{font-size:clamp(12px,2.7vw,14px);line-height:1.6}
+.run-active .overlay .primary{min-height:44px}
+.run-active .game-message{bottom:90px;font-size:13px}
+@media(max-height:430px){.run-active .game-hud{height:44px}.run-active .controls{min-height:36px;padding:5px}.run-active .overlay-card{padding:8px 16px}.run-active .overlay h3{font-size:18px}.run-active .overlay p{font-size:11px;margin-bottom:8px}}
