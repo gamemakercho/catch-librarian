@@ -1,35 +1,57 @@
 import {SPRITE_LAYOUT,SCENE_IMAGE_FILES} from './scene-data.js?v=20261025-fullscreen7';
 import { CONFIG } from './config.js?v=20261025-fullscreen7';
 import { Chase, isCorrectAnswer } from './engine.js?v=20261025-fullscreen7';
-import { Renderer } from './renderer.js?v=20261025-fullscreen7';
+import { Renderer } from './renderer.js?v=20261101-landscape27';
 const $ = id => document.getElementById(id);
 const game = new Chase();
+document.documentElement.classList.toggle('embedded-run',window.parent!==window);
 const comicFiles = ['01-chase','02-treat','03-sparkle','04-trip','05-jump'].map(x=>`assets/ending/ending-${x}.webp`);
 const comicAlts = ['사서의 뒤를 헉헉대며 쫓아가는 고양이','사서의 뒷통수 너머로 보이는 츄르','츄르를 발견하고 눈이 십자가 모양으로 빛나는 사서','넘어진 사서의 운동화와 놀란 고양이','바닥에서 올려다본 시점, 큰 앞발을 내밀며 뛰어드는 고양이'];
 let state='loading', renderer, lastTime=null, ambient=0, panel=0, comicElapsed=0, autoComic=true, composing=false, compositionEnded=0, priorHits=0;
 const afterAnswerKey=CONFIG.completionKey+':after-answer:v1';
+// Assistance belongs only to this main-story run (or the standalone game).
+const assistRun=new URL(document.baseURI).searchParams.get('runId')||'standalone';
+const assistKey=CONFIG.completionKey+':retry-assist:v1:'+encodeURIComponent(assistRun);
+const savedAssist=readSavedJSON(assistKey);
+let failedAttempts=Number.isSafeInteger(savedAssist?.failures)&&savedAssist.failures>=0?savedAssist.failures:0;
+let assistEnabled=savedAssist?.enabled===true,attemptHealth=CONFIG.health;
+const offeredHealth=()=>CONFIG.health+Math.max(0,failedAttempts-1);
+function saveAssist(){try{localStorage.setItem(assistKey,JSON.stringify({failures:failedAttempts,enabled:assistEnabled}));}catch{/* Keep assistance usable without storage. */}}
+function updateAssistOffer(){
+ const available=failedAttempts>=2&&['ready','failed'].includes(state);
+ $('run-screen').classList.toggle('assist-offer',available);$('difficulty-assist').hidden=!available;$('assist-note').hidden=!available;
+ $('assist-note').textContent=available?(assistEnabled?'다음 도전은 체력 '+offeredHealth()+'칸으로 시작해!':'난이도를 낮추면 체력 '+offeredHealth()+'칸으로 도전할 수 있어!'):'';
+}
 let afterStory=null,afterProgress=null,completionAnnounced=false;
 const paw = '<svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="7" cy="12" rx="4" ry="5" transform="rotate(-25 7 12)"/><ellipse cx="14" cy="7" rx="4" ry="5"/><ellipse cx="23" cy="9" rx="4" ry="5" transform="rotate(18 23 9)"/><ellipse cx="28" cy="17" rx="3.5" ry="4.5" transform="rotate(35 28 17)"/><path d="M7 25c0-5 6-11 10-10s10 7 9 12c-1 5-7 2-10 2S7 30 7 25Z"/></svg>';
 function hud(){
+ $('jump').disabled=state!=='playing'||game.jumps===0;
  $('time').innerHTML=`${Math.ceil(Math.max(0,CONFIG.duration-game.elapsed))}<small>초</small>`;
- $('paws').innerHTML=Array.from({length:CONFIG.health},(_,i)=>`<span style="opacity:${i<game.health?1:.2}">${paw}</span>`).join('');
- $('paws').setAttribute('aria-label',`체력 ${game.health}칸`);
+ $('paws').innerHTML=attemptHealth<=4?Array.from({length:attemptHealth},(_,i)=>`<span style="opacity:${i<game.health?1:.2}">${paw}</span>`).join(''):`<span>${paw}</span><strong class="health-count">${game.health}/${attemptHealth}</strong>`;
+ $('paws').setAttribute('aria-label',`체력 ${game.health}칸 / 최대 ${attemptHealth}칸`);
  $('jump-dots').textContent=Array.from({length:2},(_,i)=>i<game.jumps?'●':'○').join(' ');$('jump-dots').setAttribute('aria-label',`남은 점프 ${game.jumps}회`);
 }
 let previousHUD='';function syncHUD(){const key=[Math.ceil(CONFIG.duration-game.elapsed),game.health,game.jumps].join();if(key!==previousHUD){hud();previousHUD=key}}
 function showScreen(name){document.querySelector('main')?.classList.toggle('after-story-active',name==='after-answer');document.documentElement.classList.toggle('run-active',name==='run');for(const id of ['run','comic','puzzle','after-answer','complete'])$(id+'-screen').hidden=id!==name;if(name!=='after-answer')afterStory?.hide();for(const id of ['run','comic','puzzle']){const el=$('step-'+id);if(id===name||(['after-answer','complete'].includes(name)&&id==='puzzle'))el.setAttribute('aria-current','step');else el.removeAttribute('aria-current')}window.scrollTo?.({top:0,left:0,behavior:'auto'})}
-function overlay(title,copy,button,label='도서관의 마지막 추격전'){$('overlay').hidden=false;$('overlay-title').textContent=title;$('overlay-copy').textContent=copy;$('overlay-label').textContent=label;$('start').textContent=button;$('start').disabled=false;$('pause').hidden=true}
+function overlay(title,copy,button,label='도서관의 마지막 추격전'){$('jump').disabled=true;$('overlay').hidden=false;$('overlay-title').textContent=title;$('overlay-copy').textContent=copy;$('overlay-label').textContent=label;$('start').textContent=button;$('start').disabled=false;$('pause').hidden=true;updateAssistOffer()}
 let pausedState='playing';
 const endingStates=['ending-discovery','ending-trip','ending-fly','ending-gap'];
 let comicPreloads;function preloadComics(){comicPreloads??=comicFiles.map(src=>{const img=new Image();img.decoding='async';img.src=src;return img})}
-function start(){preloadComics();game.start();state='playing';priorHits=0;lastTime=null;$('overlay').hidden=true;$('pause').hidden=false;$('game-message').textContent='책장 사이로 출발!';syncHUD()}
+function start(){$('jump').disabled=false;preloadComics();attemptHealth=assistEnabled?offeredHealth():CONFIG.health;game.start();game.health=attemptHealth;previousHUD='';state='playing';$('run-screen').classList.toggle('assist-offer',false);$('difficulty-assist').hidden=true;$('assist-note').hidden=true;priorHits=0;lastTime=null;$('overlay').hidden=true;$('pause').hidden=false;$('game-message').textContent='책장 사이로 출발!';syncHUD()}
 function jump(){if(state!=='playing')return;game.jump();syncHUD()}
 function pause(){if(state!=='playing'&&!endingStates.includes(state))return;pausedState=state;state='paused';game.state='paused';overlay('잠깐, 책갈피를 꽂아 둘게.','준비가 되면 모험을 이어가 주세요.','계속 달리기','모험을 잠시 쉬는 중');lastTime=null}
-function resume(){state=pausedState;game.state=pausedState;$('overlay').hidden=true;$('pause').hidden=false;lastTime=null}
+function resume(){state=pausedState;$('jump').disabled=state!=='playing'||game.jumps===0;game.state=pausedState;$('overlay').hidden=true;$('pause').hidden=false;lastTime=null}
 $('start').addEventListener('click',()=>{if(state==='paused')resume();else if(state==='error')location.reload();else if(state==='ready'||state==='failed')start()});
 $('pause').addEventListener('click',pause);
+$('difficulty-assist').addEventListener('click',()=>{if(failedAttempts<2||!['ready','failed'].includes(state))return;assistEnabled=true;saveAssist();start();});
 // Pointer events are the only touch/mouse jump source: no duplicate touch + click.
 $('game').addEventListener('pointerdown',e=>{if(!e.isPrimary||e.button!==0)return;e.preventDefault();jump()});
+// A physical press has one source. Compatibility click never becomes a second jump.
+let heldJumpPointer=null;
+$('jump').addEventListener('pointerdown',e=>{if(!e.isPrimary||e.button!==0||heldJumpPointer!==null)return;e.preventDefault();e.stopPropagation?.();heldJumpPointer=e.pointerId??0;try{$('jump').setPointerCapture?.(e.pointerId);}catch{}jump();});
+for(const type of ['pointerup','pointercancel','lostpointercapture'])$('jump').addEventListener(type,e=>{if(heldJumpPointer===(e.pointerId??0))heldJumpPointer=null;});
+$('jump').addEventListener('click',e=>{e.preventDefault();e.stopPropagation?.();if(e.detail===0&&!e.pointerType)jump();});
+$('jump').addEventListener('keydown',e=>{if(['Space','Enter'].includes(e.code)){e.preventDefault();e.stopPropagation?.();if(!e.repeat)jump();}});
 window.addEventListener('keydown',e=>{if(e.target instanceof HTMLInputElement||e.target instanceof HTMLTextAreaElement||e.isComposing)return;if(e.code==='Space'&&state==='playing'){e.preventDefault();if(!e.repeat)jump()}if(e.code==='Escape'&&(state==='playing'||endingStates.includes(state)))pause();if(e.code==='F2'&&renderer){e.preventDefault();renderer.debug=!renderer.debug}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();lastTime=null});
 window.addEventListener('pagehide',pause);
@@ -37,7 +59,7 @@ let viewportHeight=visualViewport?.height||innerHeight,viewportWidth=innerWidth;
 function resizeViewport(){const h=visualViewport?.height||innerHeight;viewportHeight=innerWidth!==viewportWidth?h:Math.min(viewportHeight,h);viewportWidth=innerWidth;document.documentElement.style.setProperty('--run-height',viewportHeight+'px');renderer?.resize();}
 resizeViewport();window.addEventListener('resize',resizeViewport);visualViewport?.addEventListener('resize',resizeViewport);
 document.addEventListener('touchmove',e=>{if(!document.documentElement.classList.contains('run-active'))return;const box=e.target.closest?.('.overlay-card');if(box&&box.scrollHeight>box.clientHeight+1)return;if(e.cancelable)e.preventDefault();},{passive:false});
-function ending(){state=game.state;$('pause').hidden=false;$('game-message').textContent='앗, 저 앞에 츄르가!'}
+function ending(){state=game.state;$('jump').disabled=true;$('pause').hidden=false;$('game-message').textContent='앗, 저 앞에 츄르가!'}
 function comic(){state='comic';game.state='comic';game.obstacles=[];$('game-message').textContent='';panel=0;comicElapsed=0;showScreen('comic');setPanel();$('next').focus({preventScroll:true})}
 function setPanel(){comicElapsed=0;$('comic-image').src=comicFiles[panel];$('comic-image').alt=comicAlts[panel];$('comic-count').textContent=`${panel+1} / 5`;$('comic-progress').innerHTML=comicFiles.map((_,i)=>`<span class="${i<=panel?'active':''}"></span>`).join('');$('next').textContent=panel===4?'엽서 펼치기 →':'다음 →'}
 function nextPanel(){if(state!=='comic')return;if(panel<4){panel++;setPanel()}else{state='puzzle';showScreen('puzzle');$('answer').focus({preventScroll:true})}}
@@ -87,10 +109,10 @@ function complete(){
  $('completed-sentence').textContent='고양이와 사서가 돌아왔다';$('complete-screen').classList.toggle('reveal',false);
 }
 function restart(){
- for(const key of [afterAnswerKey,CONFIG.completionKey])try{localStorage.removeItem(key)}catch{/* Reset this session even when storage is unavailable. */}
- afterProgress=null;completionAnnounced=false;afterStory?.hide();game.reset();state='ready';pausedState='playing';lastTime=null;ambient=0;panel=0;comicElapsed=0;priorHits=0;composing=false;compositionEnded=0;previousHUD='';
+ for(const key of [afterAnswerKey,CONFIG.completionKey,assistKey])try{localStorage.removeItem(key)}catch{/* Reset this session even when storage is unavailable. */}
+ failedAttempts=0;assistEnabled=false;attemptHealth=CONFIG.health;afterProgress=null;completionAnnounced=false;afterStory?.hide();game.reset();state='ready';pausedState='playing';lastTime=null;ambient=0;panel=0;comicElapsed=0;priorHits=0;composing=false;compositionEnded=0;previousHUD='';
  showScreen('run');$('answer-form').reset();$('answer-feedback').textContent='';$('answer').removeAttribute('aria-invalid');$('game-message').textContent='';autoComic=true;$('comic-auto').textContent='자동 넘김 끄기';$('comic-auto').setAttribute('aria-pressed','true');
- overlay('작은 발로, 힘껏 달려 봐!','책 더미를 피해 잠시 사서를 따라가 주세요.\n터치 = 점프 · 두 번 터치 = 이단 점프','모험 시작하기');hud();
+ overlay('작은 발로, 힘껏 달려 봐!','책 더미를 피해 잠시 사서를 따라가 주세요.\n아래 ‘점프’ 버튼을 눌러 장애물을 피해 줘. 공중에서 한 번 더 누르면 2단 점프!','모험 시작하기');hud();
 }
 $('replay').addEventListener('click',restart);
 function frame(time){
@@ -101,7 +123,7 @@ function frame(time){
    game.update(dt);syncHUD();
    if(game.hits!==priorHits){priorHits=game.hits;$('game-message').textContent='앗! 괜찮아, 다시 폴짝!'}
    else if(game.invincible===0&&game.elapsed>3)$('game-message').textContent='';
-   if(game.state==='failed'){state='failed';game.failedVisualAge=0;overlay('잠깐 쉬었다, 다시 달릴까?','괜찮아! 책 더미를 잘 보고 뛰어넘어 봐.','다시 도전하기','다음엔 조금 더 멀리!')}
+   if(game.state==='failed'){failedAttempts++;saveAssist();state='failed';game.failedVisualAge=0;overlay('잠깐 쉬었다, 다시 달릴까?','괜찮아! 책 더미를 잘 보고 뛰어넘어 봐.','다시 도전하기','다음엔 조금 더 멀리!')}
    else if(endingStates.includes(game.state))ending();
   }else if(endingStates.includes(state)){
    game.update(dt);if(game.state==='ending-complete')comic();else state=game.state;
@@ -111,7 +133,7 @@ function frame(time){
  }
  requestAnimationFrame(frame);
 }
-async function load(){try{const files=SCENE_IMAGE_FILES;const entries=await Promise.all(files.map(src=>new Promise((resolve,reject)=>{const img=new Image();img.decoding='async';img.onload=()=>resolve([src,img]);img.onerror=()=>reject(new Error(src));img.src=src})));const images=Object.fromEntries(entries);renderer=new Renderer($('game'),images,SPRITE_LAYOUT);state='ready';overlay('작은 발로, 힘껏 달려 봐!','책 더미를 피해 잠시 사서를 따라가 주세요.\n터치 = 점프 · 두 번 터치 = 이단 점프','모험 시작하기');hud();const saved=normalizeAfterProgress(readSavedJSON(afterAnswerKey));if(saved)beginAfterAnswer(saved);else if(readSavedJSON(CONFIG.completionKey)?.completed===true)complete();requestAnimationFrame(frame)}catch(error){state='error';overlay('책장을 불러오지 못했어요.','인터넷 연결을 확인하고 다시 열어 주세요.','다시 불러오기','잠깐만요!');console.error('Asset loading failed:',error)}}
+async function load(){try{const files=SCENE_IMAGE_FILES;const entries=await Promise.all(files.map(src=>new Promise((resolve,reject)=>{const img=new Image();img.decoding='async';img.onload=()=>resolve([src,img]);img.onerror=()=>reject(new Error(src));img.src=src})));const images=Object.fromEntries(entries);renderer=new Renderer($('game'),images,SPRITE_LAYOUT);state='ready';attemptHealth=assistEnabled?offeredHealth():CONFIG.health;game.health=attemptHealth;overlay('작은 발로, 힘껏 달려 봐!','책 더미를 피해 잠시 사서를 따라가 주세요.\n아래 ‘점프’ 버튼을 눌러 장애물을 피해 줘. 공중에서 한 번 더 누르면 2단 점프!','모험 시작하기');hud();const saved=normalizeAfterProgress(readSavedJSON(afterAnswerKey));if(saved)beginAfterAnswer(saved);else if(readSavedJSON(CONFIG.completionKey)?.completed===true)complete();requestAnimationFrame(frame)}catch(error){state='error';overlay('책장을 불러오지 못했어요.','인터넷 연결을 확인하고 다시 열어 주세요.','다시 불러오기','잠깐만요!');console.error('Asset loading failed:',error)}}
 load();
 
 

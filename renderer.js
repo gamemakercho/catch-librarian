@@ -26,8 +26,8 @@ export class Renderer {
   this.scales={cat:CONFIG.catHeight/layout.scale_groups.cat.reference_height_px,librarian:LIBRARIAN_SCALE};this.outlineCache=new Map();this.resize();
  }
  resize(){const box=this.canvas.getBoundingClientRect?.()||{width:WORLD.width,height:WORLD.height},width=box.width||WORLD.width,height=box.height||width*WORLD.height/WORLD.width,dpr=Math.min(3,globalThis.devicePixelRatio||1);
-  this.canvas.width=Math.max(1,Math.round(width*dpr));this.canvas.height=Math.max(1,Math.round(height*dpr));this.viewWidth=Math.max(WORLD.width,WORLD.height*width/height);this.viewHeight=height*this.viewWidth/width;this.viewX=(this.viewWidth-WORLD.width)/2;this.viewOffset=this.viewHeight-WORLD.height;
-  const scale=this.canvas.width/this.viewWidth;this.c.setTransform(scale,0,0,scale,this.viewX*scale,this.viewOffset*scale);this.c.imageSmoothingEnabled=true;
+  this.canvas.width=Math.max(1,Math.round(width*dpr));this.canvas.height=Math.max(1,Math.round(height*dpr));this.viewWidth=WORLD.width;this.viewHeight=WORLD.height;this.viewX=0;this.viewOffset=0;
+  const scale=Math.min(this.canvas.width/WORLD.width,this.canvas.height/WORLD.height);this.c.setTransform(scale,0,0,scale,(this.canvas.width-WORLD.width*scale)/2,(this.canvas.height-WORLD.height*scale)/2);this.c.imageSmoothingEnabled=true;
  }
  sprite(id,x,y,t,frameIndex=null){
   const sheet=this.sheets.get(id),frame=sheet.frames[frameIndex??Math.floor(t*CONFIG.spriteFPS)%sheet.frames.length],anchor=frame.anchor_local,r=frame.source_rect,scale=this.scales[sheet.scale_group];
@@ -49,7 +49,7 @@ export class Renderer {
   return p;
  }
  draw(game,ambient){
-  const c=this.c;c.clearRect(-this.viewX,-this.viewOffset,this.viewWidth,this.viewHeight);this.background(game.distance);
+  const c=this.c;c.save();c.setTransform(1,0,0,1,0,0);rect(c,0,0,this.canvas.width,this.canvas.height,'#000');c.restore();this.background(game.distance);
   const ending=(String(game.state).startsWith('ending-')||(game.state==='paused'&&game.endingStarted)),t=game.state==='ready'?ambient:game.elapsed+(ending?game.endingAge||0:0),cat=ending?endingCatPose(game):{catX:game.x,catY:game.y};
   const shadow=(x,y,w)=>{c.fillStyle='#4c322530';c.beginPath();c.ellipse(x,y,w,5,0,0,Math.PI*2);c.fill()};shadow(cat.catX,floor+3,Math.max(7,25-cat.catY*.06));
   if(!ending||(game.endingAge||0)<(game.config?.discoverySeconds??CONFIG.discoverySeconds)+.64)shadow(WORLD.librarianX,floor+4,35);
@@ -66,10 +66,10 @@ export class Renderer {
   if(this.debug)this.drawDebug(game,pose);
  }
  background(distance){
-  const c=this.c,offset=this.viewOffset||0;
-  // Extend the scenery above the play lane. Every image keeps a uniform scale;
-  // characters, collision coordinates and throw timing stay in the original world.
-  const wall={...BACKGROUND_LAYOUT.wall,destination_y:-offset,destination_height:BACKGROUND_LAYOUT.wall.destination_height+offset};
+  const c=this.c;
+  // Keep the original landscape composition; portrait space belongs to the
+  // surrounding black letterbox, never an enlarged wall above tiny characters.
+  const wall=BACKGROUND_LAYOUT.wall;
   for(const section of [wall,BACKGROUND_LAYOUT.floor]){
    const r=section.source_rect;for(const tile of backgroundTiles(distance,section,this.viewWidth||WORLD.width)){
     c.save();c.translate(tile.x-(this.viewX||0)+(tile.flipped?tile.width:0),section.destination_y);if(tile.flipped)c.scale(-1,1);

@@ -73,7 +73,7 @@ test('initial scene requests only eight WebP runner images, then preloads comics
 test('arrival keeps the treat message readable for three seconds and pauses before the trip, flight and original comics',async()=>{
  const t=await setup();t.fire('start','click');finishChase(t,{showComic:false});
  assert.equal(t.elements['run-screen'].hidden,false);assert.notEqual(t.elements['comic-screen'].hidden,false);
- assert.equal(t.elements.jump,undefined);assert.equal(t.elements.pause.hidden,false);assert.ok(t.elements['game-message'].textContent.includes('츄르'));
+ assert.ok(t.elements.jump);assert.equal(t.elements.jump.disabled,true);assert.equal(t.elements.pause.hidden,false);assert.ok(t.elements['game-message'].textContent.includes('츄르'));
  const snapshot=[t.subject.game.elapsed,t.subject.game.distance,t.subject.game.x];
  assert.equal(t.subject.getState(),'ending-discovery');assert.ok(CONFIG.discoverySeconds>=3);
  t.fire('game','pointerdown',{isPrimary:true,button:0});t.advance(2.5);assert.equal(t.subject.getState(),'ending-discovery');assert.ok(t.elements['game-message'].textContent.includes('츄르'));assert.deepEqual([t.subject.game.elapsed,t.subject.game.distance,t.subject.game.x],snapshot);
@@ -107,4 +107,19 @@ test('blocked storage still permits story completion and a fresh local restart',
 });
 test('offline HTML shows the returned scene from embedded data without an after-ending file request',async()=>{
  const t=await setup({offline:true});reachPuzzle(t);solve(t);assert.ok(t.after('.ae-image').src.startsWith('data:image/webp;base64,'));assert.equal(t.completions.length,0);assert.equal(t.requests.some(src=>/^https?:|^file:/.test(src)),false);finishStory(t);assert.equal(t.completions.length,1);assert.equal(t.errors.length,0);
+});
+
+ test('large jump button accepts one physical press, then a deliberate second press; held/repeated/inactive inputs are ignored',async()=>{const t=await setup();t.fire('jump','pointerdown',{isPrimary:true,button:0,pointerId:1});assert.equal(t.subject.game.jumps,2);t.fire('jump','pointerup',{pointerId:1});t.fire('start','click');t.fire('jump','pointerdown',{isPrimary:true,button:0,pointerId:2});assert.equal(t.subject.game.jumps,1);t.fire('jump','click',{detail:1,pointerType:'touch'});t.fire('jump','pointerdown',{isPrimary:true,button:0,pointerId:2});assert.equal(t.subject.game.jumps,1);t.fire('jump','pointerup',{pointerId:2});t.advance(.1);t.fire('jump','pointerdown',{isPrimary:true,button:0,pointerId:3});assert.equal(t.subject.game.jumps,0);t.fire('jump','pointercancel',{pointerId:3});t.advance(1.5);assert.equal(t.subject.game.jumps,2);t.fire('jump','keydown',{code:'Space',repeat:false});assert.equal(t.subject.game.jumps,1);t.fire('jump','keydown',{code:'Space',repeat:true});assert.equal(t.subject.game.jumps,1);t.fire('pause','click');t.fire('jump','click',{detail:0});assert.equal(t.subject.game.jumps,1);assert.equal(t.subject.getState(),'paused');});
+
+test('second game over offers opt-in health; each later failure adds one, never per frame or repeated click',async()=>{
+ const t=await setup(),fail=()=>{t.subject.game.health=0;t.subject.game.defeatAge=1;t.advance(.1);assert.equal(t.subject.getState(),'failed');};
+ t.fire('difficulty-assist','click');assert.equal(t.subject.getState(),'ready');t.fire('start','click');assert.equal(t.subject.game.health,3);fail();assert.equal(t.elements['difficulty-assist'].hidden,true);t.fire('start','click');assert.equal(t.subject.game.health,3);fail();assert.equal(t.elements['difficulty-assist'].hidden,false);assert.match(t.elements['assist-note'].textContent,/4칸/);t.advance(3);assert.match(t.elements['assist-note'].textContent,/4칸/);
+ t.fire('difficulty-assist','click');assert.equal(t.subject.game.health,4);t.fire('difficulty-assist','click');assert.equal(t.subject.game.health,4);t.fire('pause','click');t.fire('start','click');assert.equal(t.subject.game.health,4);fail();t.fire('start','click');assert.equal(t.subject.game.health,5);
+ for(let health=6;health<=14;health++){fail();t.fire('difficulty-assist','click');assert.equal(t.subject.game.health,health);}
+ assert.match(t.elements.paws.innerHTML,/14\/14/);const store=JSON.parse([...t.storage.values()][0]);assert.equal(store.failures,12);assert.equal(store.enabled,true);
+ const restored=await setup({storage:t.storage});restored.fire('start','click');assert.equal(restored.subject.game.health,14);const unrelated='other-game:best';restored.storage.set(unrelated,'keep');restored.fire('replay','click');assert.equal(restored.subject.game.health,3);assert.equal(restored.storage.size,1);assert.equal(restored.storage.get(unrelated),'keep');
+});
+test('retry assistance remains usable with blocked storage and corrupt saved data',async()=>{
+ const t=await setup({storageBlocked:true});for(let n=0;n<2;n++){t.fire('start','click');t.subject.game.health=0;t.subject.game.defeatAge=1;t.advance(.1);}t.fire('difficulty-assist','click');assert.equal(t.subject.game.health,4);assert.equal(t.storage.size,0);
+ const bad=await setup({storage:new Map([[CONFIG.completionKey+':retry-assist:v1:standalone','{bad']])});bad.fire('start','click');assert.equal(bad.subject.game.health,3);
 });

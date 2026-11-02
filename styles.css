@@ -128,21 +128,52 @@ input:focus{outline:2px solid #b7cbb9;outline-offset:1px}
 main.after-story-active{width:min(760px,calc(100% - 24px));margin:12px auto}
 @media(max-width:650px){main.after-story-active{width:calc(100% - 16px);margin:8px auto}}
 
-/* One viewport, including embedded play. The lane stays proportional; the wall fills the extra height. */
+/* Original 960:500 play lane, uniformly fitted and centered in a black viewport. */
+.run-active{--run-hud-height:calc(58px + env(safe-area-inset-top));--run-controls-height:calc(44px + env(safe-area-inset-bottom))}
 .run-active,.run-active body{height:100%;overflow:hidden;overscroll-behavior:none}
-.run-active body{position:fixed;inset:0;background:#523521}
-.run-active main{width:100%;height:var(--run-height,100svh);margin:0;padding:0;max-width:none}
-.run-active #run-screen,.run-active .game-frame{width:100%;height:100%;min-height:0}
+.run-active body{position:fixed;inset:0;background:#000}
+.run-active main{display:grid;place-items:center;width:100%;height:var(--run-height,100svh);margin:0;padding:0;max-width:none}
+.run-active #run-screen{width:min(100%,calc((var(--run-height,100svh) - var(--run-hud-height) - var(--run-controls-height)) * 1.92));height:auto;min-height:0}
+.run-active .game-frame{width:100%;height:auto;min-height:0}
 .run-active .game-frame{display:flex;flex-direction:column;border:0;border-radius:0;box-shadow:none}
-.run-active .game-hud{flex:none;padding-top:env(safe-area-inset-top);height:calc(58px + env(safe-area-inset-top))}
-.run-active .stage{flex:1;min-height:0}
-.run-active canvas{width:100%;height:100%;touch-action:none}
-.run-active .controls{flex:none;min-height:44px;justify-content:center;padding:8px 10px calc(8px + env(safe-area-inset-bottom));gap:12px}
+.run-active .game-hud{flex:none;padding-top:env(safe-area-inset-top);height:var(--run-hud-height)}
+.run-active .stage{flex:none;min-height:0;width:100%;aspect-ratio:960/500}
+.run-active canvas{width:100%;height:100%;aspect-ratio:960/500;touch-action:none}
+.run-active .controls{flex:none;height:var(--run-controls-height);min-height:0;justify-content:center;padding:8px 10px calc(8px + env(safe-area-inset-bottom));gap:12px}
 .run-active .jump-help{display:block;font-size:12px;font-weight:700;text-align:center}
 .run-active .jump-dots{font-size:11px;letter-spacing:2px}
 .run-active .overlay-card{max-height:100%;overflow:auto;overscroll-behavior:contain;touch-action:pan-y}
 .run-active .overlay h3{font-size:clamp(20px,4.2vw,28px)}
 .run-active .overlay p{font-size:clamp(12px,2.7vw,14px);line-height:1.6}
 .run-active .overlay .primary{min-height:44px}
-.run-active .game-message{bottom:90px;font-size:13px}
-@media(max-height:430px){.run-active .game-hud{height:44px}.run-active .controls{min-height:36px;padding:5px}.run-active .overlay-card{padding:8px 16px}.run-active .overlay h3{font-size:18px}.run-active .overlay p{font-size:11px;margin-bottom:8px}}
+.run-active .game-message{bottom:12%;font-size:13px}
+@media(max-height:430px){.run-active{--run-hud-height:calc(44px + env(safe-area-inset-top));--run-controls-height:calc(36px + env(safe-area-inset-bottom))}.run-active .controls{padding:5px 5px calc(5px + env(safe-area-inset-bottom))}.run-active .overlay-card{padding:8px 16px}.run-active .overlay h3{font-size:18px}.run-active .overlay p{font-size:11px;margin-bottom:8px}}
+
+/* Dedicated controls never cover the fixed 960:500 collision world. */
+.run-active{--jump-height:clamp(80px,11svh,100px);--run-controls-height:calc(var(--jump-height) + 92px + env(safe-area-inset-bottom))}
+.run-active #run-screen{width:100%;height:100%}
+.run-active .game-frame{height:100%;display:grid;grid-template-rows:var(--run-hud-height) minmax(0,1fr) var(--run-controls-height);background:#000}
+.run-active .game-hud{width:min(100%,960px);justify-self:center}
+.run-active .stage{width:min(100%,calc((var(--run-height,100svh) - var(--run-hud-height) - var(--run-controls-height)) * 1.92));height:auto;aspect-ratio:960/500;align-self:center;justify-self:center}
+.run-active .controls{width:min(100%,960px);justify-self:center;display:grid;grid-template-columns:minmax(0,1fr) auto;align-content:start;gap:10px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));height:var(--run-controls-height);background:#fff8e6}
+.run-active .jump-button{grid-column:1/-1;display:block;width:100%;min-width:0;height:var(--jump-height);min-height:80px;padding:8px;font-size:clamp(30px,7vw,40px);line-height:1.2;font-weight:800;border:3px solid #176c63;border-radius:18px;background:#258f81;color:#fff9e8;box-shadow:0 4px 0 #12564e;touch-action:none;-webkit-tap-highlight-color:transparent}
+.run-active .jump-button:disabled{opacity:.55;cursor:default}
+.run-active .jump-help{margin:0;font-size:14px;line-height:1.4;text-align:left;word-break:keep-all}
+.run-active .jump-dots{align-self:center;color:#267c70}
+@media(max-height:430px){.run-active{--run-controls-height:calc(var(--jump-height) + 68px + env(safe-area-inset-bottom))}.run-active .jump-help{font-size:12px}}
+
+.run-active .jump-help{color:#34594f}
+
+/* Keep the parent story close control clear of the timer. */
+.embedded-run .game-hud{padding-left:60px;padding-right:8px;gap:8px}
+.embedded-run .game-hud h1{font-size:clamp(15px,4.5vw,23px)}
+.embedded-run .timer{min-width:48px;padding:4px 6px}
+.embedded-run .health{padding:4px 6px}
+
+/* Unlimited retry health uses a compact count rather than an overflowing row. */
+.assist-button{display:block;width:100%;min-height:44px;margin-top:10px;border:2px solid #176c63;border-radius:10px;padding:9px 14px;background:#278c7d;color:#fffaf0;font:inherit;font-size:17px;font-weight:700;line-height:1.3;touch-action:manipulation}
+.run-active .overlay .assist-note{font-size:13px;line-height:1.45;margin:8px 0 0;color:#34594f;word-break:keep-all}
+.health-count{font-size:14px;line-height:1.2;white-space:nowrap;align-self:center;font-variant-numeric:tabular-nums}
+
+.overlay:not([hidden])~.game-message{visibility:hidden}
+.assist-offer .overlay{position:fixed;inset:calc(var(--run-hud-height,58px) + 8px) 8px calc(8px + env(safe-area-inset-bottom));z-index:10}
