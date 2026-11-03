@@ -112,7 +112,7 @@ function restart(){
  for(const key of [afterAnswerKey,CONFIG.completionKey,assistKey])try{localStorage.removeItem(key)}catch{/* Reset this session even when storage is unavailable. */}
  failedAttempts=0;assistEnabled=false;attemptHealth=CONFIG.health;afterProgress=null;completionAnnounced=false;afterStory?.hide();game.reset();state='ready';pausedState='playing';lastTime=null;ambient=0;panel=0;comicElapsed=0;priorHits=0;composing=false;compositionEnded=0;previousHUD='';
  showScreen('run');$('answer-form').reset();$('answer-feedback').textContent='';$('answer').removeAttribute('aria-invalid');$('game-message').textContent='';autoComic=true;$('comic-auto').textContent='자동 넘김 끄기';$('comic-auto').setAttribute('aria-pressed','true');
- overlay('작은 발로, 힘껏 달려 봐!','책 더미를 피해 잠시 사서를 따라가 주세요.\n아래 ‘점프’ 버튼을 눌러 장애물을 피해 줘. 공중에서 한 번 더 누르면 2단 점프!','모험 시작하기');hud();
+ overlay('작은 발로, 힘껏 달려 봐!','책 더미를 피해 잠시 사서를 따라가 주세요.\n한 번 누르면 점프, 공중에서 한 번 더 누르면 이단 점프!','모험 시작하기');hud();
 }
 $('replay').addEventListener('click',restart);
 function frame(time){
@@ -133,7 +133,7 @@ function frame(time){
  }
  requestAnimationFrame(frame);
 }
-async function load(){try{const files=SCENE_IMAGE_FILES;const entries=await Promise.all(files.map(src=>new Promise((resolve,reject)=>{const img=new Image();img.decoding='async';img.onload=()=>resolve([src,img]);img.onerror=()=>reject(new Error(src));img.src=src})));const images=Object.fromEntries(entries);renderer=new Renderer($('game'),images,SPRITE_LAYOUT);state='ready';attemptHealth=assistEnabled?offeredHealth():CONFIG.health;game.health=attemptHealth;overlay('작은 발로, 힘껏 달려 봐!','책 더미를 피해 잠시 사서를 따라가 주세요.\n아래 ‘점프’ 버튼을 눌러 장애물을 피해 줘. 공중에서 한 번 더 누르면 2단 점프!','모험 시작하기');hud();const saved=normalizeAfterProgress(readSavedJSON(afterAnswerKey));if(saved)beginAfterAnswer(saved);else if(readSavedJSON(CONFIG.completionKey)?.completed===true)complete();requestAnimationFrame(frame)}catch(error){state='error';overlay('책장을 불러오지 못했어요.','인터넷 연결을 확인하고 다시 열어 주세요.','다시 불러오기','잠깐만요!');console.error('Asset loading failed:',error)}}
+async function load(){try{const files=SCENE_IMAGE_FILES;const entries=await Promise.all(files.map(src=>new Promise((resolve,reject)=>{const img=new Image();img.decoding='async';img.onload=()=>resolve([src,img]);img.onerror=()=>reject(new Error(src));img.src=src})));const images=Object.fromEntries(entries);renderer=new Renderer($('game'),images,SPRITE_LAYOUT);state='ready';attemptHealth=assistEnabled?offeredHealth():CONFIG.health;game.health=attemptHealth;overlay('작은 발로, 힘껏 달려 봐!','책 더미를 피해 잠시 사서를 따라가 주세요.\n한 번 누르면 점프, 공중에서 한 번 더 누르면 이단 점프!','모험 시작하기');hud();const saved=normalizeAfterProgress(readSavedJSON(afterAnswerKey));if(saved)beginAfterAnswer(saved);else if(readSavedJSON(CONFIG.completionKey)?.completed===true)complete();if(new URL(document.baseURI).searchParams.get('howto')==='shown'&&state==='ready')start();requestAnimationFrame(frame)}catch(error){state='error';overlay('책장을 불러오지 못했어요.','인터넷 연결을 확인하고 다시 열어 주세요.','다시 불러오기','잠깐만요!');console.error('Asset loading failed:',error)}}
 load();
 
 
